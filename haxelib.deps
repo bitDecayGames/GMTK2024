@@ -1,0 +1,22 @@
+# Main build deps
+flixel 5.8.0
+flixel-addons 3.2.2
+openfl 9.3.3
+lime 8.1.2
+
+# newgrounds integration
+newgrounds 2.0.0
+
+# arcade physics
+# echo git https://github.com/MondayHopscotch/echo.git
+
+# full physics
+# nape-haxe4 2.0.22
+
+# bitDecayGames deps
+bitdecaybtree git https://github.com/bitDecayGames/BehaviorTree.git
+bitlytics git https://github.com/bitDecayGames/Bitlytics.git
+flixelutils git https://github.com/bitDecayGames/flixel-utils.git
+
+# misc deps
+haxefmod git https://github.com/Tanz0rz/haxe-fmod.git
