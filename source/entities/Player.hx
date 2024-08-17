@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
 import bitdecay.flixel.spacial.Cardinal;
@@ -9,6 +10,7 @@ import input.SimpleController;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
 import echo.Body;
+import haxe.Timer;
 
 using echo.FlxEcho;
 
@@ -18,6 +20,10 @@ class Player extends Unibody {
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
 	var playerNum = 0;
+	var lockControls = false;
+
+	var rollDurationMs = 400;
+	var rollSpeed = 60;
 
 	public function new() {
 		super(10, 10);
@@ -31,6 +37,11 @@ class Player extends Unibody {
 		// 	}
 		// };
 		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+
+		speed = 40;
+
+		FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
+		FlxG.watch.add(this, "rollSpeed", "Roll speed");
 	}
 
 	override function makeBody():Body {
@@ -56,10 +67,38 @@ class Player extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 
-		handleDirectionIntent();
+		// debug tweaking 
+		if (FlxG.keys.anyJustPressed([FlxKey.PLUS])){
+			rollDurationMs += 100;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.MINUS])){
+			rollDurationMs -= 100;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.LBRACKET])){
+			rollSpeed -= 5;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.RBRACKET])){
+			rollSpeed += 5;
+		}
 
-		handleMovement();
-		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
+		if (!lockControls && SimpleController.pressed(Button.A, playerNum)) {
+			lockControls = true;
+			Timer.delay(() -> {
+				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
+				lockControls = false;
+				alpha = 1;
+			}, rollDurationMs);
+			
+			alpha = 0.5;
+			tmp.copyFrom(inputDir).scale(rollSpeed);
+			body.velocity.set(tmp.x, tmp.y);
+		}
+
+		if (!lockControls) {
+			handleDirectionIntent();
+			handleMovement();
+		}
+
 		FlxG.watch.addQuick("player vel: ", body.velocity);
 	}
 
