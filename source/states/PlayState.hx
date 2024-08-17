@@ -1,6 +1,12 @@
 package states;
 
+<<<<<<< HEAD
 import entities.Bullet;
+=======
+import entities.EchoSprite;
+import echo.Body;
+import echo.util.TileMap;
+>>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import entities.Reticle;
@@ -16,21 +22,38 @@ import flixel.FlxG;
 import bitdecay.flixel.debug.DebugDraw;
 import flixel.group.FlxGroup;
 import echo.FlxEcho;
-import levels.ldtk.LDTKProject;
+import levels.ldtk.Level;
 
 using states.FlxStateExt;
 
+using echo.FlxEcho;
+
 class PlayState extends FlxTransitionableState {
+<<<<<<< HEAD
     public static var me:PlayState;
     
     var player:FlxSprite;
     var uiGroup:FlxGroup = new FlxGroup();
+=======
+>>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
     var uiCamera:FlxCamera;
+
+    var player:FlxSprite;
 	var reticle:FlxSprite;
+
+    // TODO: We probably should hide the project within the level file
+	public var level:Level;
+
+    var uiGroup:FlxGroup = new FlxGroup();
+    public var terrainGroup = new FlxGroup();
+
+    public var playerGroup = new FlxGroup();
+    public var wallBodies:Array<Body> = [];
     
 	var tmp = FlxPoint.get();
 	var tmp2 = FlxPoint.get();
 
+<<<<<<< HEAD
     
 	public var level:LDTKProject_Level;
 	var project = new LDTKProject();
@@ -40,6 +63,8 @@ class PlayState extends FlxTransitionableState {
         
     }
 
+=======
+>>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
     override public function create() {
         super.create();
         Lifecycle.startup.dispatch();
@@ -47,18 +72,6 @@ class PlayState extends FlxTransitionableState {
         me = this;
 
         FlxG.camera.pixelPerfectRender = true;
-        
-        level = project.all_worlds.Default.getLevel("Level_0");
-    
-        // Create a FlxGroup for all level layers
-        var container = new flixel.group.FlxSpriteGroup();
-        add(container);
-
-        // Place it using level world coordinates (in pixels)
-        container.x = level.worldX;
-        container.y = level.worldY;
-
-        level.l_Ground.render(container);
 
 		FlxEcho.init({
 			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
@@ -66,19 +79,11 @@ class PlayState extends FlxTransitionableState {
 			height: FlxG.height,
 		});
 
-        player = new Player(level.pxWid/2, level.pxHei/2);
-        add(player);
+        add(terrainGroup);
+        add(playerGroup);
 
-		// We likely only want to follow the player directly for cutscenes adn the like
-		// FlxG.camera.follow(player);
-
-        var item = new Item();
-        item.y = 50;
-        add(item);
-		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
-		// Or do we just want to project the mouse position into the game world cam?
-		reticle = new Reticle();
-		add(reticle);
+        // TODO: Confirm ordering here is proper
+        loadLevel("Level_0");
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
 
@@ -102,6 +107,66 @@ class PlayState extends FlxTransitionableState {
         add(uiGroup);
         
 	}
+    
+    function loadLevel(levelName:String) {
+        level = new levels.ldtk.Level(levelName);
+
+        for (body in wallBodies) {
+			FlxEcho.instance.world.remove(body);
+			body.dispose();
+		}
+        wallBodies = [];
+
+        uiGroup.forEach((f) -> f.destroy());
+		uiGroup.clear();
+
+        playerGroup.forEach((f) -> f.destroy());
+		playerGroup.clear();
+		player = null;
+
+        FlxEcho.clear();
+
+        camera.scroll.set();
+		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
+		FlxEcho.instance.world.set(0, 0, level.bounds.width, level.bounds.height);
+
+        wallBodies = wallBodies.concat(TileMap.generate(level.rawCollisionInts, 16, 16, level.rawTerrainTilesWide, level.rawTerrainTilesWide, 0, 0, 0));
+		for (body in wallBodies) {
+			FlxEcho.instance.world.add(body);
+		}
+        
+        camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
+
+        terrainGroup.insert(0, level.terrainGfx);
+
+        player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
+        player.add_to_group(playerGroup);
+
+		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
+		// Or do we just want to project the mouse position into the game world cam?
+		reticle = new Reticle();
+        uiGroup.add(reticle);
+
+        configureListeners();
+    }
+
+    function configureListeners() {
+        FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(playerGroup), wallBodies, {
+			separate: true,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+    }
 
     override public function update(elapsed:Float) {
         super.update(elapsed);
@@ -111,6 +176,7 @@ class PlayState extends FlxTransitionableState {
 		
 		tmp.addPoint(tmp2).scale(.5);
 		camera.focusOn(tmp);
+
     }
 
     override public function onFocusLost() {
