@@ -11,12 +11,18 @@ class Gun extends FlxSprite {
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
 
-    public function new(follow:FlxSprite, offsetX:Float, offsetY:Float) {
+    public function new(follow:FlxSprite, drawfset:FlxPoint) {
         super(0, 0);
-        origin.set(offsetX, offsetY);
+        //origin.set(offsetX, offsetY);
         parent = follow;
-        drawfset.set(offsetX, offsetY);
+        this.drawfset.copyFrom(drawfset);
         Aseprite.loadSlice(this, AssetPaths.sketchpad__json, slices.pistol_0);
+        origin.set(width/2, height/2);
+    }
+
+    public function setDrawfset(drawfset:FlxPoint, upMod:Float) {
+        this.drawfset.copyFrom(drawfset);
+        this.drawfset.y += upMod;
     }
 
     override function update(elapsed:Float) {
@@ -24,7 +30,15 @@ class Gun extends FlxSprite {
     }
     
     override function draw() {
-        setPosition(parent.x + drawfset.x, parent.y + drawfset.y);
+        setPosition(parent.x + drawfset.x - width / 2, parent.y + drawfset.y - height / 2);
+
+        if (angle > 90 || angle < -90) {
+            // flipX = true;
+            flipY = true;
+        } else {
+            // flipX = false;
+            flipY = false;
+        }
 
         super.draw();
     }
