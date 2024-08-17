@@ -23,7 +23,10 @@
    { "name": "Layer 2", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
-   { "name": "pistol", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 38, "y": 3, "w": 9, "h": 7 } }] }
+   { "name": "pistol", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 32, "y": 0, "w": 15, "h": 16 } }] },
+   { "name": "magnum", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 48, "y": 0, "w": 19, "h": 16 } }] },
+   { "name": "shotty", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 80, "y": 0, "w": 26, "h": 16 } }] },
+   { "name": "gl", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 112, "y": 0, "w": 29, "h": 16 } }] }
   ]
  }
 }
