@@ -11,6 +11,9 @@ newgrounds 2.0.0
 echo git https://github.com/MondayHopscotch/echo.git
 echo-flixel git https://github.com/AustinEast/echo-flixel.git
 
+# level editor
+ldtk-haxe-api 1.5.3-rc.1
+
 # full physics
 # nape-haxe4 2.0.22
 
