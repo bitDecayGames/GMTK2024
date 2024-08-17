@@ -1,44 +1,77 @@
 package entities;
 
+import flixel.FlxG;
+import bitdecay.flixel.spacial.Cardinal;
 import flixel.FlxSprite;
 import input.InputCalcuator;
 import input.SimpleController;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
+import echo.Body;
 
-class Player extends FlxSprite {
+using echo.FlxEcho;
+
+class Player extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/characters/player.json");
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/characters/player.json");
 	public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/characters/player.json", "Layer 1");
 
-	var speed:Float = 300;
 	var playerNum = 0;
 
 	public function new() {
-		super();
+		super(10, 10);
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
-		Aseprite.loadAllAnimations(this, AssetPaths.player__json);
-		animation.play(anims.right);
-		animation.callback = (anim, frame, index) -> {
-			if (eventData.exists(index)) {
-				trace('frame $index has data ${eventData.get(index)}');
-			}
-		};
+		// Aseprite.loadAllAnimations(this, AssetPaths.player__json);
+		// animation.play(anims.right);
+		// animation.callback = (anim, frame, index) -> {
+		// 	if (eventData.exists(index)) {
+		// 		trace('frame $index has data ${eventData.get(index)}');
+		// 	}
+		// };
+		this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+	}
+
+	override function makeBody():Body {
+		return this.add_body({
+			x: x,
+			y: y,
+			max_velocity_x: 1000,
+			max_velocity_length: 1000,
+			drag_x: 0,
+			mass: 100,
+			shapes: [
+				// Standard moving hitbox
+				{
+					type:RECT,
+					width: 16,
+					height: 16,
+					offset_y: 8,
+				}
+			]
+		});
 	}
 
 	override public function update(delta:Float) {
 		super.update(delta);
 
-		var inputDir = InputCalcuator.getInputCardinal(playerNum);
-		if (inputDir != NONE) {
-			inputDir.asVector(velocity).scale(speed);
-		} else {
-			velocity.set();
-		}
+		handleDirectionIntent();
 
-		if (SimpleController.just_pressed(Button.A, playerNum)) {
-			color = color ^ 0xFFFFFF;
+		handleMovement();
+		FlxG.watch.addQuick("player vel: ", body.velocity);
+	}
+
+	var tmpCard:Cardinal;
+
+	function handleDirectionIntent() {
+		tmpCard = InputCalcuator.getInputCardinal(playerNum);
+		tmpCard.asVector(inputDir);
+		if (inputDir.length != 0) {
+			intentState.add(RUNNING);
 		}
+	}
+
+	function updateAnims() {
+		// Here we'd like to look at the overall state of the player (input + interaction) and play the correct animations
 	}
 }

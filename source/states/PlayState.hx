@@ -12,6 +12,7 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 import bitdecay.flixel.debug.DebugDraw;
 import flixel.group.FlxGroup;
+import echo.FlxEcho;
 
 using states.FlxStateExt;
 
@@ -28,6 +29,11 @@ class PlayState extends FlxTransitionableState {
 
         player = new Player();
         add(player);
+		FlxEcho.init({
+			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
+			width: FlxG.width,
+			height: FlxG.height,
+		});
 
 		FlxG.camera.follow(player);
 
@@ -40,6 +46,8 @@ class PlayState extends FlxTransitionableState {
         uiCamera.bgColor = FlxColor.TRANSPARENT;
         FlxG.cameras.add(uiCamera, false);
         uiGroup.cameras = [uiCamera];
+		// QuickLog.error('Example error');
+	}
 
         // Adding the FL Studio logo as a static UI element in the center of the screen
         var flStudioLogo = new FlxSprite(50, 50, AssetPaths.items__png);
@@ -47,12 +55,12 @@ class PlayState extends FlxTransitionableState {
 		// FmodManager.PlaySoundOneShot(FmodSFX.MenuHover);
 
         add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
-
-        QuickLog.error('Example error');
+		// var cam = FlxG.camera;
+		// DebugDraw.ME.drawCameraRect(cam.getCenterPoint().x - 5, cam.getCenterPoint().y - 5, 10, 10, DebugLayers.RAYCAST, FlxColor.RED);
 
         // Add uiGroup to the state
         add(uiGroup);
-    }
+	}
 
     override public function update(elapsed:Float) {
         super.update(elapsed);
