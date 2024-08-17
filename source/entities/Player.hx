@@ -17,7 +17,11 @@ class Player extends Unibody {
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/playerSketchpad.json");
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
+	var gun:FlxSprite;
+
 	var playerNum = 0;
+
+	var animTmp = FlxPoint.get();
 
 	public function new() {
 		super(10, 10);
@@ -31,6 +35,11 @@ class Player extends Unibody {
 		// 	}
 		// };
 		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+
+		gun = new Gun(this, 5, 5);
+
+		// TODO: This is not how we want to leave this, but it's a good filler for now
+		FlxG.state.add(gun);
 	}
 
 	override function makeBody():Body {
@@ -110,5 +119,20 @@ class Player extends Unibody {
 		}
 
 		playAnimIfNotAlready(nextAnim);
+
+		animTmp.copyFrom(reference);
+		animTmp.subtract(body.x, body.y);
+		gun.angle = animTmp.degrees;
+	}
+
+	override function draw() {
+		// Handles what order we draw the player/gun so that it looks right
+		if (StringTools.endsWith(animation.curAnim.name, "up")) {
+			gun.draw();
+			super.draw();
+		} else {
+			super.draw();
+			gun.draw();
+		}
 	}
 }
