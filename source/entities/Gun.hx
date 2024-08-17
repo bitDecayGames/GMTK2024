@@ -6,7 +6,7 @@ import loaders.AsepriteMacros;
 import flixel.FlxSprite;
 
 class Gun extends FlxSprite {
-	public static var slices = AsepriteMacros.sliceNames("assets/aseprite/sketchpad.json");
+	public static var anims = AsepriteMacros.tagNames("assets/aseprite/pistol.json");
 
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
@@ -16,7 +16,8 @@ class Gun extends FlxSprite {
         //origin.set(offsetX, offsetY);
         parent = follow;
         this.drawfset.copyFrom(drawfset);
-        Aseprite.loadSlice(this, AssetPaths.sketchpad__json, slices.pistol_0);
+        Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+        // animation.play(anims.)
         origin.set(width/2, height/2);
     }
 
