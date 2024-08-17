@@ -33,8 +33,6 @@ class PlayState extends FlxTransitionableState {
 
         FlxG.camera.pixelPerfectRender = true;
 
-        player = new Player();
-        add(player);
 		FlxEcho.init({
 			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
 			width: FlxG.width,
@@ -42,6 +40,9 @@ class PlayState extends FlxTransitionableState {
 		});
 
 		FlxG.camera.follow(player);
+
+        player = new Player();
+        add(player);
 
         var item = new Item();
         item.y = 50;
