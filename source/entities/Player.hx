@@ -1,6 +1,6 @@
 package entities;
 
-import js.html.Console;
+import states.PlayState;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
@@ -112,6 +112,13 @@ class Player extends Unibody {
 			handleDirectionIntent();
 			handleMovement();
 			updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
+
+			
+			var position = body.get_position();
+			if (FlxG.mouse.justPressed) {
+				var bullet = new Bullet(new FlxPoint(position.x, position.y), gun.angle, 60);
+				PlayState.me.AddBullet(bullet);
+			}
 		}
 
 		FlxG.watch.addQuick("player vel: ", body.velocity);

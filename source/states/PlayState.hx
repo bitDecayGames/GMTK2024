@@ -1,12 +1,9 @@
 package states;
 
-<<<<<<< HEAD
 import entities.Bullet;
-=======
 import entities.EchoSprite;
 import echo.Body;
 import echo.util.TileMap;
->>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import entities.Reticle;
@@ -29,16 +26,11 @@ using states.FlxStateExt;
 using echo.FlxEcho;
 
 class PlayState extends FlxTransitionableState {
-<<<<<<< HEAD
     public static var me:PlayState;
     
     var player:FlxSprite;
-    var uiGroup:FlxGroup = new FlxGroup();
-=======
->>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
     var uiCamera:FlxCamera;
 
-    var player:FlxSprite;
 	var reticle:FlxSprite;
 
     // TODO: We probably should hide the project within the level file
@@ -46,25 +38,18 @@ class PlayState extends FlxTransitionableState {
 
     var uiGroup:FlxGroup = new FlxGroup();
     public var terrainGroup = new FlxGroup();
+    public var bulletGroup = new FlxGroup();
 
     public var playerGroup = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     
 	var tmp = FlxPoint.get();
 	var tmp2 = FlxPoint.get();
-
-<<<<<<< HEAD
     
-	public var level:LDTKProject_Level;
-	var project = new LDTKProject();
-
-    var bulletGroup:FlxGroup;
     public function AddBullet(bullet:Bullet) {
-        
+        bullet.add_to_group(bulletGroup);
     }
 
-=======
->>>>>>> eef7dbe2f88327a88e957147ee0191d0a5713f55
     override public function create() {
         super.create();
         Lifecycle.startup.dispatch();
@@ -81,6 +66,7 @@ class PlayState extends FlxTransitionableState {
 
         add(terrainGroup);
         add(playerGroup);
+        add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
         loadLevel("Level_0");
@@ -120,11 +106,16 @@ class PlayState extends FlxTransitionableState {
         uiGroup.forEach((f) -> f.destroy());
 		uiGroup.clear();
 
+        bulletGroup.forEach((f) -> f.destroy());
+		bulletGroup.clear();
+
         playerGroup.forEach((f) -> f.destroy());
 		playerGroup.clear();
 		player = null;
 
         FlxEcho.clear();
+
+        AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
 
         camera.scroll.set();
 		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
@@ -152,6 +143,21 @@ class PlayState extends FlxTransitionableState {
 
     function configureListeners() {
         FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(playerGroup), wallBodies, {
+			separate: true,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(bulletGroup), wallBodies, {
 			separate: true,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {

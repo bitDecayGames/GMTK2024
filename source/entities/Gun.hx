@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import flixel.math.FlxPoint;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
