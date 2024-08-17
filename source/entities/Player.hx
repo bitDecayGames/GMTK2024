@@ -22,14 +22,14 @@ class Player extends Unibody {
 		super(10, 10);
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
-		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__png);
+		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__json);
 		animation.play(anims.Idle);
 		// animation.callback = (anim, frame, index) -> {
 		// 	if (eventData.exists(index)) {
 		// 		trace('frame $index has data ${eventData.get(index)}');
 		// 	}
 		// };
-		this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
 	}
 
 	override function makeBody():Body {

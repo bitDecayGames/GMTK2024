@@ -39,10 +39,11 @@ class PlayState extends FlxTransitionableState {
 			height: FlxG.height,
 		});
 
-		FlxG.camera.follow(player);
-
         player = new Player();
         add(player);
+
+		// We likely only want to follow the player directly for cutscenes adn the like
+		// FlxG.camera.follow(player);
 
         var item = new Item();
         item.y = 50;
@@ -73,18 +74,16 @@ class PlayState extends FlxTransitionableState {
         // Add uiGroup to the state
         add(uiGroup);
         
-		reticle.getPosition(tmp);
-		player.getPosition(tmp2);
-		
-		tmp.addPoint(tmp2).scale(.5);
-		camera.focusOn(tmp);
 	}
 
     override public function update(elapsed:Float) {
         super.update(elapsed);
 
-        var cam = FlxG.camera;
-        DebugDraw.ME.drawCameraRect(cam.getCenterPoint().x - 5, cam.getCenterPoint().y - 5, 10, 10, DebugLayers.RAYCAST, FlxColor.RED);
+		reticle.getPosition(tmp);
+		player.getPosition(tmp2);
+		
+		tmp.addPoint(tmp2).scale(.5);
+		camera.focusOn(tmp);
     }
 
     override public function onFocusLost() {
