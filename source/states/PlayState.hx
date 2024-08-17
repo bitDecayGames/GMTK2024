@@ -15,6 +15,7 @@ import flixel.FlxG;
 import bitdecay.flixel.debug.DebugDraw;
 import flixel.group.FlxGroup;
 import echo.FlxEcho;
+import levels.ldtk.LDTKProject;
 
 using states.FlxStateExt;
 
@@ -27,11 +28,28 @@ class PlayState extends FlxTransitionableState {
 	var tmp = FlxPoint.get();
 	var tmp2 = FlxPoint.get();
 
+    
+	public var level:LDTKProject_Level;
+	var project = new LDTKProject();
+
+
     override public function create() {
         super.create();
         Lifecycle.startup.dispatch();
 
         FlxG.camera.pixelPerfectRender = true;
+        
+        level = project.all_worlds.Default.getLevel("Level_0");
+    
+        // Create a FlxGroup for all level layers
+        var container = new flixel.group.FlxSpriteGroup();
+        add(container);
+
+        // Place it using level world coordinates (in pixels)
+        container.x = level.worldX;
+        container.y = level.worldY;
+
+        level.l_Ground.render(container);
 
 		FlxEcho.init({
 			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
@@ -39,7 +57,7 @@ class PlayState extends FlxTransitionableState {
 			height: FlxG.height,
 		});
 
-        player = new Player();
+        player = new Player(level.pxWid/2, level.pxHei/2);
         add(player);
 
 		// We likely only want to follow the player directly for cutscenes adn the like

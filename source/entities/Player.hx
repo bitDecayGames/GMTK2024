@@ -25,8 +25,8 @@ class Player extends Unibody {
 	var rollDurationMs = 400;
 	var rollSpeed = 60;
 
-	public function new() {
-		super(10, 10);
+	public function new(x:Float, y:Float) {
+		super(x, y);
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
 		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__json);
