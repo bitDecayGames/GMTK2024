@@ -298,7 +298,7 @@
    },
    {
     "filename": "playerSketchpad 33.aseprite",
-    "frame": { "x": 32, "y": 48, "w": 16, "h": 16 },
+    "frame": { "x": 48, "y": 64, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
@@ -316,24 +316,6 @@
    },
    {
     "filename": "playerSketchpad 35.aseprite",
-    "frame": { "x": 48, "y": 64, "w": 16, "h": 16 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
-    "sourceSize": { "w": 16, "h": 16 },
-    "duration": 100
-   },
-   {
-    "filename": "playerSketchpad 36.aseprite",
-    "frame": { "x": 0, "y": 32, "w": 16, "h": 16 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
-    "sourceSize": { "w": 16, "h": 16 },
-    "duration": 100
-   },
-   {
-    "filename": "playerSketchpad 37.aseprite",
     "frame": { "x": 64, "y": 64, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -342,7 +324,7 @@
     "duration": 100
    },
    {
-    "filename": "playerSketchpad 38.aseprite",
+    "filename": "playerSketchpad 36.aseprite",
     "frame": { "x": 80, "y": 64, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -351,7 +333,16 @@
     "duration": 100
    },
    {
-    "filename": "playerSketchpad 39.aseprite",
+    "filename": "playerSketchpad 37.aseprite",
+    "frame": { "x": 0, "y": 32, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+    "sourceSize": { "w": 16, "h": 16 },
+    "duration": 100
+   },
+   {
+    "filename": "playerSketchpad 38.aseprite",
     "frame": { "x": 96, "y": 64, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -360,7 +351,7 @@
     "duration": 100
    },
    {
-    "filename": "playerSketchpad 40.aseprite",
+    "filename": "playerSketchpad 39.aseprite",
     "frame": { "x": 0, "y": 80, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -369,8 +360,26 @@
     "duration": 100
    },
    {
-    "filename": "playerSketchpad 41.aseprite",
+    "filename": "playerSketchpad 40.aseprite",
     "frame": { "x": 16, "y": 80, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+    "sourceSize": { "w": 16, "h": 16 },
+    "duration": 100
+   },
+   {
+    "filename": "playerSketchpad 41.aseprite",
+    "frame": { "x": 32, "y": 80, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
+    "sourceSize": { "w": 16, "h": 16 },
+    "duration": 100
+   },
+   {
+    "filename": "playerSketchpad 42.aseprite",
+    "frame": { "x": 48, "y": 80, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 16 },
@@ -390,8 +399,9 @@
    { "name": "Run_up", "from": 7, "to": 13, "direction": "forward", "color": "#000000ff" },
    { "name": "Idle", "from": 16, "to": 24, "direction": "forward", "color": "#000000ff" },
    { "name": "Idle_up", "from": 25, "to": 33, "direction": "forward", "color": "#000000ff" },
-   { "name": "Dodge", "from": 35, "to": 35, "direction": "forward", "color": "#000000ff" },
-   { "name": "Death", "from": 37, "to": 41, "direction": "forward", "repeat": "1", "color": "#000000ff" }
+   { "name": "Dodge", "from": 35, "to": 35, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "Dodeg_up", "from": 36, "to": 36, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "Death", "from": 38, "to": 42, "direction": "forward", "repeat": "1", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
