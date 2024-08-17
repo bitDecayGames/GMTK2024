@@ -1,6 +1,7 @@
 package states;
 
 import entities.Bullet;
+import entities.TrashCan;
 import entities.EchoSprite;
 import echo.Body;
 import echo.util.TileMap;
@@ -41,6 +42,7 @@ class PlayState extends FlxTransitionableState {
     public var bulletGroup = new FlxGroup();
 
     public var playerGroup = new FlxGroup();
+    public var enemyGroup = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     
 	var tmp = FlxPoint.get();
@@ -66,6 +68,7 @@ class PlayState extends FlxTransitionableState {
 
         add(terrainGroup);
         add(playerGroup);
+        add(enemyGroup);
         add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
@@ -109,6 +112,9 @@ class PlayState extends FlxTransitionableState {
         bulletGroup.forEach((f) -> f.destroy());
 		bulletGroup.clear();
 
+        enemyGroup.forEach((f) -> f.destroy());
+		enemyGroup.clear();
+
         playerGroup.forEach((f) -> f.destroy());
 		playerGroup.clear();
 		player = null;
@@ -132,6 +138,9 @@ class PlayState extends FlxTransitionableState {
 
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
+
+        var testTrash = new TrashCan(100, 100);
+        testTrash.add_to_group(enemyGroup);
 
 		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
 		// Or do we just want to project the mouse position into the game world cam?
