@@ -11,7 +11,7 @@ class Player extends FlxSprite {
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/characters/player.json");
 	public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/characters/player.json", "Layer 1");
 
-	var speed:Float = 30;
+	var speed:Float = 300;
 	var playerNum = 0;
 
 	public function new() {

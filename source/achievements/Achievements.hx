@@ -56,7 +56,7 @@ class AchievementDef {
 		var a = new AchievementToast(this);
 		if (show) {
 			if (!achieved || force) {
-				FmodManager.PlaySoundOneShot(FmodSFX.MenuSelect);
+				// FmodManager.PlaySoundOneShot(FmodSFX.MenuSelect);
 				Achievements.ACHIEVEMENTS_DISPLAYED++;
 				a.show(Achievements.ACHIEVEMENTS_DISPLAYED);
 				Analytics.reportAchievement(this.key);
