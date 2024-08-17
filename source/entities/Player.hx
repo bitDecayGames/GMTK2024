@@ -19,11 +19,18 @@ class Player extends Unibody {
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/playerSketchpad.json");
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
+	var gun:Gun;
+
 	var playerNum = 0;
 	var lockControls = false;
 
 	var rollDurationMs = 400;
 	var rollSpeed = 60;
+	var animTmp = FlxPoint.get();
+
+	var rightDrawfset = FlxPoint.get(6, 9);
+	var leftDrawfset = FlxPoint.get(10, 9);
+	var upMod = -6;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -38,10 +45,15 @@ class Player extends Unibody {
 		// };
 		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
 
+		gun = new Gun(this, rightDrawfset);
+
+		// TODO: This is not how we want to leave this, but it's a good filler for now
+		FlxG.state.add(gun);
 		speed = 40;
 
 		FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
 		FlxG.watch.add(this, "rollSpeed", "Roll speed");
+		FlxG.watch.add(gun, "angle", "gun angle");
 	}
 
 	override function makeBody():Body {
@@ -97,6 +109,7 @@ class Player extends Unibody {
 		if (!lockControls) {
 			handleDirectionIntent();
 			handleMovement();
+			updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 		}
 
 		FlxG.watch.addQuick("player vel: ", body.velocity);
@@ -120,18 +133,20 @@ class Player extends Unibody {
 		var lefting = false;
 		var righting = false;
 		var myPos = body.get_position();
-		if (reference.x < myPos.x) {
-			lefting = true;
-			flipX = true;
-		} else if (reference.x > myPos.x) {
-			righting = true;
-			flipX = false;
-		}
-
 		if (reference.y < myPos.y) {
 			upping = true;
 		} else if (reference.y > myPos.y) {
 			upping = false;
+		}
+
+		if (reference.x < myPos.x) {
+			lefting = true;
+			flipX = true;
+			gun.setDrawfset(leftDrawfset, upping ? upMod : 0);
+		} else if (reference.x > myPos.x) {
+			righting = true;
+			flipX = false;
+			gun.setDrawfset(rightDrawfset, upping ? upMod : 0);
 		}
 
 		if (intentState.has(RUNNING)) {
@@ -149,5 +164,20 @@ class Player extends Unibody {
 		}
 
 		playAnimIfNotAlready(nextAnim);
+
+		animTmp.copyFrom(reference);
+		animTmp.subtract(body.x, body.y);
+		gun.angle = animTmp.degrees;
+	}
+
+	override function draw() {
+		// Handles what order we draw the player/gun so that it looks right
+		if (StringTools.endsWith(animation.curAnim.name, "up")) {
+			gun.draw();
+			super.draw();
+		} else {
+			super.draw();
+			gun.draw();
+		}
 	}
 }
