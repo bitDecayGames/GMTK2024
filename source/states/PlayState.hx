@@ -1,5 +1,6 @@
 package states;
 
+import entities.Bullet;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import entities.Reticle;
@@ -20,6 +21,8 @@ import levels.ldtk.LDTKProject;
 using states.FlxStateExt;
 
 class PlayState extends FlxTransitionableState {
+    public static var me:PlayState;
+    
     var player:FlxSprite;
     var uiGroup:FlxGroup = new FlxGroup();
     var uiCamera:FlxCamera;
@@ -32,10 +35,16 @@ class PlayState extends FlxTransitionableState {
 	public var level:LDTKProject_Level;
 	var project = new LDTKProject();
 
+    var bulletGroup:FlxGroup;
+    public function AddBullet(bullet:Bullet) {
+        
+    }
 
     override public function create() {
         super.create();
         Lifecycle.startup.dispatch();
+
+        me = this;
 
         FlxG.camera.pixelPerfectRender = true;
         
