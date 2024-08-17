@@ -1,6 +1,7 @@
 package entities;
 
 import flixel.input.keyboard.FlxKey;
+import flixel.math.FlxPoint;
 import flixel.FlxG;
 import bitdecay.flixel.spacial.Cardinal;
 import flixel.FlxSprite;
@@ -111,7 +112,42 @@ class Player extends Unibody {
 		}
 	}
 
-	function updateAnims() {
-		// Here we'd like to look at the overall state of the player (input + interaction) and play the correct animations
+	override function updateCurrentAnimation(reference:FlxPoint) {
+		var nextAnim = animation.curAnim.name;
+
+		var upping = false;
+		var downing = false;
+		var lefting = false;
+		var righting = false;
+		var myPos = body.get_position();
+		if (reference.x < myPos.x) {
+			lefting = true;
+			flipX = true;
+		} else if (reference.x > myPos.x) {
+			righting = true;
+			flipX = false;
+		}
+
+		if (reference.y < myPos.y) {
+			upping = true;
+		} else if (reference.y > myPos.y) {
+			upping = false;
+		}
+
+		if (intentState.has(RUNNING)) {
+			if (upping) {
+				nextAnim = anims.Run_up;
+			} else {
+				nextAnim = anims.Run;
+			}
+		} else {
+			if (upping) {
+				nextAnim = anims.Idle_up;
+			} else {
+				nextAnim = anims.Idle;
+			}
+		}
+
+		playAnimIfNotAlready(nextAnim);
 	}
 }

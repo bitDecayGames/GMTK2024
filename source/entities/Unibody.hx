@@ -122,7 +122,7 @@ class Unibody extends EchoSprite {
 		// PlayState.ME.addEnemyBullet(bullet);
 	// }
 
-	function updateCurrentAnimation() {
+	function updateCurrentAnimation(reference:FlxPoint) {
 		var nextAnim = animation.curAnim.name;
 
 		// if (intentState.has(MOVE_RIGHT)) {
@@ -177,13 +177,13 @@ class Unibody extends EchoSprite {
 		// playAnimIfNotAlready(nextAnim);
 	}
 
-	// function playAnimIfNotAlready(name:String):Bool {
-		// if (animation.curAnim == null || (animation.curAnim.name != name && animation.curAnim.name != name + "Shoot")) {
-		// 	animation.play(name, true);
-		// 	return true;
-		// }
-		// return false;
-	// }
+	function playAnimIfNotAlready(name:String):Bool {
+		if (animation.curAnim == null || animation.curAnim.name != name) {
+			animation.play(name, true);
+			return true;
+		}
+		return false;
+	}
 
 	// @:access(flixel.animation.FlxAnimation)
 	// function muzzleFlashAnim(duration:Float) {
