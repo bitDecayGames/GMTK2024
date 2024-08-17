@@ -40,6 +40,7 @@
 	<!-- _____________________________ First Party Libraries _____________________ -->
 
 	<haxelib name="bitlytics" />
+	<haxelib name="bitdecaybtree" />
 	<haxelib name="flixelutils" />
 	<haxelib name="haxefmod" />
 	<haxelib name="newgrounds" />
