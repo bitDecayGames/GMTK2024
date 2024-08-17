@@ -47,7 +47,6 @@ class PlayState extends FlxTransitionableState {
         FlxG.cameras.add(uiCamera, false);
         uiGroup.cameras = [uiCamera];
 		// QuickLog.error('Example error');
-	}
 
         // Adding the FL Studio logo as a static UI element in the center of the screen
         var flStudioLogo = new FlxSprite(50, 50, AssetPaths.items__png);
