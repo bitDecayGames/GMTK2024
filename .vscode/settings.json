@@ -23,5 +23,12 @@
         "FMOD",
         "haxe",
         "haxelib"
-    ]
+    ],
+    "haxe.enableServerView": true,
+    "haxe.displayServer": {
+        "arguments": ["-v"],
+        "print": {
+            "reusing": true
+        }
+    }
 }

@@ -90,7 +90,7 @@ while read -r line; do
   if [[ ${libVersionOrGit} == "git" ]]; then
     if [[ -z "${gitBranchOrTag}" ]]; then
       echo "Installing ${libName} git master"
-      haxelib git --always --quiet ${libName} ${gitLocation}
+      echo "" | haxelib git --always --quiet ${libName} ${gitLocation}
     else
       echo "Installing ${libName} git branch ${gitBranchOrTag}"
       # commands that can hijack standard in will cause our file read loop to break per: https://stackoverflow.com/a/35208546
@@ -104,7 +104,7 @@ while read -r line; do
 
   if [[ ${libName} == "lime" ]]; then
     # this is a one-off just to make sure that lime is configured properly in our local repo
-    haxelib run lime setup
+    haxelib run lime setup y
   fi
 done <haxelib.deps
 

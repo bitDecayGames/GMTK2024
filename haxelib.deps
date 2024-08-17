@@ -8,15 +8,15 @@ lime 8.1.2
 newgrounds 2.0.0
 
 # arcade physics
-# echo git https://github.com/MondayHopscotch/echo.git
+echo git https://github.com/MondayHopscotch/echo.git
+echo-flixel git https://github.com/AustinEast/echo-flixel.git
 
 # full physics
 # nape-haxe4 2.0.22
 
 # bitDecayGames deps
-bitdecaybtree git https://github.com/bitDecayGames/BehaviorTree.git
 bitlytics git https://github.com/bitDecayGames/Bitlytics.git
 flixelutils git https://github.com/bitDecayGames/flixel-utils.git
 
 # misc deps
-haxefmod git https://github.com/Tanz0rz/haxe-fmod.git
+haxefmod git https://github.com/Tanz0rz/haxe-fmod.git master

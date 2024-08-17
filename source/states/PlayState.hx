@@ -10,6 +10,7 @@ import entities.Player;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import bitdecay.flixel.debug.DebugDraw;
+import echo.FlxEcho;
 
 using states.FlxStateExt;
 
@@ -22,6 +23,12 @@ class PlayState extends FlxTransitionableState {
 
 		FlxG.camera.pixelPerfectRender = true;
 
+		FlxEcho.init({
+			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
+			width: FlxG.width,
+			height: FlxG.height,
+		});
+
 		player = new Player();
 		add(player);
 
@@ -31,14 +38,14 @@ class PlayState extends FlxTransitionableState {
 
 		add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
 
-		QuickLog.error('Example error');
+		// QuickLog.error('Example error');
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		var cam = FlxG.camera;
-		DebugDraw.ME.drawCameraRect(cam.getCenterPoint().x - 5, cam.getCenterPoint().y - 5, 10, 10, DebugLayers.RAYCAST, FlxColor.RED);
+		// var cam = FlxG.camera;
+		// DebugDraw.ME.drawCameraRect(cam.getCenterPoint().x - 5, cam.getCenterPoint().y - 5, 10, 10, DebugLayers.RAYCAST, FlxColor.RED);
 	}
 
 	override public function onFocusLost() {
