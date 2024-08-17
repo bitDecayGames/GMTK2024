@@ -177,9 +177,9 @@ class Unibody extends EchoSprite {
 		// playAnimIfNotAlready(nextAnim);
 	}
 
-	function playAnimIfNotAlready(name:String):Bool {
-		if (animation.curAnim == null || animation.curAnim.name != name) {
-			animation.play(name, true);
+	function playAnimIfNotAlready(name:String, playInReverse:Bool, ?forceAnimationRefresh:Bool):Bool {
+		if (animation.curAnim == null || animation.curAnim.name != name || forceAnimationRefresh) {
+			animation.play(name, true, playInReverse);
 			return true;
 		}
 		return false;

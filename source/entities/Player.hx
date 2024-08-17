@@ -1,5 +1,6 @@
 package entities;
 
+import js.html.Console;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
@@ -31,6 +32,7 @@ class Player extends Unibody {
 	var rightDrawfset = FlxPoint.get(6, 9);
 	var leftDrawfset = FlxPoint.get(10, 9);
 	var upMod = -6;
+	var storedLefting = false;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -51,8 +53,8 @@ class Player extends Unibody {
 		FlxG.state.add(gun);
 		speed = 40;
 
-		FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
-		FlxG.watch.add(this, "rollSpeed", "Roll speed");
+		// FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
+		// FlxG.watch.add(this, "rollSpeed", "Roll speed");
 		FlxG.watch.add(gun, "angle", "gun angle");
 	}
 
@@ -132,6 +134,7 @@ class Player extends Unibody {
 		var downing = false;
 		var lefting = false;
 		var righting = false;
+		var reversing = false;
 		var myPos = body.get_position();
 		if (reference.y < myPos.y) {
 			upping = true;
@@ -149,11 +152,22 @@ class Player extends Unibody {
 			gun.setDrawfset(rightDrawfset, upping ? upMod : 0);
 		}
 
+        var currentPlayerPosition = body.get_position();
+		var cursorLeftOfPlayer = false;
+
 		if (intentState.has(RUNNING)) {
+			if (FlxG.mouse.getPosition().subtract(currentPlayerPosition.x, 0).x < 0) {
+				cursorLeftOfPlayer = true;
+			}
+
 			if (upping) {
 				nextAnim = anims.Run_up;
 			} else {
 				nextAnim = anims.Run;
+			}
+			
+			if ((body.velocity.x > 0 && cursorLeftOfPlayer) || (body.velocity.x < 0 && !cursorLeftOfPlayer)) {
+				reversing = true;
 			}
 		} else {
 			if (upping) {
@@ -163,11 +177,16 @@ class Player extends Unibody {
 			}
 		}
 
-		playAnimIfNotAlready(nextAnim);
+		var forceAnimationRefresh = false;
+		if (storedLefting != lefting) {
+			forceAnimationRefresh = true;
+		}
+		playAnimIfNotAlready(nextAnim, reversing, forceAnimationRefresh);
 
 		animTmp.copyFrom(reference);
 		animTmp.subtract(body.x, body.y);
 		gun.angle = animTmp.degrees;
+		storedLefting = lefting;
 	}
 
 	override function draw() {
