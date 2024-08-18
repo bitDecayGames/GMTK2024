@@ -29,6 +29,7 @@ class Player extends Unibody {
 	var rollDurationMs = 400;
 	var rollSpeed = 60;
 	var animTmp = FlxPoint.get();
+	var bulletSpeed = 200;
 
 	var rightDrawfset = FlxPoint.get(6, 9);
 	var leftDrawfset = FlxPoint.get(10, 9);
@@ -127,7 +128,7 @@ class Player extends Unibody {
 			var position = body.get_position();
 			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
 			if (FlxG.mouse.justPressed) {
-				var bullet = new Bullet(positionAsFlxPoint, gun.angle, 60);
+				var bullet = new Bullet(positionAsFlxPoint, gun.angle, bulletSpeed);
 				PlayState.me.AddBullet(bullet);
 				PlayState.me.AddScrap(new Scrap(positionAsFlxPoint));
 			}
