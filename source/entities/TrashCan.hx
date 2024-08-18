@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxTimer;
 import js.html.AbortController;
 import flixel.path.FlxPath;
 import flixel.math.FlxPoint;
@@ -63,7 +64,8 @@ class TrashCan extends Unibody {
                             new HopAround(this) //,
                             // new BigJump(this),
                             // new CircleBlast(this)
-                        ])
+                        ]),
+                        new Explode(this)
                     ])),
                     new Precondition(new StatusAction((delta) -> {
                         if (!hitByKillGun) {
@@ -101,7 +103,7 @@ class TrashCan extends Unibody {
 				{
 					type:RECT,
 					width: 16,
-					height: 16,
+					height: 32,
 					offset_y: 8,
 				}
 			]
@@ -140,7 +142,7 @@ class HopAround implements Node {
         }
 
         if (jumping) {
-            can.body.velocity.set(can.velocity.x, can.velocity.y);
+            //can.body.velocity.set(can.velocity.x, can.velocity.y);
 
             // if (can.path != null && !can.path.active) {
             //     jumping = false;
@@ -158,6 +160,8 @@ class HopAround implements Node {
                     return SUCCESS;
                 }
             }
+
+            return RUNNING;
         }
 
         // Pick target location
@@ -167,10 +171,28 @@ class HopAround implements Node {
         dest.addPoint(jump);
 
         if (can.path == null) {
-            can.path = new FlxPath([dest]);
+            can.path = new FlxPath([can.getPosition(), dest]);
         } else {
-            can.path.start([dest]);
+            can.path.start([can.getPosition(), dest]);
         }
+
+        // NGL, pretty jank way of going through the animations... but we'll clean it up at some point
+        can.animation.play(TrashCan.anims.jump);
+        can.animation.finishCallback = (name) -> {
+            can.animation.play(TrashCan.anims.float);
+            can.animation.finishCallback = null;
+            new FlxTimer().start(0.5, (t) -> {
+                can.animation.play(TrashCan.anims.land);
+                can.animation.finishCallback = (name) -> {
+                    can.animation.play(TrashCan.anims.idle);
+                    jumpsRemaining--;
+                    jumping = false;
+                    cooldown = 1;
+                    can.animation.finishCallback = null;
+                };
+            });
+
+        };
 
         can.path.onComplete = (path) -> {jumping = false; cooldown = 1;};
         

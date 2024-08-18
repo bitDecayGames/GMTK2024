@@ -72,7 +72,6 @@ class Player extends Unibody {
 					type:RECT,
 					width: 16,
 					height: 16,
-					offset_y: 8,
 				}
 			]
 		});
