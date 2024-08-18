@@ -262,6 +262,22 @@ class PlayState extends FlxTransitionableState {
 				}
 			}
 		});
+        // Only player is told of scraps
+        FlxEcho.listen(scrapGroup, playerGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
         // Only enemies are told of bullets
         FlxEcho.listen(enemyGroup, bulletGroup, {
 			separate: false,
