@@ -1,5 +1,6 @@
 package states;
 
+import entities.ScrapCollector;
 import ui.CharacterDialog;
 import entities.Scrap;
 import bitdecay.flixel.sorting.ZSorting;
@@ -34,7 +35,7 @@ using echo.FlxEcho;
 class PlayState extends FlxTransitionableState {
     public static var me:PlayState;
     
-    public var player:EchoSprite;
+    public var player:Player;
 
     var uiCamera:FlxCamera;
 
@@ -54,6 +55,7 @@ class PlayState extends FlxTransitionableState {
     public var playerGroup = new FlxGroup();
     public var enemyGroup = new FlxGroup();
     public var scrapGroup = new FlxGroup();
+    public var generalInteractables = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     public var topGroup = new FlxGroup();
     
@@ -75,6 +77,11 @@ class PlayState extends FlxTransitionableState {
     public function AddScrap(scrap:Scrap) {
         scrap.add_to_group(scrapGroup);
         entityRenderGroup.add(scrap);
+    }
+
+    public function AddInteractable(int:EchoSprite) {
+        int.add_to_group(generalInteractables);
+        entityRenderGroup.add(int);
     }
 
     override public function create() {
@@ -137,6 +144,12 @@ class PlayState extends FlxTransitionableState {
         bulletGroup.forEach((f) -> f.destroy());
 		bulletGroup.clear();
 
+        generalInteractables.forEach((f) -> f.destroy());
+		generalInteractables.clear();
+
+        scrapGroup.forEach((f) -> f.destroy());
+		scrapGroup.clear();
+
         enemyGroup.forEach((f) -> f.destroy());
 		enemyGroup.clear();
 
@@ -152,8 +165,10 @@ class PlayState extends FlxTransitionableState {
         entityRenderGroup.clear();
 
         FlxEcho.clear();
+        bulletGroup.add_group_bodies();
+        enemyGroup.add_group_bodies();
 
-        AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
+        // AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
 
         camera.scroll.set();
 		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
@@ -172,9 +187,12 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-        var testTrash = new TrashCan(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
+        // var testTrash = new TrashCan(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
+
+        var testRecepticle = new ScrapCollector(150, 150);
+        AddInteractable(testRecepticle);
 
 		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
 		// Or do we just want to project the mouse position into the game world cam?
@@ -281,6 +299,29 @@ class PlayState extends FlxTransitionableState {
         // Player is told of scrap collisions
         FlxEcho.listen(playerGroup, scrapGroup, {
 			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+            stay: (a, b, o) -> {
+                // Slightly special case as we know scrap can be delayed in pickup. we want this to feel right
+                if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}            
+            },
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        // Interactables told of player touch to help isolate code
+        FlxEcho.listen(generalInteractables, playerGroup, {
+			separate: true,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;

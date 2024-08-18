@@ -23,8 +23,10 @@ class Scrap extends Unibody {
 	var loopDropRadius = 30;
     public var collectible = false;
 
-    public function new(source:FlxPoint, delayPickup:Bool = false) {
+    public function new(source:FlxPoint, distance:Int = 30, delayPickup:Bool = false) {
         super(source.x, source.y);
+
+        loopDropRadius = distance;
 
         if(Math.random() < 0.5){
             Aseprite.loadAllAnimations(this, AssetPaths.bolt__json);

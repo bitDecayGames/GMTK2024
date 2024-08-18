@@ -59,5 +59,11 @@ class Level {
 				}
 			}
 		}
+
+		// TODO: handle all this crap
+		// level.l_Entities.all_Recepticle
+		// level.l_Entities.all_Door
+		// level.l_Entities.all_TinkShop
+
 	}
 }

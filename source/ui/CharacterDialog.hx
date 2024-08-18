@@ -63,6 +63,10 @@ class CharacterDialog extends FlxGroup {
 
 		add(textGroup);
 
+		textGroup.finishCallback = () -> {
+			kill();
+		}
+
         portrait = new FlxSprite(textGroup.bounds.x + 5, textGroup.bounds.top + (textGroup.bounds.bottom - textGroup.bounds.top) / 2 - 24);
         portrait.scrollFactor.set();
         portrait.loadGraphic(expressionsAsset, true, 48, 48);

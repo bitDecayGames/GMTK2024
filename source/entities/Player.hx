@@ -40,7 +40,7 @@ class Player extends Unibody {
 	var lastInputDir = FlxPoint.get();
 	var flippedInputDir = false;
 
-	var scrapCount = 0;
+	public var scrapCount = 0;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -249,7 +249,7 @@ class Player extends Unibody {
 
 		// TODO: Drop scrap
 		for (i in 0...scrapCount) {
-			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), true));
+			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
 		}
 		scrapCount = 0;
 	}
