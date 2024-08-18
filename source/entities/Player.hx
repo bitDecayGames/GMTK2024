@@ -23,6 +23,7 @@ class Player extends Unibody {
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
 	var gun:Gun;
+	var pistolBulletSpeed = 120;
 
 	var playerNum = 0;
 	var dashing = false;
@@ -129,7 +130,7 @@ class Player extends Unibody {
 			var position = body.get_position();
 			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
 			if (FlxG.mouse.justPressed) {
-				var bullet = new Bullet(positionAsFlxPoint, gun.angle, 60);
+				var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
 				PlayState.me.AddBullet(bullet);
 				PlayState.me.AddScrap(new Scrap(positionAsFlxPoint));
 			}
