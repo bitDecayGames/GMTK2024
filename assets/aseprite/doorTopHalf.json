@@ -1,7 +1,61 @@
 { "frames": [
    {
-    "filename": "doorTopHalf.aseprite",
+    "filename": "doorTopHalf 0.aseprite",
     "frame": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 1.aseprite",
+    "frame": { "x": 32, "y": 0, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 2.aseprite",
+    "frame": { "x": 64, "y": 0, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 3.aseprite",
+    "frame": { "x": 0, "y": 79, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 4.aseprite",
+    "frame": { "x": 32, "y": 79, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 5.aseprite",
+    "frame": { "x": 64, "y": 79, "w": 32, "h": 79 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
+    "sourceSize": { "w": 32, "h": 79 },
+    "duration": 100
+   },
+   {
+    "filename": "doorTopHalf 6.aseprite",
+    "frame": { "x": 0, "y": 158, "w": 32, "h": 79 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 79 },
@@ -14,9 +68,11 @@
   "version": "1.3-rc6-x64",
   "image": "doorTopHalf.png",
   "format": "RGBA8888",
-  "size": { "w": 32, "h": 79 },
+  "size": { "w": 96, "h": 237 },
   "scale": "1",
   "frameTags": [
+   { "name": "open", "from": 0, "to": 6, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "close", "from": 0, "to": 6, "direction": "reverse", "repeat": "1", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
