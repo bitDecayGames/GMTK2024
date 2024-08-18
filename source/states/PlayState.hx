@@ -33,7 +33,8 @@ using echo.FlxEcho;
 class PlayState extends FlxTransitionableState {
     public static var me:PlayState;
     
-    var player:FlxSprite;
+    public var player:EchoSprite;
+
     var uiCamera:FlxCamera;
 
 	var reticle:FlxSprite;
