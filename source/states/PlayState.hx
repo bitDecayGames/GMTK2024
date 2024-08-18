@@ -55,6 +55,7 @@ class PlayState extends FlxTransitionableState {
     public var enemyGroup = new FlxGroup();
     public var scrapGroup = new FlxGroup();
     public var wallBodies:Array<Body> = [];
+    public var topGroup = new FlxGroup();
     
 	var tmp = FlxPoint.get();
 	var tmp2 = FlxPoint.get();
@@ -92,6 +93,7 @@ class PlayState extends FlxTransitionableState {
 
         add(terrainGroup);
         add(entityRenderGroup);
+        add(topGroup);
         
         // Don't want to add these to the scene directly. let the render group handle them
         // add(playerGroup);
@@ -177,7 +179,7 @@ class PlayState extends FlxTransitionableState {
 		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
 		// Or do we just want to project the mouse position into the game world cam?
 		reticle = new Reticle();
-        uiGroup.add(reticle);
+        topGroup.add(reticle);
 
         configureListeners();
     }
@@ -284,8 +286,10 @@ class PlayState extends FlxTransitionableState {
 		reticle.getPosition(tmp);
 		player.getPosition(tmp2);
 		
-		tmp.addPoint(tmp2).scale(.5);
-		camera.focusOn(tmp);
+        var focus = FlxPoint.get();
+        focus.copyFrom(tmp).subtractPoint(tmp2).scale(0.2);
+        focus.addPoint(tmp2);
+		camera.focusOn(focus);
 
         entityRenderGroup.sort(ZSorting.getSort(BOTTOM));
     }

@@ -61,7 +61,8 @@ class Main extends Sprite {
 		FlxG.sound.volumeDownKeys = null;
 
 		// Don't use the flixel cursor
-		FlxG.mouse.useSystemCursor = true;
+		FlxG.mouse.visible = false;
+		// FlxG.mouse.useSystemCursor = true;
 
 		#if debug
 		FlxG.autoPause = false;
