@@ -10,7 +10,6 @@ import flixel.FlxSprite;
 using echo.FlxEcho;
 
 class Bullet extends Unibody {
-	public static var slices = AsepriteMacros.sliceNames("assets/aseprite/sketchpad.json");
 
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
@@ -29,8 +28,8 @@ class Bullet extends Unibody {
 
         //origin.set(offsetX, offsetY);
         this.drawfset.copyFrom(drawfset);
-        Aseprite.loadSlice(this, "assets/aseprite/sketchpad.json", slices.pistol_0);
-        origin.set(width/2, height/2);
+		loadGraphic(AssetPaths.magnumBullet__png);
+		centerOrigin();
     }
 
 	override function handleEnter(other:Body, data:Array<CollisionData>) {

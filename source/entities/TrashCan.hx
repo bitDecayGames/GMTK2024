@@ -1,5 +1,6 @@
 package entities;
 
+import echo.data.Data.CollisionData;
 import flixel.util.FlxTimer;
 import js.html.AbortController;
 import flixel.path.FlxPath;
@@ -98,6 +99,7 @@ class TrashCan extends Unibody {
 			max_velocity_length: 1000,
 			drag_x: 0,
 			mass: 100,
+            kinematic: true,
 			shapes: [
 				// Standard moving hitbox
 				{
@@ -110,6 +112,11 @@ class TrashCan extends Unibody {
 		});
 	}
 
+    function handleHit(bullet:Bullet) {
+        // TODO: Whatever damage/scrap mechanic we want
+        bullet.kill();
+    }
+
 	override public function update(delta:Float) {
 		super.update(delta);
 
@@ -117,6 +124,14 @@ class TrashCan extends Unibody {
             // Intersting. why it fail?
         }
 	}
+
+    override function handleEnter(other:Body, data:Array<CollisionData>) {
+        super.handleEnter(other, data);
+
+        if (other.object is Bullet) {
+            handleHit(cast other.object);
+        }
+    }
 }
 
 // Jump a small distance 2-4 times, somewhat randomly within the play area. Maybe shoot a can projectile at the 

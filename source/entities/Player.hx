@@ -1,5 +1,6 @@
 package entities;
 
+import echo.data.Data.CollisionData;
 import states.PlayState;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
@@ -31,8 +32,9 @@ class Player extends Unibody {
 
 	var rightDrawfset = FlxPoint.get(6, 9);
 	var leftDrawfset = FlxPoint.get(10, 9);
-	var upMod = -6;
+	var upMod = -4;
 	var storedLefting = false;
+	var storedUpping = false;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -50,7 +52,7 @@ class Player extends Unibody {
 		gun = new Gun(this, rightDrawfset);
 
 		// TODO: This is not how we want to leave this, but it's a good filler for now
-		FlxG.state.add(gun);
+		//FlxG.state.add(gun);
 		speed = 40;
 
 		// FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
@@ -151,11 +153,11 @@ class Player extends Unibody {
 		if (reference.x < myPos.x) {
 			lefting = true;
 			flipX = true;
-			gun.setDrawfset(leftDrawfset, upping ? upMod : 0);
+			gun.setDrawfset(upping ? rightDrawfset : leftDrawfset, upping ? upMod : 0);
 		} else if (reference.x > myPos.x) {
 			righting = true;
 			flipX = false;
-			gun.setDrawfset(rightDrawfset, upping ? upMod : 0);
+			gun.setDrawfset(upping ? leftDrawfset : rightDrawfset, upping ? upMod : 0);
 		}
 
         var currentPlayerPosition = body.get_position();
@@ -193,11 +195,25 @@ class Player extends Unibody {
 		animTmp.subtract(body.x, body.y);
 		gun.angle = animTmp.degrees;
 		storedLefting = lefting;
+		storedUpping = upping;
+	}
+
+    override function handleEnter(other:Body, data:Array<CollisionData>) {
+        super.handleEnter(other, data);
+
+        if (other.object is Bullet) {
+            handleHit(cast other.object);
+        }
+    }
+
+	function handleHit(bullet:Bullet) {
+		// TODO: handle damage / scrap
+		bullet.kill();
 	}
 
 	override function draw() {
 		// Handles what order we draw the player/gun so that it looks right
-		if (StringTools.endsWith(animation.curAnim.name, "up")) {
+		if (storedUpping) {
 			gun.draw();
 			super.draw();
 		} else {
