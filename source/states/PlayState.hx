@@ -1,5 +1,6 @@
 package states;
 
+import entities.Scrap;
 import entities.Bullet;
 import entities.TrashCan;
 import entities.EchoSprite;
@@ -40,6 +41,7 @@ class PlayState extends FlxTransitionableState {
     var uiGroup:FlxGroup = new FlxGroup();
     public var terrainGroup = new FlxGroup();
     public var bulletGroup = new FlxGroup();
+    public var scrapGroup = new FlxGroup();
 
     public var playerGroup = new FlxGroup();
     public var enemyGroup = new FlxGroup();
@@ -50,6 +52,10 @@ class PlayState extends FlxTransitionableState {
     
     public function AddBullet(bullet:Bullet) {
         bullet.add_to_group(bulletGroup);
+    }
+    
+    public function AddScrap(scrap:Scrap) {
+        scrap.add_to_group(scrapGroup);
     }
 
     override public function create() {
@@ -70,6 +76,7 @@ class PlayState extends FlxTransitionableState {
         add(playerGroup);
         add(enemyGroup);
         add(bulletGroup);
+        add(scrapGroup);
 
         // TODO: Confirm ordering here is proper
         loadLevel("Level_0");

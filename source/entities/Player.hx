@@ -115,9 +115,11 @@ class Player extends Unibody {
 
 			
 			var position = body.get_position();
+			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
 			if (FlxG.mouse.justPressed) {
-				var bullet = new Bullet(new FlxPoint(position.x, position.y), gun.angle, 60);
+				var bullet = new Bullet(positionAsFlxPoint, gun.angle, 60);
 				PlayState.me.AddBullet(bullet);
+				PlayState.me.AddScrap(new Scrap(positionAsFlxPoint));
 			}
 		}
 
