@@ -14,6 +14,8 @@ class Bullet extends Unibody {
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
 
+	var lifespan = 5.0;
+
     public function new(source:FlxPoint, angle:Float, speed:Float) {
         super(source.x, source.y);
 
@@ -64,6 +66,12 @@ class Bullet extends Unibody {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+
+		lifespan -= elapsed;
+		if (lifespan <= 0) {
+			// likely need to do some pooling eventually so that we can reuse these bodies
+			kill();
+		}
     }
     
     override function draw() {

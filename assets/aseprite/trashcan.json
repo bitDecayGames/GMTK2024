@@ -230,7 +230,8 @@
    { "name": "launch", "from": 5, "to": 5, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "float", "from": 8, "to": 8, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "land", "from": 9, "to": 12, "direction": "forward", "repeat": "1", "color": "#000000ff" },
-   { "name": "shoot", "from": 14, "to": 21, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "open", "from": 14, "to": 20, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "shoot", "from": 21, "to": 21, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "dead", "from": 23, "to": 23, "direction": "forward", "repeat": "1", "color": "#000000ff" }
   ],
   "layers": [

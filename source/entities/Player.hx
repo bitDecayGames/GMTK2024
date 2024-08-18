@@ -40,6 +40,8 @@ class Player extends Unibody {
 	var lastInputDir = FlxPoint.get();
 	var flippedInputDir = false;
 
+	var scrapCount = 0;
+
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
@@ -132,7 +134,6 @@ class Player extends Unibody {
 			if (FlxG.mouse.justPressed) {
 				var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
 				PlayState.me.AddBullet(bullet);
-				PlayState.me.AddScrap(new Scrap(positionAsFlxPoint));
 			}
 		}
 
@@ -236,11 +237,31 @@ class Player extends Unibody {
         if (other.object is Bullet) {
             handleHit(cast other.object);
         }
+
+		if (other.object is Scrap) {
+            handleScrap(cast other.object);
+        }
     }
 
 	function handleHit(bullet:Bullet) {
 		// TODO: handle damage / scrap
 		bullet.kill();
+
+		// TODO: Drop scrap
+		for (i in 0...scrapCount) {
+			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), true));
+		}
+		scrapCount = 0;
+	}
+
+	function handleScrap(scrap:Scrap) {
+		if (!scrap.collectible) {
+			return;
+		}
+
+		// TODO: SFX picked up a piece of scrap
+		scrap.kill();
+		scrapCount++;
 	}
 
 	override function draw() {

@@ -247,7 +247,7 @@ class PlayState extends FlxTransitionableState {
 			}
 		});
         // Only player is told of bullets
-        FlxEcho.listen(enemyBulletGroup, playerGroup, {
+        FlxEcho.listen(playerGroup, enemyBulletGroup, {
 			separate: false,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {
@@ -271,6 +271,29 @@ class PlayState extends FlxTransitionableState {
 					aSpr.handleEnter(b, o);
 				}                
 			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        // Player is told of scrap collisions
+        FlxEcho.listen(playerGroup, scrapGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+            stay: (a, b, o) -> {
+                // Slightly special case as we know scrap can be delayed in pickup. we want this to feel right
+                if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}            
+            },
 			exit: (a, b) -> {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;

@@ -15,14 +15,15 @@ import flixel.FlxSprite;
 using echo.FlxEcho;
 
 class Scrap extends Unibody {
-    var parent:FlxSprite;
-    var drawfset = FlxPoint.get();
-	var loopDropRadius = 30;
-
 	public static var animsBolt = AsepriteMacros.tagNames("assets/aseprite/bolt.json");
 	public static var animsNut = AsepriteMacros.tagNames("assets/aseprite/nut.json");
 
-    public function new(source:FlxPoint) {
+    var parent:FlxSprite;
+    var drawfset = FlxPoint.get();
+	var loopDropRadius = 30;
+    public var collectible = false;
+
+    public function new(source:FlxPoint, delayPickup:Bool = false) {
         super(source.x, source.y);
 
         if(Math.random() < 0.5){
@@ -48,6 +49,14 @@ class Scrap extends Unibody {
 
         // Create the path for it to follow
         path = new FlxPath();
+
+        if (delayPickup) {
+            collectible = false;
+            path.onComplete = (p) -> collectible = true;
+        } else {
+            collectible = true;
+        }
+
         var initialPoint = new FlxPoint(source.x, source.y);
         var midpoint = GetMidpoint(initialPoint, randomPointAroundPlayer);
         var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
@@ -59,6 +68,7 @@ class Scrap extends Unibody {
 
         // Start the movement and add it to the state
         path.start(points, 100, FlxPathType.FORWARD);
+        source.putWeak();
     }
 
 	function GetMidpoint(point1:FlxPoint, point2:FlxPoint):FlxPoint {
