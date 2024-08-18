@@ -72,8 +72,7 @@ class TrashCan extends Unibody {
                         new Wait(0.5, 1.5),
                         new Selector(RANDOM([1, 1]), [
                             new HopAround(this),
-                            new BigJump(this) //,
-                            // new CircleBlast(this)
+                            new BigJump(this)
                         ])
                     ])),
                     new Precondition(new StatusAction((delta) -> {
@@ -264,6 +263,7 @@ class BigJump implements Node {
     var state:String = "wait";
     var fallSpeed = 1000.0;
     var offScreenBuffer = 16 * 5;
+    var blastDirections = 12;
 
     var stateWait = "wait";
     var stateWindup = "windup";
@@ -341,6 +341,14 @@ class BigJump implements Node {
 				can.body.set_position(targetPoint.x, targetPoint.y);
 				can.animation.play(TrashCan.anims.land);
 				state = stateLand;
+
+
+				var increment = 360 / blastDirections;
+				var startPos = FlxPoint.get(can.body.x, can.body.y);
+				// TODO: SFX shoot ring of cans
+				for (i in 0...12) {
+					PlayState.me.AddEnemyBullet(new SpinningCan(startPos, i * increment, 100));
+				}
 			}
 		} else if (state == stateLand) {
 			// TODO: Shoot upon landing?
@@ -358,20 +366,66 @@ class BigJump implements Node {
 
 class CircleBlast implements Node {
     var can:TrashCan;
+    var blastDirections = 12;
+    var angleOffset = 0;
+    var angleChange = 5;
+    var baseCoolDown = 0.2;
+
+    var wavesRemaining = 3;
+    var cd = 0.0;
+
+    var started = false;
+
     public function new(can:TrashCan) {
         this.can = can;
     }
 
     public function init(context:BTContext) {
+        started = false;
+        angleOffset = 0;
+        wavesRemaining = 8;
+
         can.animation.finishCallback = (name) -> {
-            // if (name == )
+            if (name == TrashCan.anims.open) {
+                can.animation.play(TrashCan.anims.shoot);
+            }
         }
     }
 
     public function process(delta:Float):NodeStatus {
-        can.animation.play(TrashCan.anims.shoot);
-        // TODO: implement
-        return SUCCESS;
+        if (!started) {
+            started = true;
+            can.animation.play(TrashCan.anims.open);
+            return RUNNING;
+        }
+
+        if (can.animation.name == null || can.animation.name != TrashCan.anims.shoot) {
+            return RUNNING;
+        }
+
+        if (cd > 0) {
+            cd -= delta;
+            return RUNNING;
+        }
+
+        if (wavesRemaining == 0) {
+            can.animation.play(TrashCan.anims.idle);
+            return SUCCESS;
+        }
+
+		wavesRemaining--;
+
+		var increment = 360 / blastDirections;
+		var startPos = FlxPoint.get(can.body.x, can.body.y);
+		// TODO: SFX shoot ring of cans
+		for (i in 0...12) {
+			PlayState.me.AddEnemyBullet(new SpinningCan(startPos, angleOffset + i * increment, 100));
+		}
+
+		cd = baseCoolDown;
+        angleOffset += angleChange;
+        
+        return RUNNING;
     }
 
     public function exit() {}
