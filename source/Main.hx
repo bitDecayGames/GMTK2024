@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxSprite;
+import flixel.FlxCamera;
 import debug.DebugLayers;
 import flixel.system.debug.log.LogStyle;
 import haxe.Timer;
@@ -19,6 +21,7 @@ import flixel.util.FlxColor;
 import misc.FlxTextFactory;
 import openfl.display.Sprite;
 import bitdecay.flixel.debug.DebugDraw;
+import lime.app.Application;
 #if play
 import states.PlayState;
 #end
@@ -52,8 +55,17 @@ class Main extends Sprite {
 		}
 		#end
 		addChild(new FlxGame(0, 0, startingState, 60, 60, true, false));
-
 		FlxG.fixedTimestep = false;
+
+		FlxG.stage.quality = LOW;
+		FlxG.camera.antialiasing = false;
+		FlxSprite.defaultAntialiasing = false;
+        FlxG.camera.pixelPerfectRender = true;
+		
+		#if web
+		// pixel perfect render fix!
+		Application.current.window.element.style.setProperty("image-rendering", "pixelated");
+		#end
 
 		// Disable flixel volume controls as we don't use them because of FMOD
 		FlxG.sound.muteKeys = null;

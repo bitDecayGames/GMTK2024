@@ -45,7 +45,7 @@ class Player extends Unibody {
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
-		speed = 100;
+		speed = 95;
 
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
