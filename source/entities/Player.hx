@@ -24,7 +24,7 @@ class Player extends Unibody {
 	var gun:Gun;
 
 	var playerNum = 0;
-	var lockControls = false;
+	var dashing = false;
 
 	var rollDurationMs = 400;
 	var rollSpeed = 60;
@@ -39,7 +39,7 @@ class Player extends Unibody {
 	public function new(x:Float, y:Float) {
 		super(x, y);
 
-		speed = 40;
+		speed = 100;
 
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
@@ -105,11 +105,11 @@ class Player extends Unibody {
 			speed += 5;
 		}
 
-		if (!lockControls && SimpleController.pressed(Button.A, playerNum)) {
-			lockControls = true;
+		if (!dashing && SimpleController.pressed(Button.A, playerNum)) {
+			dashing = true;
 			Timer.delay(() -> {
 				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
-				lockControls = false;
+				dashing = false;
 				alpha = 1;
 			}, rollDurationMs);
 			
@@ -118,7 +118,7 @@ class Player extends Unibody {
 			body.velocity.set(tmp.x, tmp.y);
 		}
 
-		if (!lockControls) {
+		if (!dashing) {
 			handleDirectionIntent();
 			handleMovement();
 			updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
