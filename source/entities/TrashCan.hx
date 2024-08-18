@@ -33,6 +33,8 @@ class TrashCan extends Unibody {
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/trashcan.json");
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
+    var hitsToEachScrap = 5;
+    var hitsToNextScrap = 5;
     var scrapDropped = 0;
     var firstPhaseScrap = 10;
     public var hitByKillGun = false;
@@ -124,7 +126,17 @@ class TrashCan extends Unibody {
         // TODO: SFX trash can hit by bullet
         bullet.kill();
 
-		PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y)));
+        hitsToNextScrap--;
+        if (hitsToNextScrap <= 0) {
+            // drop scrap
+            // TODO: SFX hit dropped scrap
+		    PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y)));
+            scrapDropped++;
+            hitsToNextScrap = hitsToEachScrap;
+        } else {
+            // TODO: SFX hit  did not drop scrap
+        }
+
     }
 
 	override public function update(delta:Float) {
