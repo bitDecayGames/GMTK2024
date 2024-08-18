@@ -1,5 +1,6 @@
 package entities;
 
+import echo.data.Data.CollisionData;
 import echo.Body;
 import flixel.math.FlxPoint;
 import loaders.Aseprite;
@@ -31,6 +32,16 @@ class Bullet extends Unibody {
         Aseprite.loadSlice(this, "assets/aseprite/sketchpad.json", slices.pistol_0);
         origin.set(width/2, height/2);
     }
+
+	override function handleEnter(other:Body, data:Array<CollisionData>) {
+		super.handleEnter(other, data);
+
+		// if (other.object is BasicBullet) {
+		// 	FmodManager.PlaySoundOneShot(FmodSFX.EnemyAlienDeath);
+		// 	animation.play(anims.Death);
+		// 	body.active = false;
+		// }
+	}
 
 	override function makeBody():Body {
 		return this.add_body({

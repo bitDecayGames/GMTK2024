@@ -31,6 +31,13 @@ class Main extends Sprite {
 		super();
 		Configure.initAnalytics(false);
 
+		// Disable the right click menu
+		#if js
+		untyped {
+			document.oncontextmenu = document.body.oncontextmenu = function() {return false;}
+		}
+		#end
+
 		Storage.load();
 		Achievements.initAchievements();
 
