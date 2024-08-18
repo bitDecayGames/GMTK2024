@@ -10,6 +10,7 @@ import flixel.FlxSprite;
 using echo.FlxEcho;
 
 class Bullet extends Unibody {
+
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
 
@@ -27,8 +28,8 @@ class Bullet extends Unibody {
 
         //origin.set(offsetX, offsetY);
         this.drawfset.copyFrom(drawfset);
-        Aseprite.loadAllAnimations(this, AssetPaths.magnumBullet__json);
-        origin.set(width/2, height/2);
+		loadGraphic(AssetPaths.magnumBullet__png);
+		centerOrigin();
     }
 
 	override function handleEnter(other:Body, data:Array<CollisionData>) {

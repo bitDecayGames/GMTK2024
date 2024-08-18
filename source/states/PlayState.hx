@@ -1,6 +1,9 @@
 package states;
 
 import entities.Scrap;
+import bitdecay.flixel.sorting.ZSorting;
+import flixel.FlxObject;
+import flixel.util.FlxSort;
 import entities.Bullet;
 import entities.TrashCan;
 import entities.EchoSprite;
@@ -38,13 +41,17 @@ class PlayState extends FlxTransitionableState {
     // TODO: We probably should hide the project within the level file
 	public var level:Level;
 
+    // groups for rendering
     var uiGroup:FlxGroup = new FlxGroup();
     public var terrainGroup = new FlxGroup();
-    public var bulletGroup = new FlxGroup();
-    public var scrapGroup = new FlxGroup();
+    public var entityRenderGroup = new FlxTypedGroup<FlxSprite>();
 
+    // groups for tracking things
+    public var bulletGroup = new FlxGroup();
+    public var enemyBulletGroup = new FlxGroup();
     public var playerGroup = new FlxGroup();
     public var enemyGroup = new FlxGroup();
+    public var scrapGroup = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     
 	var tmp = FlxPoint.get();
@@ -52,10 +59,19 @@ class PlayState extends FlxTransitionableState {
     
     public function AddBullet(bullet:Bullet) {
         bullet.add_to_group(bulletGroup);
+        // TODO: Do we want bullets on a separate render group so they are always above the player/enemies? (for readability)
+        entityRenderGroup.add(bullet);
+    }
+
+    public function AddEnemyBullet(bullet:Bullet) {
+        bullet.add_to_group(enemyBulletGroup);
+        // TODO: Do we want bullets on a separate render group so they are always above the player/enemies? (for readability)
+        entityRenderGroup.add(bullet);
     }
     
     public function AddScrap(scrap:Scrap) {
         scrap.add_to_group(scrapGroup);
+        entityRenderGroup.add(scrap);
     }
 
     override public function create() {
@@ -73,10 +89,12 @@ class PlayState extends FlxTransitionableState {
 		});
 
         add(terrainGroup);
-        add(playerGroup);
-        add(enemyGroup);
-        add(bulletGroup);
-        add(scrapGroup);
+        add(entityRenderGroup);
+        
+        // Don't want to add these to the scene directly. let the render group handle them
+        // add(playerGroup);
+        // add(enemyGroup);
+        // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
         loadLevel("Level_0");
@@ -126,6 +144,13 @@ class PlayState extends FlxTransitionableState {
 		playerGroup.clear();
 		player = null;
 
+        entityRenderGroup.forEach((f) -> {
+            if (f.exists) {
+                f.destroy();
+            }
+        });
+        entityRenderGroup.clear();
+
         FlxEcho.clear();
 
         AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
@@ -145,9 +170,11 @@ class PlayState extends FlxTransitionableState {
 
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
+        entityRenderGroup.add(player);
 
         var testTrash = new TrashCan(100, 100);
         testTrash.add_to_group(enemyGroup);
+        entityRenderGroup.add(testTrash);
 
 		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
 		// Or do we just want to project the mouse position into the game world cam?
@@ -158,6 +185,21 @@ class PlayState extends FlxTransitionableState {
     }
 
     function configureListeners() {
+        FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(enemyGroup), wallBodies, {
+			separate: true,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
         FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(playerGroup), wallBodies, {
 			separate: true,
 			enter: (a, b, o) -> {
@@ -189,6 +231,53 @@ class PlayState extends FlxTransitionableState {
 				}
 			}
 		});
+        FlxEcho.listen(enemyGroup, playerGroup, {
+			separate: true,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        // Only player is told of bullets
+        FlxEcho.listen(enemyBulletGroup, playerGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        // Only enemies are told of bullets
+        FlxEcho.listen(enemyGroup, bulletGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
     }
 
     override public function update(elapsed:Float) {
@@ -200,6 +289,7 @@ class PlayState extends FlxTransitionableState {
 		tmp.addPoint(tmp2).scale(.5);
 		camera.focusOn(tmp);
 
+        entityRenderGroup.sort(ZSorting.getSort(CENTER));
     }
 
     override public function onFocusLost() {
