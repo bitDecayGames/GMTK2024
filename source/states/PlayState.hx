@@ -122,7 +122,7 @@ class PlayState extends FlxTransitionableState {
         // Add uiGroup to the state
         add(uiGroup);
         
-        var dialogTest = new CharacterDialog("Hello buddy");
+        var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
         uiGroup.add(dialogTest);
 	}
     
@@ -252,22 +252,6 @@ class PlayState extends FlxTransitionableState {
 		});
         // Only player is told of bullets
         FlxEcho.listen(enemyBulletGroup, playerGroup, {
-			separate: false,
-			enter: (a, b, o) -> {
-				if (a.object is EchoSprite) {
-					var aSpr:EchoSprite = cast a.object;
-					aSpr.handleEnter(b, o);
-				}                
-			},
-			exit: (a, b) -> {
-				if (a.object is EchoSprite) {
-					var aSpr:EchoSprite = cast a.object;
-					aSpr.handleExit(b);
-				}
-			}
-		});
-        // Only player is told of scraps
-        FlxEcho.listen(scrapGroup, playerGroup, {
 			separate: false,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {

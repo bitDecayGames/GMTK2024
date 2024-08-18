@@ -10,7 +10,7 @@ import flixel.group.FlxGroup;
 
 @:access(com.bitdecay.lucidtext.TypingGroup)
 class CharacterDialog extends FlxGroup {
-	private static var expressionsAsset = "";
+	private static var expressionsAsset = AssetPaths.headshots__png;
 
 	public var textGroup:TypingGroup;
 	public var portrait:FlxSprite;
@@ -24,10 +24,10 @@ class CharacterDialog extends FlxGroup {
 	var portraitMargins:Array<Float> = [5, 5, 60, 5];
 	var noPortraitMargins:Array<Float> = [5, 5, 5, 5];
 
-	public function new(initialText:String) {
+	public function new(speaker:CharacterIndex, initialText:String) {
 		super();
 
-		options = new TypeOptions(AssetPaths.filler16__png, [4, 4, 7, 8], 10);
+		options = new TypeOptions(AssetPaths.filler16__png, [4, 4, 7, 8], portraitMargins, 10);
 		options.checkPageConfirm = (delta) -> {
 			if (SimpleController.just_pressed(A)) {
 				// we don't want their press to go to the next page to also start fast-forwarding the next page
@@ -63,9 +63,10 @@ class CharacterDialog extends FlxGroup {
 
 		add(textGroup);
 
-        portrait = new FlxSprite(textGroup.bounds.x + 5, textGroup.bounds.top + (textGroup.bounds.bottom - textGroup.bounds.top) / 2 - 25);
+        portrait = new FlxSprite(textGroup.bounds.x + 5, textGroup.bounds.top + (textGroup.bounds.bottom - textGroup.bounds.top) / 2 - 24);
         portrait.scrollFactor.set();
-        portrait.loadGraphic(expressionsAsset, true, 50, 50);
+        portrait.loadGraphic(expressionsAsset, true, 48, 48);
+        portrait.animation.frameIndex = speaker;
         add(portrait);
 	}
 
