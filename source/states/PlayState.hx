@@ -90,8 +90,6 @@ class PlayState extends FlxTransitionableState {
 
         me = this;
 
-        FlxG.camera.pixelPerfectRender = true;
-
 		FlxEcho.init({
 			// TODO: This needs to be the size of the world as we load it from LDTK (or whatever we use)
 			width: FlxG.width,
@@ -108,7 +106,8 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-        loadLevel("Level_0");
+        loadLevel("Level_1");
+		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
 
