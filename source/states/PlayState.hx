@@ -129,8 +129,6 @@ class PlayState extends FlxTransitionableState {
 	}
     
     function loadLevel(levelName:String) {
-        level = new levels.ldtk.Level(levelName);
-
         for (body in wallBodies) {
 			FlxEcho.instance.world.remove(body);
 			body.dispose();
@@ -164,10 +162,11 @@ class PlayState extends FlxTransitionableState {
         entityRenderGroup.clear();
 
         FlxEcho.clear();
+
+        level = new levels.ldtk.Level(levelName);
+
         bulletGroup.add_group_bodies();
         enemyGroup.add_group_bodies();
-
-        // AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
 
         camera.scroll.set();
 		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
@@ -185,6 +184,10 @@ class PlayState extends FlxTransitionableState {
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
+
+        for (door in level.doors) {
+            AddInteractable(door);
+        }
 
         // var testTrash = new TrashCan(100, 100);
         // testTrash.add_to_group(enemyGroup);

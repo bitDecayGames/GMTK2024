@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.DoorTop;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import ldtk.Project;
@@ -25,6 +26,8 @@ class Level {
 	public var rawCollisionInts = new Array<Int>();
 	public var rawTerrainTilesWide = 0;
 	public var rawTerrainTilesTall = 0;
+
+	public var doors:Array<DoorTop> = [];
 
 	public var rawTerrainLayer:levels.ldtk.LDTKProject.Layer_Ground;
 	public var rawWallsLayer:levels.ldtk.LDTKProject.Layer_Collision;
@@ -58,6 +61,10 @@ class Level {
 					rawCollisionInts.push(-1);
 				}
 			}
+		}
+
+		for (d in level.l_Entities.all_Door) {
+			doors.push(new DoorTop(d.pixelX, d.pixelY));
 		}
 
 		// TODO: handle all this crap
