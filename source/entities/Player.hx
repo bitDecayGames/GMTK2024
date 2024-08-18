@@ -51,6 +51,17 @@ class Player extends Unibody {
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
 		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__json);
 		animation.play(anims.Idle);
+
+		
+
+		animation.callback = (name, frameNumber, frameIndex) -> {
+			if (name == anims.Run || name == anims.Run_up) {
+				if (frameNumber == 2 || frameNumber == 5)  {
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerStep);
+				}
+			}
+		}
+
 		// animation.callback = (anim, frame, index) -> {
 		// 	if (eventData.exists(index)) {
 		// 		trace('frame $index has data ${eventData.get(index)}');
@@ -112,6 +123,7 @@ class Player extends Unibody {
 		}
 
 		if (!dashing && SimpleController.pressed(Button.A, playerNum)) {
+			FmodManager.PlaySoundOneShot(FmodSFX.PlayerDodge);
 			dashing = true;
 			Timer.delay(() -> {
 				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
@@ -150,6 +162,10 @@ class Player extends Unibody {
 		}
 
 		if (inputDir.x != 0 && lastInputDir.x == 0) {
+			flippedInputDir = true;
+		} else if (inputDir.x < 0 && lastInputDir.x > 0){
+			flippedInputDir = true;
+		} else if (inputDir.x > 0 && lastInputDir.x < 0){
 			flippedInputDir = true;
 		}
 	}
@@ -259,7 +275,7 @@ class Player extends Unibody {
 			return;
 		}
 
-		// TODO: SFX picked up a piece of scrap
+		FmodManager.PlaySoundOneShot(FmodSFX.ScrapPickup);
 		scrap.kill();
 		scrapCount++;
 	}
