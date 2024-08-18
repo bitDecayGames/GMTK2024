@@ -165,8 +165,10 @@ class PlayState extends FlxTransitionableState {
         entityRenderGroup.clear();
 
         FlxEcho.clear();
+        bulletGroup.add_group_bodies();
+        enemyGroup.add_group_bodies();
 
-        AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
+        // AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
 
         camera.scroll.set();
 		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
@@ -185,9 +187,9 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-        var testTrash = new TrashCan(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
+        // var testTrash = new TrashCan(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);
