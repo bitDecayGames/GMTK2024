@@ -27,7 +27,7 @@ class Player extends Unibody {
 	var dashing = false;
 
 	var rollDurationMs = 400;
-	var rollSpeed = 60;
+	var rollSpeedMultiplier = 1.5;
 	var animTmp = FlxPoint.get();
 
 	var rightDrawfset = FlxPoint.get(6, 9);
@@ -93,10 +93,10 @@ class Player extends Unibody {
 			rollDurationMs -= 100;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.LBRACKET])){
-			rollSpeed -= 5;
+			rollSpeedMultiplier -= 0.1;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.RBRACKET])){
-			rollSpeed += 5;
+			rollSpeedMultiplier += 0.1;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.SEMICOLON])){
 			speed -= 5;
@@ -114,7 +114,7 @@ class Player extends Unibody {
 			}, rollDurationMs);
 			
 			alpha = 0.5;
-			tmp.copyFrom(inputDir).scale(rollSpeed);
+			tmp.copyFrom(inputDir).scale(speed).scale(rollSpeedMultiplier);
 			body.velocity.set(tmp.x, tmp.y);
 		}
 
