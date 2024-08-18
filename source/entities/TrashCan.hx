@@ -121,7 +121,10 @@ class TrashCan extends Unibody {
 
     function handleHit(bullet:Bullet) {
         // TODO: Whatever damage/scrap mechanic we want
+        // TODO: SFX trash can hit by bullet
         bullet.kill();
+
+		PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y)));
     }
 
 	override public function update(delta:Float) {
