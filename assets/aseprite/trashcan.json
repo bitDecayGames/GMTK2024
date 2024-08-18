@@ -208,6 +208,8 @@
   "frameTags": [
    { "name": "idle", "from": 0, "to": 0, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "jump", "from": 2, "to": 7, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "windup", "from": 2, "to": 4, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "launch", "from": 5, "to": 5, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "float", "from": 8, "to": 8, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "land", "from": 9, "to": 12, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "shoot", "from": 14, "to": 21, "direction": "forward", "repeat": "1", "color": "#000000ff" }
