@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.tweens.FlxTween;
 import states.PlayState;
 import flixel.math.FlxMath;
 import flixel.path.FlxPath;

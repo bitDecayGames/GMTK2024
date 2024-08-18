@@ -27,7 +27,7 @@ class CharacterDialog extends FlxGroup {
 	public function new(speaker:CharacterIndex, initialText:String) {
 		super();
 
-		options = new TypeOptions(AssetPaths.filler16__png, [4, 4, 7, 8], portraitMargins, 10);
+		options = new TypeOptions(AssetPaths.ninePatch__png, [16, 16, 16, 16], portraitMargins, 10);
 		options.checkPageConfirm = (delta) -> {
 			if (SimpleController.just_pressed(A)) {
 				// we don't want their press to go to the next page to also start fast-forwarding the next page
@@ -40,7 +40,7 @@ class CharacterDialog extends FlxGroup {
 		options.nextIconMaker = () -> {
 			var nextIcon = new FlxSprite();
 			nextIcon.scrollFactor.set();
-			nextIcon.loadGraphic(AssetPaths.filler16__png, true, 10, 10);
+			nextIcon.loadGraphic(AssetPaths.nextIcon__png);
 			// nextIcon.animation.add('spin', [0,1,2,3], 8);
 			// nextIcon.animation.play('spin');
 			return nextIcon;
