@@ -1,5 +1,6 @@
 package states;
 
+import ui.CharacterDialog;
 import entities.Scrap;
 import bitdecay.flixel.sorting.ZSorting;
 import flixel.FlxObject;
@@ -121,6 +122,8 @@ class PlayState extends FlxTransitionableState {
         // Add uiGroup to the state
         add(uiGroup);
         
+        var dialogTest = new CharacterDialog("Hello buddy");
+        uiGroup.add(dialogTest);
 	}
     
     function loadLevel(levelName:String) {

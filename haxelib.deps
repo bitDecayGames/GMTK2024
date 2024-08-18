@@ -21,6 +21,7 @@ ldtk-haxe-api 1.5.3-rc.1
 bitlytics git https://github.com/bitDecayGames/Bitlytics.git
 flixelutils git https://github.com/bitDecayGames/flixel-utils.git
 bitdecaybtree git https://github.com/bitDecayGames/BehaviorTree.git
+lucidtext git https://github.com/bitDecayGames/LucidText.git
 
 # misc deps
 haxefmod git https://github.com/Tanz0rz/haxe-fmod.git master

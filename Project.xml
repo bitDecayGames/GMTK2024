@@ -42,6 +42,7 @@
 	<haxelib name="bitlytics" />
 	<haxelib name="bitdecaybtree" />
 	<haxelib name="flixelutils" />
+	<haxelib name="lucidtext" />
 	<haxelib name="haxefmod" />
 	<haxelib name="newgrounds" />
 
@@ -49,7 +50,6 @@
 	<haxelib name="echo" />
 	<haxelib name="echo-flixel" />
 
-	<!-- <haxelib name="lucidtext" /> -->
 	<haxelib name="ldtk-haxe-api" />
 
 	<!--In case you want to use nape with flixel-->
