@@ -1,8 +1,10 @@
 package entities;
 
+import states.PlayState;
+import flixel.tweens.FlxEase;
+import flixel.FlxObject;
+import flixel.tweens.FlxTween;
 import echo.data.Data.CollisionData;
-import flixel.util.FlxTimer;
-import js.html.AbortController;
 import flixel.path.FlxPath;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
@@ -33,6 +35,7 @@ class TrashCan extends Unibody {
     public var hitByKillGun = false;
 
     var btree:BTree;
+    var forceFollow:FlxObject = null;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -120,6 +123,10 @@ class TrashCan extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+        if (forceFollow != null) {
+            body.set_position(forceFollow.x, forceFollow.y);
+        }
+
         if (btree.process(delta) == FAIL) {
             // Intersting. why it fail?
         }
@@ -132,23 +139,33 @@ class TrashCan extends Unibody {
             handleHit(cast other.object);
         }
     }
+
+    public function followObj(obj:FlxObject) {
+        forceFollow = obj;
+    }
 }
 
 // Jump a small distance 2-4 times, somewhat randomly within the play area. Maybe shoot a can projectile at the 
 // peak of each hop
 class HopAround implements Node {
 
+    var jumpHeight = 90;
+    var jumpDistance = 20;
     var can:TrashCan;
     var jumpsRemaining:Int;
     var jumping = false;
     var cooldown = 0.0;
-    
+
+    var hackObj = new FlxObject();
+
     public function new(can:TrashCan) {
         this.can = can;
     }
 
     public function init(context:BTContext) {
-        jumpsRemaining = FlxG.random.int(2, 4);
+        jumpsRemaining = 100;
+        // jumpsRemaining = FlxG.random.int(2, 4);
+        FlxG.state.add(hackObj);
     }
 
     public function process(delta:Float):NodeStatus {
@@ -157,13 +174,6 @@ class HopAround implements Node {
         }
 
         if (jumping) {
-            //can.body.velocity.set(can.velocity.x, can.velocity.y);
-
-            // if (can.path != null && !can.path.active) {
-            //     jumping = false;
-            //     cooldown = 1;
-            // }
-
             // TODO: We want to be able to "fail" out of this node if the player hits us with the killshot
             return RUNNING;
         }
@@ -179,47 +189,60 @@ class HopAround implements Node {
             return RUNNING;
         }
 
+        jumping = true;
+
         // Pick target location
         // Maybe ray cast in a 'random' direction to decide if we can jump as far as we want, and only jump to the wall if we hit something?
-        var dest = can.getPosition();
-        var jump = FlxPoint.get(1, 0).rotateByDegrees(FlxG.random.int(0, 359)).scale(15);
-        dest.addPoint(jump);
+        var start = FlxPoint.get(can.body.x, can.body.y);
+        var dest = FlxPoint.get();
 
-        if (can.path == null) {
-            can.path = new FlxPath([can.getPosition(), dest]);
-        } else {
-            can.path.start([can.getPosition(), dest]);
+        var dir = FlxPoint.get(PlayState.me.player.body.x, PlayState.me.player.body.y).subtractPoint(start).normalize();
+
+        var jump = FlxPoint.get();
+        var attempts = 0;
+        while (dest.x < 16 || dest.x > FlxEcho.instance.world.width - 16 || dest.y < 16 * 2 || dest.y > FlxEcho.instance.world.height - 16) {
+            jump.copyFrom(dir);
+            jump.rotateByDegrees(FlxG.random.int(-30, 30)).scale(jumpDistance);
+            dest.set(start.x + jump.x, start.y + jump.y);
+            if (attempts > 5) {
+                QuickLog.error('taking too long to find a jump destination: ${attempts}');
+            }
         }
+
+        var midpoint = FlxPoint.get(start.x, start.y);
+        midpoint.addPoint(dest).scale(0.5);
+        midpoint.y -= jumpHeight;
+
+        hackObj.setPosition(start.x, start.y);
 
         // NGL, pretty jank way of going through the animations... but we'll clean it up at some point
         can.animation.play(TrashCan.anims.jump);
         can.animation.finishCallback = (name) -> {
-            can.animation.play(TrashCan.anims.float);
             can.animation.finishCallback = null;
-            new FlxTimer().start(0.5, (t) -> {
-                can.animation.play(TrashCan.anims.land);
-                can.animation.finishCallback = (name) -> {
-                    can.animation.play(TrashCan.anims.idle);
-                    jumpsRemaining--;
-                    jumping = false;
-                    cooldown = 1;
-                    can.animation.finishCallback = null;
-                };
+            can.animation.play(TrashCan.anims.float);
+            can.followObj(hackObj);
+            FlxTween.quadPath(hackObj, [start, midpoint, dest], .5, {
+                // ease: FlxEase.sineOut,
+                onComplete: (t) -> {
+                    can.followObj(null);
+                    can.animation.play(TrashCan.anims.land);
+                    can.animation.finishCallback = (name) -> {
+                        can.animation.play(TrashCan.anims.idle);
+                        jumpsRemaining--;
+                        jumping = false;
+                        cooldown = 1;
+                        can.animation.finishCallback = null;
+                    };
+                }
             });
-
         };
-
-        can.path.onComplete = (path) -> {jumping = false; cooldown = 1;};
-        
-        jumping = true;
-        // initiate 'jump'
-
-        // wait for path/animation to finish (likely path)
 
         return RUNNING;
     }
 
-    public function exit() {}
+    public function exit() {
+        FlxG.state.remove(hackObj);
+    }
 }
 
 class BigJump implements Node {
