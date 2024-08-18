@@ -59,11 +59,9 @@ class Scrap extends Unibody {
 	override function handleEnter(other:Body, data:Array<CollisionData>) {
 		super.handleEnter(other, data);
 
-		// if (other.object is BasicBullet) {
-		// 	FmodManager.PlaySoundOneShot(FmodSFX.EnemyAlienDeath);
-		// 	animation.play(anims.Death);
-		// 	body.active = false;
-		// }
+		if (other.object is Player) {
+			// kill();
+		}
 	}
 
 	override function makeBody():Body {

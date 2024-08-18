@@ -38,6 +38,9 @@ class Player extends Unibody {
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
+
+		speed = 40;
+
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
 		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__json);
@@ -53,11 +56,11 @@ class Player extends Unibody {
 
 		// TODO: This is not how we want to leave this, but it's a good filler for now
 		//FlxG.state.add(gun);
-		speed = 40;
 
-		// FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
-		// FlxG.watch.add(this, "rollSpeed", "Roll speed");
-		FlxG.watch.add(gun, "angle", "gun angle");
+		FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
+		FlxG.watch.add(this, "rollSpeed", "Roll speed");
+		FlxG.watch.add(this, "speed", "Walk speed");
+		// FlxG.watch.add(gun, "angle", "gun angle");
 	}
 
 	override function makeBody():Body {
@@ -94,6 +97,12 @@ class Player extends Unibody {
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.RBRACKET])){
 			rollSpeed += 5;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.SEMICOLON])){
+			speed -= 5;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.QUOTE])){
+			speed += 5;
 		}
 
 		if (!lockControls && SimpleController.pressed(Button.A, playerNum)) {
