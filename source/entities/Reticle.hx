@@ -15,7 +15,7 @@ class Reticle extends Unibody {
     public function new() {
         super(0, 0);
         
-		this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+		this.loadGraphic(AssetPaths.reticle__png, true, 16, 16);
     }
 
     override function makeBody():Body {
