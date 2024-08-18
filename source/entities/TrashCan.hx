@@ -369,7 +369,7 @@ class CircleBlast implements Node {
     }
 
     public function process(delta:Float):NodeStatus {
-        can.animation.play(TrashCan.anims.shoot)
+        can.animation.play(TrashCan.anims.shoot);
         // TODO: implement
         return SUCCESS;
     }

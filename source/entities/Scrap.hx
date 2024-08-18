@@ -19,18 +19,24 @@ class Scrap extends Unibody {
     var drawfset = FlxPoint.get();
 	var loopDropRadius = 30;
 
-	public static var anims = AsepriteMacros.tagNames("assets/aseprite/bolt.json");
+	public static var animsBolt = AsepriteMacros.tagNames("assets/aseprite/bolt.json");
+	public static var animsNut = AsepriteMacros.tagNames("assets/aseprite/nut.json");
 
     public function new(source:FlxPoint) {
         super(source.x, source.y);
-        Aseprite.loadAllAnimations(this, AssetPaths.bolt__json);
-		animation.play(anims.Bolt);
+
+        if(Math.random() < 0.5){
+            Aseprite.loadAllAnimations(this, AssetPaths.bolt__json);
+            animation.play(animsBolt.Bolt);
+        } else {
+            Aseprite.loadAllAnimations(this, AssetPaths.nut__json);
+            animation.play(animsNut.spin);
+        }
 
 		
         // accounting for known half-width and half-height here
         // assume we are placing loot based on center
         var boundaryBuffer = 24;
-        var inventoryBuffer = 36;
 
         var levelBounds = PlayState.me.level.bounds;
 

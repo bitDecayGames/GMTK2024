@@ -1,5 +1,6 @@
 package entities;
 
+import js.html.Console;
 import echo.data.Data.CollisionData;
 import states.PlayState;
 import flixel.input.keyboard.FlxKey;
@@ -22,20 +23,22 @@ class Player extends Unibody {
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
 	var gun:Gun;
+	var pistolBulletSpeed = 120;
 
 	var playerNum = 0;
 	var dashing = false;
 
 	var rollDurationMs = 400;
-	var rollSpeed = 60;
+	var rollSpeedMultiplier = 2.1;
 	var animTmp = FlxPoint.get();
-	var bulletSpeed = 200;
 
 	var rightDrawfset = FlxPoint.get(6, 9);
 	var leftDrawfset = FlxPoint.get(10, 9);
 	var upMod = -4;
 	var storedLefting = false;
 	var storedUpping = false;
+	var lastInputDir = FlxPoint.get();
+	var flippedInputDir = false;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -58,9 +61,9 @@ class Player extends Unibody {
 		// TODO: This is not how we want to leave this, but it's a good filler for now
 		//FlxG.state.add(gun);
 
-		FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
-		FlxG.watch.add(this, "rollSpeed", "Roll speed");
-		FlxG.watch.add(this, "speed", "Walk speed");
+		// FlxG.watch.add(this, "rollDurationMs", "Roll duration Ms");
+		// FlxG.watch.add(this, "rollSpeedMultiplier", "Roll speed multiplier");
+		// FlxG.watch.add(this, "speed", "Walk speed");
 		// FlxG.watch.add(gun, "angle", "gun angle");
 	}
 
@@ -94,10 +97,10 @@ class Player extends Unibody {
 			rollDurationMs -= 100;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.LBRACKET])){
-			rollSpeed -= 5;
+			rollSpeedMultiplier -= 0.1;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.RBRACKET])){
-			rollSpeed += 5;
+			rollSpeedMultiplier += 0.1;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.SEMICOLON])){
 			speed -= 5;
@@ -111,30 +114,29 @@ class Player extends Unibody {
 			Timer.delay(() -> {
 				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
 				dashing = false;
-				alpha = 1;
 			}, rollDurationMs);
 			
-			alpha = 0.5;
-			tmp.copyFrom(inputDir).scale(rollSpeed);
+			tmp.copyFrom(inputDir).scale(speed).scale(rollSpeedMultiplier);
 			body.velocity.set(tmp.x, tmp.y);
 		}
 
-		if (!dashing) {
+		if  (dashing) {
+			intentState.add(DODGING);
+		} else {
 			handleDirectionIntent();
 			handleMovement();
-			updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 
 			
 			var position = body.get_position();
 			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
 			if (FlxG.mouse.justPressed) {
-				var bullet = new Bullet(positionAsFlxPoint, gun.angle, bulletSpeed);
+				var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
 				PlayState.me.AddBullet(bullet);
 				PlayState.me.AddScrap(new Scrap(positionAsFlxPoint));
 			}
 		}
 
-		FlxG.watch.addQuick("player vel: ", body.velocity);
+		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 	}
 
 	var tmpCard:Cardinal;
@@ -144,6 +146,10 @@ class Player extends Unibody {
 		tmpCard.asVector(inputDir);
 		if (inputDir.length != 0) {
 			intentState.add(RUNNING);
+		}
+
+		if (inputDir.x != 0 && lastInputDir.x == 0) {
+			flippedInputDir = true;
 		}
 	}
 
@@ -175,19 +181,31 @@ class Player extends Unibody {
         var currentPlayerPosition = body.get_position();
 		var cursorLeftOfPlayer = false;
 
+		if (FlxG.mouse.getPosition().subtract(currentPlayerPosition.x, 0).x < 0) {
+			cursorLeftOfPlayer = true;
+		}
+		if ((body.velocity.x > 0 && cursorLeftOfPlayer) || (body.velocity.x < 0 && !cursorLeftOfPlayer)) {
+			reversing = true;
+		}
 		if (intentState.has(RUNNING)) {
-			if (FlxG.mouse.getPosition().subtract(currentPlayerPosition.x, 0).x < 0) {
-				cursorLeftOfPlayer = true;
-			}
 
 			if (upping) {
 				nextAnim = anims.Run_up;
 			} else {
 				nextAnim = anims.Run;
 			}
-			
-			if ((body.velocity.x > 0 && cursorLeftOfPlayer) || (body.velocity.x < 0 && !cursorLeftOfPlayer)) {
-				reversing = true;
+		} else if (intentState.has(DODGING)) {
+			if (upping) {
+				nextAnim = anims.Dodeg_up;
+			} else {
+				nextAnim = anims.Dodge;
+			}
+
+			if (reversing && body.velocity.x > 0) {
+				flipX = false;
+			}
+			if (reversing && body.velocity.x < 0) {
+				flipX = true;
 			}
 		} else {
 			if (upping) {
@@ -198,7 +216,7 @@ class Player extends Unibody {
 		}
 
 		var forceAnimationRefresh = false;
-		if (storedLefting != lefting) {
+		if (storedLefting != lefting || flippedInputDir) {
 			forceAnimationRefresh = true;
 		}
 		playAnimIfNotAlready(nextAnim, reversing, forceAnimationRefresh);
@@ -208,6 +226,8 @@ class Player extends Unibody {
 		gun.angle = animTmp.degrees;
 		storedLefting = lefting;
 		storedUpping = upping;
+		lastInputDir.copyFrom(inputDir);
+		flippedInputDir = false;
 	}
 
     override function handleEnter(other:Body, data:Array<CollisionData>) {
