@@ -1,5 +1,8 @@
 package entities;
 
+import echo.Line;
+import echo.math.Vector2;
+import echo.Echo;
 import states.PlayState;
 import flixel.tweens.FlxEase;
 import flixel.FlxObject;
@@ -37,8 +40,11 @@ class TrashCan extends Unibody {
     var btree:BTree;
     var forceFollow:FlxObject = null;
 
+    public var startPoint = FlxPoint.get();
+
 	public function new(x:Float, y:Float) {
 		super(x, y);
+        startPoint.set(x, y);
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
 		Aseprite.loadAllAnimations(this, AssetPaths.trashcan__json);
@@ -63,13 +69,12 @@ class TrashCan extends Unibody {
                         }
                         return FAIL;
                     }), new Sequence([
-                        new Wait(1, 3),
-                        new Selector(RANDOM([1]), [
-                            new HopAround(this) //,
-                            // new BigJump(this),
+                        new Wait(0.5, 1.5),
+                        new Selector(RANDOM([1, 1]), [
+                            new HopAround(this),
+                            new BigJump(this) //,
                             // new CircleBlast(this)
-                        ]),
-                        new Explode(this)
+                        ])
                     ])),
                     new Precondition(new StatusAction((delta) -> {
                         if (!hitByKillGun) {
@@ -78,7 +83,7 @@ class TrashCan extends Unibody {
 
                         return FAIL;
                     }), new Sequence([
-                        new Wait(1, 1.5),
+                        new Wait(.25, 1),
                         new Selector(RANDOM([1, 1, 1]), [
                             new BigJump(this),
                             new CircleBlast(this),
@@ -148,6 +153,7 @@ class TrashCan extends Unibody {
 // Jump a small distance 2-4 times, somewhat randomly within the play area. Maybe shoot a can projectile at the 
 // peak of each hop
 class HopAround implements Node {
+    var edgeBuffer = 32;
 
     var jumpHeight = 90;
     var jumpDistance = 20;
@@ -163,8 +169,8 @@ class HopAround implements Node {
     }
 
     public function init(context:BTContext) {
-        jumpsRemaining = 100;
-        // jumpsRemaining = FlxG.random.int(2, 4);
+        //jumpsRemaining = 100;
+        jumpsRemaining = FlxG.random.int(2, 4);
         FlxG.state.add(hackObj);
     }
 
@@ -200,12 +206,16 @@ class HopAround implements Node {
 
         var jump = FlxPoint.get();
         var attempts = 0;
-        while (dest.x < 16 || dest.x > FlxEcho.instance.world.width - 16 || dest.y < 16 * 2 || dest.y > FlxEcho.instance.world.height - 16) {
+        while (dest.x < edgeBuffer || dest.x > FlxEcho.instance.world.width - edgeBuffer || dest.y < edgeBuffer * 2 || dest.y > FlxEcho.instance.world.height - edgeBuffer) {
+            attempts++;
             jump.copyFrom(dir);
             jump.rotateByDegrees(FlxG.random.int(-30, 30)).scale(jumpDistance);
             dest.set(start.x + jump.x, start.y + jump.y);
             if (attempts > 5) {
-                QuickLog.error('taking too long to find a jump destination: ${attempts}');
+                // Don't get in bad situation... just jump back to your spawn point!
+                dest.copyFrom(can.startPoint);
+                //QuickLog.error('taking too long to find a jump destination: ${attempts}');
+                break;
             }
         }
 
@@ -216,14 +226,17 @@ class HopAround implements Node {
         hackObj.setPosition(start.x, start.y);
 
         // NGL, pretty jank way of going through the animations... but we'll clean it up at some point
-        can.animation.play(TrashCan.anims.jump);
+        can.animation.play(TrashCan.anims.jump, true);
         can.animation.finishCallback = (name) -> {
             can.animation.finishCallback = null;
             can.animation.play(TrashCan.anims.float);
             can.followObj(hackObj);
+            // TODO: SFX small jump started
             FlxTween.quadPath(hackObj, [start, midpoint, dest], .5, {
                 // ease: FlxEase.sineOut,
                 onComplete: (t) -> {
+                    // TODO: SFX small jump landed
+                    FlxG.camera.shake(0.01, 0.1);
                     can.followObj(null);
                     can.animation.play(TrashCan.anims.land);
                     can.animation.finishCallback = (name) -> {
@@ -247,15 +260,97 @@ class HopAround implements Node {
 
 class BigJump implements Node {
     var can:TrashCan;
+    var targetPoint = new Vector2(0, 0);
+    var state:String = "wait";
+    var fallSpeed = 1000.0;
+    var offScreenBuffer = 16 * 5;
+
+    var stateWait = "wait";
+    var stateWindup = "windup";
+    var stateLaunch = "launch";
+    var stateTarget = "target";
+    var stateFall = "fall";
+    var stateLand = "land";
+    var stateShoot = "shoot";
+    var stateDone = "done";
+
+    var cd:Float = 0;
+
     public function new(can:TrashCan) {
         this.can = can;
     }
 
-    public function init(context:BTContext) {}
+    public function init(context:BTContext) {
+        state = stateWait;
+
+        can.animation.finishCallback = (name) -> {
+            if (name == TrashCan.anims.windup && state == stateWindup) {
+                // TODO: SFX trash can leaves the ground
+                can.animation.play(TrashCan.anims.launch);
+                can.body.get_position(targetPoint);
+                var line = Line.get(can.body.x, can.body.y, can.body.x, can.body.y - 1000);
+                var intersect = Echo.linecast(line, PlayState.me.wallBodies, FlxEcho.instance.world);
+                if (intersect != null) {
+                    targetPoint.y = can.body.y - intersect.closest.distance - offScreenBuffer;
+                } else {
+                    targetPoint.y -= 1000;
+                }
+
+                state = stateLaunch;
+            } else if (name == TrashCan.anims.land) {
+                can.animation.play(TrashCan.anims.idle);
+                state = stateDone;
+            }
+        }
+    }
 
     public function process(delta:Float):NodeStatus {
-        // TODO: implement
-        return SUCCESS;
+        FlxG.watch.addQuick('trash state: ', state);
+        if (cd > 0) {
+            cd -= delta;
+        }
+        if (state == stateWait) {
+			if (cd <= 0) {
+				can.animation.play(TrashCan.anims.windup);
+				state = stateWindup;
+			}
+		} else if (state == stateLaunch) {
+			if (can.body.y > targetPoint.y) {
+				can.body.velocity.y = -fallSpeed;
+			} else {
+				can.body.set_position(can.body.x, targetPoint.y);
+				state = stateTarget;
+				cd = 1;
+			}
+		} else if (state == stateTarget) {
+			if (cd <= 0) {
+                // TODO: SFX Trash can starts falling
+				PlayState.me.player.body.get_position(targetPoint);
+				can.animation.play(TrashCan.anims.float);
+                can.body.set_position(targetPoint.x, can.body.y);
+                state = stateFall;
+			}
+		} else if (state == stateFall) {
+			if (can.body.y < targetPoint.y) {
+				can.body.velocity.y = fallSpeed;
+			} else {
+                // TODO: Screen shake
+                // TODO: SFX: trash can lands big jump
+                FlxG.camera.shake();
+                can.body.velocity.set(0, 0);
+				can.body.set_position(targetPoint.x, targetPoint.y);
+				can.animation.play(TrashCan.anims.land);
+				state = stateLand;
+			}
+		} else if (state == stateLand) {
+			// TODO: Shoot upon landing?
+        } else if (state == stateDone) {
+            if (cd <= 0) {
+			    return SUCCESS;
+            }
+		} 
+
+        return RUNNING;
     }
 
     public function exit() {}
@@ -267,9 +362,14 @@ class CircleBlast implements Node {
         this.can = can;
     }
 
-    public function init(context:BTContext) {}
+    public function init(context:BTContext) {
+        can.animation.finishCallback = (name) -> {
+            // if (name == )
+        }
+    }
 
     public function process(delta:Float):NodeStatus {
+        can.animation.play(TrashCan.anims.shoot);
         // TODO: implement
         return SUCCESS;
     }
