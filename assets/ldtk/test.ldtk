@@ -1937,7 +1937,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "PlayerSpawn",
-							"__grid": [10,16],
+							"__grid": [10,21],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 16, "y": 0, "w": 16, "h": 16 },
@@ -1946,10 +1946,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [160,256],
+							"px": [160,336],
 							"fieldInstances": [],
 							"__worldX": -672,
-							"__worldY": 240
+							"__worldY": 320
 						},
 						{
 							"__identifier": "TinkSpawn",

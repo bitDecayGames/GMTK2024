@@ -33,6 +33,7 @@ class Level {
 	public var rawWallsLayer:levels.ldtk.LDTKProject.Layer_Collision;
 
 	public var playerSpawnPoint:FlxPoint;
+	public var tinkSpawnPoint:FlxPoint;
 
 	public function new(nameOrIID:String) {
 		var level = project.all_worlds.Default.getLevel(nameOrIID);
@@ -40,6 +41,9 @@ class Level {
 
 		var rawSpawnPoint = level.l_Entities.all_PlayerSpawn[0];
 		playerSpawnPoint = FlxPoint.get(rawSpawnPoint.pixelX, rawSpawnPoint.pixelY);
+
+		var tinkRawSpawnPoint = level.l_Entities.all_TinkSpawn[0];
+		tinkSpawnPoint = FlxPoint.get(tinkRawSpawnPoint.pixelX, tinkRawSpawnPoint.pixelY);
 
 		bounds.width = level.pxWid;
 		bounds.height = level.pxHei;

@@ -1,5 +1,6 @@
 package states;
 
+import entities.Tink;
 import entities.Dumpster;
 import entities.ScrapCollector;
 import ui.CharacterDialog;
@@ -37,6 +38,7 @@ class PlayState extends FlxTransitionableState {
     public static var me:PlayState;
     
     public var player:Player;
+    public var tink:Tink;
 
     var uiCamera:FlxCamera;
 
@@ -111,7 +113,7 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-        loadLevel("Level_0");
+        loadLevel("Level_1");
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
@@ -128,9 +130,20 @@ class PlayState extends FlxTransitionableState {
 
         // Add uiGroup to the state
         add(uiGroup);
-        
-        var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
-        uiGroup.add(dialogTest);
+	}
+
+	public function openDialog(dialog:CharacterDialog){
+		player.body.active = false;
+        entityRenderGroup.active = false;
+        projectileRenderGroup.active = false;
+        uiGroup.add(dialog);
+	}
+
+	public function closeDialog(dialog:CharacterDialog){
+		player.body.active = true;
+        entityRenderGroup.active = true;
+        projectileRenderGroup.active = true;
+		uiGroup.remove(dialog);
 	}
     
     function loadLevel(levelName:String) {
@@ -198,13 +211,19 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
+        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player);
+        entityRenderGroup.add(tink);
+
+        // var testTrash = new TrashCan(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
         for (door in level.doors) {
             AddInteractable(door);
         }
 
-        var testTrash = new Dumpster(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
+        // var testTrash = new Dumpster(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);
