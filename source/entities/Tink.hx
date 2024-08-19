@@ -18,27 +18,26 @@ import ui.CharacterDialog;
 
 using echo.FlxEcho;
 
-enum TinkSpawnPoint {
-	Intro;
-}
-
 class Tink extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/tinkSketchpad.json");
 
+	public static inline var TINK_INTRO = "Intro";
 
-	var player:Player;
+	public var ogXY = FlxPoint.get();
+
 	var distanceToPlayer:Float;
 
-	var spawnPoint:TinkSpawnPoint;
+	var spawnPoint:String;
 	var doorTop:DoorTop;
 	var doorBottom:DoorBottom;
+	public var shutter:Shutter = null;
 
 	var introDialogDone = false;
 	var introDialogwDone = false;
 
-	public function new(x:Float, y:Float, player:Player, spawnPoint:TinkSpawnPoint, doorTop:DoorTop, doorBottom:DoorBottom) {
+	public function new(x:Float, y:Float, spawnPoint:String, doorTop:DoorTop, doorBottom:DoorBottom) {
 		super(x, y);
-		this.player = player;
+		ogXY.set(x, y);
 		this.doorTop = doorTop;
 		this.doorBottom = doorBottom;
 		Aseprite.loadAllAnimations(this, AssetPaths.tinkSketchpad__json);
@@ -48,8 +47,8 @@ class Tink extends Unibody {
 
 	override function makeBody():Body {
 		return this.add_body({
-			x: x,
-			y: y,
+			x: x+8,
+			y: y+4,
 			max_velocity_x: 1000,
 			max_velocity_length: 1000,
 			drag_x: 0,
@@ -69,10 +68,15 @@ class Tink extends Unibody {
 		super.update(delta);
 		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 
-		distanceToPlayer = player.getMidpoint().distanceTo(getMidpoint());
+		if (PlayState.me.dialogActive) {
+			// just a fail-safe to keep extra dialogs from opening up once we know one is open
+			return;
+		}
+
+		distanceToPlayer = PlayState.me.player.getMidpoint().distanceTo(getMidpoint());
 		if (distanceToPlayer < 30) {
 
-			if (spawnPoint == TinkSpawnPoint.Intro){
+			if (spawnPoint == TINK_INTRO){
 
 				if (!introDialogDone) {
 					introDialogDone = true;
@@ -80,6 +84,7 @@ class Tink extends Unibody {
 					PlayState.me.openDialog(dialogTest);
 				} else if (!introDialogwDone) {
 					introDialogwDone = true;
+					shutter.close();
 					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.", () -> {
 						doorTop.open();
 						doorBottom.open();

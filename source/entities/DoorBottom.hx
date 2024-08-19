@@ -9,10 +9,12 @@ using echo.FlxEcho;
 class DoorBottom extends Unibody {
     public static var anims = AsepriteMacros.tagNames("assets/aseprite/doorBottomHalf.json");
 
+	public var iid:String;
 	public var name:String;
 
-    public function new(x:Float, y:Float, name:String) {
+    public function new(iid:String, x:Float, y:Float, name:String) {
         super(x, y);
+		this.iid = iid;
 		this.name = name;
 		Aseprite.loadAllAnimations(this, AssetPaths.doorBottomHalf__json);
 		animation.frameIndex = 0;

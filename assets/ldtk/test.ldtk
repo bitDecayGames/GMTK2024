@@ -11,7 +11,7 @@
 	"iid": "597a0d00-4ce0-11ef-8b7f-6b3358d89566",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 17,
+	"nextUid": 19,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -320,7 +320,82 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 0,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "door",
+					"doc": null,
+					"__type": "EntityRef",
+					"uid": 17,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "ZigZag",
+					"editorDisplayColor": "#37FF00",
+					"editorAlwaysShow": true,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySpecificEntity",
+					"allowedRefsEntityUid": 14,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "TinkSpawnName",
+					"doc": null,
+					"__type": "String",
+					"uid": 18,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": true,
+					"editorShowInWorld": true,
+					"editorCutLongValues": false,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		},
 		{
 			"identifier": "Door",
@@ -2004,7 +2079,21 @@
 							"height": 16,
 							"defUid": 11,
 							"px": [176,192],
-							"fieldInstances": [],
+							"fieldInstances": [
+								{ "__identifier": "door", "__type": "EntityRef", "__value": {
+									"entityIid": "2dbc8440-4ce0-11ef-91af-b533c284ec70",
+									"layerIid": "5eed0480-4ce0-11ef-91af-e136fbcb7a56",
+									"levelIid": "5eecb660-4ce0-11ef-91af-0b71fb3046f1",
+									"worldIid": "597ad050-4ce0-11ef-8b7f-a3f823fb17fb"
+								}, "__tile": null, "defUid": 17, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["2dbc8440-4ce0-11ef-91af-b533c284ec70"]
+								}] },
+								{ "__identifier": "TinkSpawnName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 18, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Intro"]
+								}] }
+							],
 							"__worldX": -656,
 							"__worldY": 176
 						},
@@ -2074,6 +2163,25 @@
 							"fieldInstances": [],
 							"__worldX": -320,
 							"__worldY": 304
+						},
+						{
+							"__identifier": "TinkSpawn",
+							"__grid": [35,19],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 12, "x": 0, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#BE4A2F",
+							"iid": "0fd508f0-4ce0-11ef-b179-8b1a06b186e0",
+							"width": 16,
+							"height": 16,
+							"defUid": 11,
+							"px": [560,304],
+							"fieldInstances": [
+								{ "__identifier": "door", "__type": "EntityRef", "__value": null, "__tile": null, "defUid": 17, "realEditorValues": [] },
+								{ "__identifier": "TinkSpawnName", "__type": "String", "__value": null, "__tile": null, "defUid": 18, "realEditorValues": [] }
+							],
+							"__worldX": -272,
+							"__worldY": 288
 						}
 					]
 				},
