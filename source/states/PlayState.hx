@@ -1,5 +1,7 @@
 package states;
 
+import entities.Tink;
+import entities.Dumpster;
 import entities.ScrapCollector;
 import ui.CharacterDialog;
 import entities.Scrap;
@@ -36,6 +38,7 @@ class PlayState extends FlxTransitionableState {
     public static var me:PlayState;
     
     public var player:Player;
+    public var tink:Tink;
 
     var uiCamera:FlxCamera;
 
@@ -47,7 +50,9 @@ class PlayState extends FlxTransitionableState {
     // groups for rendering
     var uiGroup:FlxGroup = new FlxGroup();
     public var terrainGroup = new FlxGroup();
+    public var topTerrainGroup = new FlxGroup();
     public var entityRenderGroup = new FlxTypedGroup<FlxSprite>();
+    public var projectileRenderGroup = new FlxTypedGroup<FlxSprite>();
 
     // groups for tracking things
     public var bulletGroup = new FlxGroup();
@@ -65,13 +70,13 @@ class PlayState extends FlxTransitionableState {
     public function AddBullet(bullet:Bullet) {
         bullet.add_to_group(bulletGroup);
         // TODO: Do we want bullets on a separate render group so they are always above the player/enemies? (for readability)
-        entityRenderGroup.add(bullet);
+        projectileRenderGroup.add(bullet);
     }
 
     public function AddEnemyBullet(bullet:Bullet) {
         bullet.add_to_group(enemyBulletGroup);
         // TODO: Do we want bullets on a separate render group so they are always above the player/enemies? (for readability)
-        entityRenderGroup.add(bullet);
+        projectileRenderGroup.add(bullet);
     }
     
     public function AddScrap(scrap:Scrap) {
@@ -98,6 +103,8 @@ class PlayState extends FlxTransitionableState {
 
         add(terrainGroup);
         add(entityRenderGroup);
+        add(projectileRenderGroup);
+        add(topTerrainGroup);
         add(topGroup);
         
         // Don't want to add these to the scene directly. let the render group handle them
@@ -123,14 +130,23 @@ class PlayState extends FlxTransitionableState {
 
         // Add uiGroup to the state
         add(uiGroup);
-        
-        var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
-        uiGroup.add(dialogTest);
+	}
+
+	public function openDialog(dialog:CharacterDialog){
+		player.body.active = false;
+        entityRenderGroup.active = false;
+        projectileRenderGroup.active = false;
+        uiGroup.add(dialog);
+	}
+
+	public function closeDialog(dialog:CharacterDialog){
+		player.body.active = true;
+        entityRenderGroup.active = true;
+        projectileRenderGroup.active = true;
+		uiGroup.remove(dialog);
 	}
     
     function loadLevel(levelName:String) {
-        level = new levels.ldtk.Level(levelName);
-
         for (body in wallBodies) {
 			FlxEcho.instance.world.remove(body);
 			body.dispose();
@@ -163,11 +179,20 @@ class PlayState extends FlxTransitionableState {
         });
         entityRenderGroup.clear();
 
-        FlxEcho.clear();
-        bulletGroup.add_group_bodies();
-        enemyGroup.add_group_bodies();
+        projectileRenderGroup.forEach((f) -> {
+            if (f.exists) {
+                f.destroy();
+            }
+        });
+        projectileRenderGroup.clear();
 
-        // AddBullet(new Bullet(new FlxPoint(0, 0), 0, 100));
+        FlxEcho.clear();
+
+        level = new levels.ldtk.Level(levelName);
+
+        bulletGroup.add_group_bodies();
+        enemyBulletGroup.add_group_bodies();
+        enemyGroup.add_group_bodies();
 
         camera.scroll.set();
 		camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
@@ -186,7 +211,17 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
+        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player);
+        entityRenderGroup.add(tink);
+
         // var testTrash = new TrashCan(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
+        for (door in level.doors) {
+            AddInteractable(door);
+        }
+
+        // var testTrash = new Dumpster(100, 100);
         // testTrash.add_to_group(enemyGroup);
         // entityRenderGroup.add(testTrash);
 
@@ -233,6 +268,22 @@ class PlayState extends FlxTransitionableState {
 			}
 		});
         FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(bulletGroup), wallBodies, {
+			separate: true,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+                    aSpr.kill();
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(enemyBulletGroup), wallBodies, {
 			separate: true,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {

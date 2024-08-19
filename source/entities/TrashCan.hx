@@ -24,6 +24,7 @@ import bitdecay.behavior.tree.BTree;
 import bitdecay.behavior.tree.Node;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
+import behavior.Explode;
 import echo.Body;
 
 using echo.FlxEcho;
@@ -456,22 +457,6 @@ class ChainFire implements Node {
 
     public function process(delta:Float):NodeStatus {
         // TODO: implement
-        return SUCCESS;
-    }
-
-    public function exit() {}
-}
-
-class Explode implements Node {
-    var can:TrashCan;
-    public function new(can:TrashCan) {
-        this.can = can;
-    }
-
-    public function init(context:BTContext) {}
-
-    public function process(delta:Float):NodeStatus {
-        can.kill();
         return SUCCESS;
     }
 
