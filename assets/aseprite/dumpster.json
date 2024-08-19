@@ -684,6 +684,8 @@
    { "name": "leftDoorClose", "from": 13, "to": 19, "direction": "reverse", "repeat": "1", "color": "#000000ff" },
    { "name": "bothDoorsOpen", "from": 21, "to": 27, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "bothDoorsClosed", "from": 21, "to": 27, "direction": "reverse", "repeat": "1", "color": "#000000ff" },
+   { "name": "missileLoad", "from": 28, "to": 36, "direction": "forward", "repeat": "1", "color": "#000000ff" },
+   { "name": "missileFire", "from": 37, "to": 47, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "fireUpDown", "from": 51, "to": 54, "direction": "forward", "color": "#000000ff" },
    { "name": "fireDownRight", "from": 55, "to": 58, "direction": "forward", "color": "#000000ff" },
    { "name": "fireLeftRight", "from": 59, "to": 62, "direction": "forward", "color": "#000000ff" },
