@@ -27,7 +27,7 @@ class PracticeTarget extends Unibody {
 			shapes: [
 				{
 					type:CIRCLE,
-                    radius: 8
+                    radius: 6
 				}
 			]
         });

@@ -39,14 +39,14 @@ class ScrapCollector extends Unibody {
     public var isDepositable = true;
 
     public function new(x:Float, y:Float, scrapToActivate:Int, id:String) {
-        super(x-10, y);
+        super(x-8, y);
         Aseprite.loadAllAnimations(this, AssetPaths.recepticle__json);
         animation.frameIndex = 0;
         this.id = id;
 
         animation.finishCallback = handleAnimFinish;
 
-        displayText = FlxTextFactory.make('${scrapToActivate}', x-10, y-28, 16);
+        displayText = FlxTextFactory.make('${scrapToActivate}', x-11, y-28, 16);
         PlayState.me.add(displayText);
         this.scrapToActivate = scrapToActivate;
     }
@@ -90,7 +90,7 @@ class ScrapCollector extends Unibody {
             FlxG.watch.addQuick("gun location", gun.getPosition());
             FlxG.watch.addQuick("player location", PlayState.me.player.getPosition());
             FlxVelocity.moveTowardsObject(gun, PlayState.me.player, 200);
-            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 1) {
+            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 2) {
                 collectGun();
             }
         }
