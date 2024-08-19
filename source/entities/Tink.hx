@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxTimer;
 import js.html.Console;
 import echo.data.Data.CollisionData;
 import states.PlayState;
@@ -86,8 +87,11 @@ class Tink extends Unibody {
 					introDialogwDone = true;
 					shutter.close();
 					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.", () -> {
-						doorTop.open();
-						doorBottom.open();
+						FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
+						new FlxTimer().start(1, (t) -> {
+							doorTop.open();
+							doorBottom.open();
+						});
 					});
 					PlayState.me.openDialog(dialogTest);
 				}
