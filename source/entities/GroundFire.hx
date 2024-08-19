@@ -24,7 +24,6 @@ class GroundFire extends Unibody {
 		if (other.object is Player) {
             var p:Player = cast other.object;
             p.takeDamage(this);
-			p.hitByFireCount++;
 		}
 	}
 
