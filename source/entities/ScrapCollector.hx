@@ -39,14 +39,14 @@ class ScrapCollector extends Unibody {
     public var isDepositable = true;
 
     public function new(x:Float, y:Float, scrapToActivate:Int, id:String) {
-        super(x, y);
+        super(x-10, y);
         Aseprite.loadAllAnimations(this, AssetPaths.recepticle__json);
         animation.frameIndex = 0;
         this.id = id;
 
         animation.finishCallback = handleAnimFinish;
 
-        displayText = FlxTextFactory.make('${scrapToActivate}', x-4, y-24, 20);
+        displayText = FlxTextFactory.make('${scrapToActivate}', x-10, y-28, 16);
         PlayState.me.add(displayText);
         this.scrapToActivate = scrapToActivate;
     }

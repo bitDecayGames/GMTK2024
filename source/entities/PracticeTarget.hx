@@ -1,5 +1,7 @@
 package entities;
 
+import loaders.Aseprite;
+import loaders.AsepriteMacros;
 import echo.data.Data.CollisionData;
 import echo.Body;
 
@@ -9,10 +11,12 @@ class PracticeTarget extends Unibody {
 
     public var beenShot = false;
 
+    public static var anims = AsepriteMacros.tagNames("assets/aseprite/target.json");
+
     public function new(x:Float, y:Float) {
         super(x, y);
         
-		this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
+        Aseprite.loadAllAnimations(this, AssetPaths.target__json);
     }
 
     override function makeBody():Body {
@@ -23,9 +27,7 @@ class PracticeTarget extends Unibody {
 			shapes: [
 				{
 					type:CIRCLE,
-                    radius: 8,
-					offset_x: 8,
-					offset_y: 8,
+                    radius: 8
 				}
 			]
         });
@@ -40,9 +42,9 @@ class PracticeTarget extends Unibody {
 
         if (other.object is Bullet) {
             other.object.kill();
-            kill();
+            body.active = false;
             FmodManager.PlaySoundOneShot(FmodSFX.TargetHit2);
-            // TODO: Play some animation? Explode? Something
+            animation.play(anims.drop);
             beenShot = true;
         }
     }

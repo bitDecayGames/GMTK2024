@@ -19,7 +19,7 @@ class CharacterDialog extends FlxGroup {
 
 	public var delayStarted = false;
 	public var timeSinceDelayStarted:Float = 0;
-	public var nextDialogDelay = 0.5;
+	public var nextDialogDelay = 0.25;
 	public var canProgressTextBox = false;
 
 	public var faster = false;
