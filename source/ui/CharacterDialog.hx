@@ -17,6 +17,11 @@ class CharacterDialog extends FlxGroup {
 	public var portrait:FlxSprite;
 	public var options:TypeOptions;
 
+	public var delayStarted = false;
+	public var timeSinceDelayStarted:Float = 0;
+	public var nextDialogDelay = 1;
+	public var canProgressTextBox = false;
+
 	public var faster = false;
 
 	// for cleaner input handling
@@ -30,7 +35,9 @@ class CharacterDialog extends FlxGroup {
 
 		options = new TypeOptions(AssetPaths.ninePatch__png, [16, 16, 16, 16], portraitMargins, 10);
 		options.checkPageConfirm = (delta) -> {
-			if (SimpleController.just_pressed(A) || FlxG.mouse.justPressed) {
+			if (SimpleController.just_pressed(A) || FlxG.mouse.justPressed && canProgressTextBox) {
+				delayStarted = false;
+				canProgressTextBox = false;
 				// we don't want their press to go to the next page to also start fast-forwarding the next page
 				skipOneUpdate = true;
 				return true;
@@ -89,6 +96,18 @@ class CharacterDialog extends FlxGroup {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (delayStarted) {
+			timeSinceDelayStarted += elapsed;
+			if (timeSinceDelayStarted > nextDialogDelay) {
+				canProgressTextBox = true;
+			}
+		}
+
+		if (textGroup.waitingForConfirm && !delayStarted) {
+			delayStarted = true;
+			timeSinceDelayStarted = 0;
+		}
 
 		if (skipOneUpdate) {
 			skipOneUpdate = false;

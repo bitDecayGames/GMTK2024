@@ -11,7 +11,7 @@ class MissileExplosion extends Bullet {
         super(FlxPoint.weak(x, y), 0, 0);
         // TODO: SFX missile explosion
         Aseprite.loadAllAnimations(this, AssetPaths.explosion__json);
-        animation.play("");
+        animation.play(anims.explode);
         animation.finishCallback = (n) -> {
             kill();
         }

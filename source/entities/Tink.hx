@@ -18,19 +18,28 @@ import ui.CharacterDialog;
 
 using echo.FlxEcho;
 
+enum TinkSpawnPoint {
+	Intro;
+}
+
 class Tink extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/tinkSketchpad.json");
+
 
 	var player:Player;
 	var distanceToPlayer:Float;
 
-	var introDialogDone = false;
+	var spawnPoint:TinkSpawnPoint;
 
-	public function new(x:Float, y:Float, player:Player) {
+	var introDialogDone = false;
+	var introDialogwDone = false;
+
+	public function new(x:Float, y:Float, player:Player, spawnPoint:TinkSpawnPoint) {
 		super(x, y);
 		this.player = player;
 		Aseprite.loadAllAnimations(this, AssetPaths.tinkSketchpad__json);
 		animation.play(anims.Idle);
+		this.spawnPoint = spawnPoint;
 	}
 
 	override function makeBody():Body {
@@ -58,10 +67,18 @@ class Tink extends Unibody {
 
 		distanceToPlayer = player.getMidpoint().distanceTo(getMidpoint());
 		if (distanceToPlayer < 30) {
-			if (!introDialogDone) {
-				introDialogDone = true;
-				var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
-				PlayState.me.openDialog(dialogTest);
+
+			if (spawnPoint == TinkSpawnPoint.Intro){
+
+				if (!introDialogDone) {
+					introDialogDone = true;
+					var dialogTest = new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.");
+					PlayState.me.openDialog(dialogTest);
+				} else if (!introDialogwDone) {
+					introDialogwDone = true;
+					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.");
+					PlayState.me.openDialog(dialogTest);
+				}
 			}
 		}
 	}

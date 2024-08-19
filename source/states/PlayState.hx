@@ -214,13 +214,14 @@ class PlayState extends FlxTransitionableState {
         camera.setScrollBoundsRect(0, 0, level.bounds.width, level.bounds.height);
 
         terrainGroup.insert(0, level.terrainGfx);
+        topTerrainGroup.insert(0, level.terrainTopGfx);
 
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
 		if (level.tinkSpawnPoint != null) {
-			tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player);
+			tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player, TinkSpawnPoint.Intro);
 			entityRenderGroup.add(tink);
 		}
 

@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import flixel.path.FlxPath;
 import states.PlayState;
 import loaders.AsepriteMacros;
@@ -49,6 +50,7 @@ class TankMissile extends FlxSprite {
             path.start([start, end], landSpeed);
             path.onComplete = (p) -> {
                 kill();
+                FlxG.camera.shake(0.01, 0.1);
                 PlayState.me.AddEnemyBullet(new MissileExplosion(end.x, end.y));
             }
         }
