@@ -1,21 +1,20 @@
 package entities;
 
-import js.html.Console;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
 import echo.Body;
 
 using echo.FlxEcho;
 
-class DoorTop extends Unibody {
-    public static var anims = AsepriteMacros.tagNames("assets/aseprite/doorTopHalf.json");
+class DoorBottom extends Unibody {
+    public static var anims = AsepriteMacros.tagNames("assets/aseprite/doorBottomHalf.json");
 
 	public var name:String;
 
     public function new(x:Float, y:Float, name:String) {
         super(x, y);
 		this.name = name;
-		Aseprite.loadAllAnimations(this, AssetPaths.doorTopHalf__json);
+		Aseprite.loadAllAnimations(this, AssetPaths.doorBottomHalf__json);
 		animation.frameIndex = 0;
 
 		animation.finishCallback = (name) -> {
@@ -39,7 +38,7 @@ class DoorTop extends Unibody {
 				{
 					type:RECT,
 					width: 32,
-					height: 64,
+					height: 160,
 				}
 			]
 		});

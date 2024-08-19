@@ -11,7 +11,7 @@
 	"iid": "597a0d00-4ce0-11ef-8b7f-6b3358d89566",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 16,
+	"nextUid": 17,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -355,7 +355,48 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 1,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "DoorName",
+					"doc": null,
+					"__type": "String",
+					"uid": 16,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": {
+						"id": "V_String",
+						"params": ["name_me"]
+					},
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -1927,7 +1968,7 @@
 					"layerDefUid": 5,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"visible": false,
+					"visible": true,
 					"optionalRules": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
@@ -1937,7 +1978,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "PlayerSpawn",
-							"__grid": [10,16],
+							"__grid": [10,21],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 16, "y": 0, "w": 16, "h": 16 },
@@ -1946,10 +1987,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [160,256],
+							"px": [160,336],
 							"fieldInstances": [],
 							"__worldX": -672,
-							"__worldY": 240
+							"__worldY": 320
 						},
 						{
 							"__identifier": "TinkSpawn",
@@ -1969,7 +2010,7 @@
 						},
 						{
 							"__identifier": "Door",
-							"__grid": [15,15],
+							"__grid": [16,15],
 							"__pivot": [0,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 96, "y": 96, "w": 16, "h": 48 },
@@ -1978,9 +2019,12 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 14,
-							"px": [240,256],
-							"fieldInstances": [],
-							"__worldX": -592,
+							"px": [256,256],
+							"fieldInstances": [{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Intro"]
+							}] }],
+							"__worldX": -576,
 							"__worldY": 240
 						},
 						{
@@ -2049,7 +2093,7 @@
 					"layerDefUid": 3,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"visible": true,
+					"visible": false,
 					"optionalRules": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
@@ -2224,7 +2268,7 @@
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"visible": false,
+					"visible": true,
 					"optionalRules": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],

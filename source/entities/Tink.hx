@@ -30,13 +30,17 @@ class Tink extends Unibody {
 	var distanceToPlayer:Float;
 
 	var spawnPoint:TinkSpawnPoint;
+	var doorTop:DoorTop;
+	var doorBottom:DoorBottom;
 
 	var introDialogDone = false;
 	var introDialogwDone = false;
 
-	public function new(x:Float, y:Float, player:Player, spawnPoint:TinkSpawnPoint) {
+	public function new(x:Float, y:Float, player:Player, spawnPoint:TinkSpawnPoint, doorTop:DoorTop, doorBottom:DoorBottom) {
 		super(x, y);
 		this.player = player;
+		this.doorTop = doorTop;
+		this.doorBottom = doorBottom;
 		Aseprite.loadAllAnimations(this, AssetPaths.tinkSketchpad__json);
 		animation.play(anims.Idle);
 		this.spawnPoint = spawnPoint;
@@ -76,7 +80,10 @@ class Tink extends Unibody {
 					PlayState.me.openDialog(dialogTest);
 				} else if (!introDialogwDone) {
 					introDialogwDone = true;
-					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.");
+					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.", () -> {
+						doorTop.open();
+						doorBottom.open();
+					});
 					PlayState.me.openDialog(dialogTest);
 				}
 			}

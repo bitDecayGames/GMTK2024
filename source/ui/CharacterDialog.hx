@@ -30,7 +30,7 @@ class CharacterDialog extends FlxGroup {
 	var portraitMargins:Array<Float> = [5, 5, 60, 5];
 	var noPortraitMargins:Array<Float> = [5, 5, 5, 5];
 
-	public function new(speaker:CharacterIndex, initialText:String) {
+	public function new(speaker:CharacterIndex, initialText:String, ?cutomCallback:() -> Void) {
 		super();
 
 		options = new TypeOptions(AssetPaths.ninePatch__png, [16, 16, 16, 16], portraitMargins, 10);
@@ -72,6 +72,9 @@ class CharacterDialog extends FlxGroup {
 		add(textGroup);
 
 		textGroup.finishCallback = () -> {
+			if (cutomCallback != null) {
+				cutomCallback();
+			}
 			PlayState.me.closeDialog(this);
 			kill();
 		}

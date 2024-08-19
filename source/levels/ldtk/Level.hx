@@ -1,5 +1,7 @@
 package levels.ldtk;
 
+import js.html.Console;
+import entities.DoorBottom;
 import entities.DoorTop;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup;
@@ -29,6 +31,7 @@ class Level {
 	public var rawTerrainTilesTall = 0;
 
 	public var doors:Array<DoorTop> = [];
+	public var doorsBottom:Array<DoorBottom> = [];
 
 	public var rawTerrainLayer:levels.ldtk.LDTKProject.Layer_Ground;
 	public var rawTerrainTopLayer:levels.ldtk.LDTKProject.Layer_Top;
@@ -70,7 +73,8 @@ class Level {
 		}
 
 		for (d in level.l_Entities.all_Door) {
-			doors.push(new DoorTop(d.pixelX, d.pixelY));
+			doors.push(new DoorTop(d.pixelX, d.pixelY+3, d.f_DoorName));
+			doorsBottom.push(new DoorBottom(d.pixelX, d.pixelY+15, d.f_DoorName));
 		}
 		
 		rawTerrainTopLayer = level.l_Top;

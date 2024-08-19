@@ -1,5 +1,8 @@
 package states;
 
+import js.html.Console;
+import entities.DoorBottom;
+import entities.DoorTop;
 import entities.Tink;
 import entities.Dumpster;
 import entities.ScrapCollector;
@@ -212,13 +215,16 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player, TinkSpawnPoint.Intro);
+        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player, TinkSpawnPoint.Intro, getDoorTopByName("Intro"), getDoorBottomByName("Intro"));
         entityRenderGroup.add(tink);
 
         // var testTrash = new TrashCan(100, 100);
         // testTrash.add_to_group(enemyGroup);
         // entityRenderGroup.add(testTrash);
         for (door in level.doors) {
+            AddInteractable(door);
+        }
+        for (door in level.doorsBottom) {
             AddInteractable(door);
         }
 
@@ -236,6 +242,27 @@ class PlayState extends FlxTransitionableState {
 
         configureListeners();
     }
+
+	function getDoorTopByName(name:String):DoorTop {
+
+		for (door in level.doors) {
+
+			// Console.log(door.name);
+			if (door.name == name) {
+				return door;
+			}
+		}
+		return null;
+	}
+
+	function getDoorBottomByName(name:String):DoorBottom {
+		for (door in level.doorsBottom) {
+			if (door.name == name) {
+				return door;
+			}
+		}
+		return null;
+	}
 
     function configureListeners() {
         FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(enemyGroup), wallBodies, {
