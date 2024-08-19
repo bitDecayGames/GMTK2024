@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import js.html.Console;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
@@ -20,6 +21,12 @@ class DoorTop extends Unibody {
 		Aseprite.loadAllAnimations(this, AssetPaths.doorTopHalf__json);
 		animation.frameIndex = 0;
 
+		animation.callback = (name, frameNumber, frameIndex) -> {
+			if (frameNumber == 5)  {
+                FlxG.camera.shake(0.05, 0.1);
+			}
+		}
+
 		animation.finishCallback = (name) -> {
 			if (name == anims.open) {
 				body.active = false;
@@ -29,6 +36,7 @@ class DoorTop extends Unibody {
 
 	public function open() {
 		animation.play(anims.open);
+		FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
 	}
     
 	override function makeBody():Body {

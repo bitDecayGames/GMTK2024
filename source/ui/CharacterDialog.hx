@@ -24,6 +24,9 @@ class CharacterDialog extends FlxGroup {
 
 	public var faster = false;
 
+	var typingSoundId = "typingSoundId";
+	var killing = false;
+
 	// for cleaner input handling
 	public var skipOneUpdate = false;
 
@@ -72,6 +75,8 @@ class CharacterDialog extends FlxGroup {
 		add(textGroup);
 
 		textGroup.finishCallback = () -> {
+			FmodManager.StopSoundImmediately(typingSoundId);
+			killing = true;
 			if (cutomCallback != null) {
 				cutomCallback();
 			}
@@ -99,6 +104,14 @@ class CharacterDialog extends FlxGroup {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (textGroup.waitingForConfirm && FmodManager.IsSoundPlaying(typingSoundId)){
+			FmodManager.StopSoundImmediately(typingSoundId);
+		}
+
+		if (!textGroup.waitingForConfirm && !FmodManager.IsSoundPlaying(typingSoundId) && !killing) {
+			FmodManager.PlaySoundAndAssignId(FmodSFX.TinkTalk, typingSoundId);
+		}
 
 		if (delayStarted) {
 			timeSinceDelayStarted += elapsed;
