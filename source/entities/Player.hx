@@ -349,7 +349,7 @@ class Player extends Unibody {
     }
 
 	function handleHit(bullet:Bullet) {
-		if (!dashing) {
+		if (dashing) {
 			// no hits while dashing
 			return; 
 		}

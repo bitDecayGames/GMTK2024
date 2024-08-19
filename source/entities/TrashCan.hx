@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxColor;
 import echo.Line;
 import echo.math.Vector2;
 import echo.Echo;
@@ -70,6 +71,8 @@ class TrashCan extends Unibody {
                         if (scrapDropped < firstPhaseScrap) {
                             return SUCCESS;
                         }
+                        //XXX Not the right place to do this, but it may work
+                        color = FlxColor.RED.getLightened(.5);
                         return FAIL;
                     }), new Sequence([
                         new Wait(0.5, 1.5),
