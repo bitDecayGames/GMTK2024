@@ -146,6 +146,7 @@ class Player extends Unibody {
 			if (FlxG.mouse.justPressed) {
 				var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
 				PlayState.me.AddBullet(bullet);
+				FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
 			}
 		}
 

@@ -1,5 +1,6 @@
 package states;
 
+import entities.Tink;
 import entities.ScrapCollector;
 import ui.CharacterDialog;
 import entities.Scrap;
@@ -36,6 +37,7 @@ class PlayState extends FlxTransitionableState {
     public static var me:PlayState;
     
     public var player:Player;
+    public var tink:Tink;
 
     var uiCamera:FlxCamera;
 
@@ -127,6 +129,10 @@ class PlayState extends FlxTransitionableState {
         var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
         uiGroup.add(dialogTest);
 	}
+
+	function openDialog(dialog:CharacterDialog){
+
+	}
     
     function loadLevel(levelName:String) {
         level = new levels.ldtk.Level(levelName);
@@ -185,6 +191,9 @@ class PlayState extends FlxTransitionableState {
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
+
+        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y);
+        entityRenderGroup.add(tink);
 
         // var testTrash = new TrashCan(100, 100);
         // testTrash.add_to_group(enemyGroup);
