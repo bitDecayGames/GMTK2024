@@ -88,7 +88,7 @@ class Tink extends Unibody {
 				} else if (!introDialog2Done) {
 					introDialog2Done = true;
 					shutter.close();
-					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.", () -> {
+					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.<page/>Anyways, see ya.", () -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
 						new FlxTimer().start(1, (t) -> {
 							doorTop.open();
@@ -115,7 +115,9 @@ class Tink extends Unibody {
 					if (targetsDone && !introDialog2Done) {
 						introDialog2Done = true;
 						shutter.close();
-						var dialogTest = new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.");
+						var dialogTest = new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", () -> {
+							FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
+						});
 						PlayState.me.openDialog(dialogTest);
 					}
 				}
