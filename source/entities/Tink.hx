@@ -31,10 +31,13 @@ class Tink extends Unibody {
 
 	var distanceToPlayer:Float;
 
+	var dialogIndex = 0;
+
 	var spawnPoint:String;
 	var doorTop:DoorTop;
 	var doorBottom:DoorBottom;
 	public var shutter:Shutter = null;
+	public var collector:ScrapCollector = null;
 
 	var skipAllDialog = false;
 	var fireDashTipDisplayedHitCount = 0;
@@ -44,7 +47,7 @@ class Tink extends Unibody {
 	var introDialogDone = false;
 	var introDialog2Done = false;
 
-	public function new(x:Float, y:Float, spawnPoint:String, doorTop:DoorTop, doorBottom:DoorBottom, activationRadius:Int) {
+	public function new(x:Float, y:Float, spawnPoint:String, doorTop:DoorTop, doorBottom:DoorBottom, activationRadius:Int, collector:ScrapCollector) {
 		#if skip_dialog
 		skipAllDialog = true;
 		#end
@@ -53,10 +56,18 @@ class Tink extends Unibody {
 		ogXY.set(x, y);
 		this.doorTop = doorTop;
 		this.doorBottom = doorBottom;
+		this.collector = collector;
 		Aseprite.loadAllAnimations(this, AssetPaths.tinkSketchpad__json);
 		animation.play(anims.Idle);
 		this.spawnPoint = spawnPoint;
 		this.activationRadius = activationRadius;
+		
+
+		if (spawnPoint == TINK_TARGETS) {
+			if (collector != null){
+				collector.isDepositable = false;
+			}
+		}
 	}
 
 	override function makeBody():Body {
@@ -102,47 +113,60 @@ class Tink extends Unibody {
 
 			switch (spawnPoint) {
 				case TINK_INTRO:
+					switch(dialogIndex) {
+						case 0:
+							dialogIndex++;
+							introDialogDone = true;
 
-					if (!introDialogDone) {
-						introDialogDone = true;
+							var endDialogCallback = () -> {
+								shutter.close();
+								new FlxTimer().start(1, (t) -> {
+									doorTop.open();
+									doorBottom.open();
+								});
+							};
 
-						var endDialogCallback = () -> {
-							shutter.close();
-							new FlxTimer().start(1, (t) -> {
-								doorTop.open();
-								doorBottom.open();
-							});
-						};
-
-						triggerDialog(new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", endDialogCallback), endDialogCallback);
-					} 
-				case TINK_FIRE:
-					if (!introDialogDone && PlayState.me.player.hitByFireCount > 0) {
-						PlayState.me.player.hitByFireCount = 0;
-						introDialogDone = true;
-						var endDialogCallback = () -> {
-							shutter.close();
-						};
-						
-						new FlxTimer().start(1, (t) -> {
-							triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
-						});
-						return;
-					} else if (!introDialogDone && PlayState.me.player.body.x > 550) { // If you dash through the fire without hitting it, skip the tutorial dialog
-						introDialogDone = true;
-						shutter.close();
-					} else if (introDialogDone && PlayState.me.player.hitByFireCount % 3 == 0) {
-						if (fireDashTipDisplayedHitCount != PlayState.me.player.hitByFireCount) {
-							fireDashTipDisplayedHitCount = PlayState.me.player.hitByFireCount;
-							triggerDialog(new CharacterDialog(TINK, "Dash through the fire with SPACEBAR!"));
-						}
+							triggerDialog(new CharacterDialog(TINK, "Hey buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", endDialogCallback), endDialogCallback);
 					}
+				case TINK_FIRE:
+					switch(dialogIndex) {
+						case 0:
+							if (PlayState.me.player.hitByFireCount > 0) {
+								PlayState.me.player.hitByFireCount = 0;
+								dialogIndex++;
+								var endDialogCallback = () -> {
+									shutter.close();
+								};
+								
+								new FlxTimer().start(1, (t) -> {
+									triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+								});
+								return;
+							} else if (PlayState.me.player.body.x > 550) { // If you dash through the fire without hitting it, skip the tutorial dialog
+								dialogIndex++;
+								introDialogDone = true;
+								shutter.close();
+							}
+						case 1:
+							if (PlayState.me.player.hitByFireCount % 3 == 0) {
+								if (fireDashTipDisplayedHitCount != PlayState.me.player.hitByFireCount) {
+									fireDashTipDisplayedHitCount = PlayState.me.player.hitByFireCount;
+									triggerDialog(new CharacterDialog(TINK_GATE, "Dash through the fire with SPACEBAR!"));
+								}
+							}
+					}
+					
 				case TINK_TARGETS:
-					if (!introDialogDone) {
-						introDialogDone = true;
-						triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));
+					
+				switch(dialogIndex) {
+					case 0:
+						dialogIndex++;
+						triggerDialog(new CharacterDialog(TINK, "Ah, some targets! Time to start testing your sk...<page/>Wait, you still need a gun... Bring me 2 scrap and I will give you something easy to handle. Place the collected scrap into the scrap grider to my left.. uhh.. your left."));
+						collector.isDepositable = true;
+						// triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));"
 						return;
-					} else if (!introDialog2Done) {
+						
+					case 1:
 						var targetsDone = true;
 						for (t in PlayState.me.practiceTargets) {
 							if (!t.beenShot) {
@@ -151,16 +175,15 @@ class Tink extends Unibody {
 							}
 						}
 
-						if (targetsDone && !introDialog2Done) {
-							introDialog2Done = true;
-
+						if (targetsDone) {
+							dialogIndex++;
 							var endDialogCallback = () -> {
 								shutter.close();
 							};
 
 							triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);
 						}
-					}
+				}
 			}
 		}
 	}

@@ -15,9 +15,13 @@ class FmodSFX {
     public static inline var ScrapSpawnDeposited:String = "event:/SFX/Collectables/ScrapSpawnDeposited";
     public static inline var ScrapSpawnDeposited2:String = "event:/SFX/Collectables/ScrapSpawnDeposited2";
     public static inline var ScrapSpawnDepositedComplete:String = "event:/SFX/Collectables/ScrapSpawnDepositedComplete";
+    public static inline var CollectorGrinding:String = "event:/SFX/Collector/CollectorGrinding";
     public static inline var CollectorOpen:String = "event:/SFX/Collector/CollectorOpen";
     public static inline var DoorOpen:String = "event:/SFX/Door/DoorOpen";
     public static inline var DoorOpen2:String = "event:/SFX/Door/DoorOpen2";
+    public static inline var GunGet:String = "event:/SFX/Guns/GunGet";
+    public static inline var GunGetJingle:String = "event:/SFX/Guns/GunGetJingle";
+    public static inline var GunSpawn:String = "event:/SFX/Guns/GunSpawn";
     public static inline var GunsPistol:String = "event:/SFX/Guns/GunsPistol";
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
