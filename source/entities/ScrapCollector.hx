@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxObject;
 import flixel.math.FlxVelocity;
 import ui.WeaponUnlockOverlay;
 import flixel.FlxG;
@@ -160,18 +161,15 @@ class ScrapCollector extends Unibody {
                     depositScrap.path = new FlxPath();
                     var midpoint = GetMidpoint(playerPosition, myPosition);
                     var topOfArc = body.y-32;
-                    midpoint.y = topOfArc-10;
+                    midpoint.y = topOfArc-20;
                     var points:Array<FlxPoint> = [playerPosition, midpoint, myPosition];
 
-                    depositScrap.path.onComplete = (p) -> {
+                    depositScrap.doPath(points, () -> {
                         scrapToClose--;
                         scrapToActivate--;
                         FmodManager.PlaySoundOneShot(FmodSFX.ScrapSpawnDepositedComplete);    
                         depositScrap.kill();
-                    }
-
-                    // Start the movement and add it to the state
-                    depositScrap.path.start(points, 100, FlxPathType.FORWARD);
+                    });
                 });
             }
 
