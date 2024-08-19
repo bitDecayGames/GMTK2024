@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{7197a605-4cac-4758-8598-76a9b3cec180}">
+		<property name="assetPath">
+			<value>talk.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.8509583333333333</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{8437bb97-ead8-45e7-929a-eda2e732a050}</destination>
+		</relationship>
+	</object>
+</objects>

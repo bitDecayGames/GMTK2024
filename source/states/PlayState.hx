@@ -124,7 +124,7 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-        loadLevel("Level_0");
+        loadLevel("Level_1");
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
@@ -235,9 +235,9 @@ class PlayState extends FlxTransitionableState {
             AddInteractable(door);
         }
 
-        var testTrash = new Dumpster(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
+        // var testTrash = new Dumpster(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);
