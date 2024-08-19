@@ -114,7 +114,7 @@ class Level {
 
 
 		for (s in level.l_Entities.all_RecepticalSpawn) {
-			collectors.push(new ScrapCollector(s.pixelX, s.pixelY));
+			collectors.push(new ScrapCollector(s.pixelX, s.pixelY, s.f_ScrapToActivate));
 		}
 
 		rawTerrainTopLayer = level.l_Top;

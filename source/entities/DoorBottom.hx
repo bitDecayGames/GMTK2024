@@ -19,6 +19,12 @@ class DoorBottom extends Unibody {
 		Aseprite.loadAllAnimations(this, AssetPaths.doorBottomHalf__json);
 		animation.frameIndex = 0;
 
+		animation.callback = (name, frameNumber, frameIndex) -> {
+			if (frameNumber == 3) {
+				body.active = false;
+			}
+		}
+
 		animation.finishCallback = (name) -> {
 			if (name == anims.open) {
 				body.active = false;

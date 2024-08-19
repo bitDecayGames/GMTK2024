@@ -63,6 +63,9 @@ class FlxTextFactory {
 
 		txt.updateHitbox();
 
+		txt.pixelPerfectPosition = true;
+		txt.pixelPerfectRender = true;
+
 		if (color != null) {
 			txt.color = color;
 		} else {

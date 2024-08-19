@@ -22,16 +22,18 @@ class DoorTop extends Unibody {
 		animation.frameIndex = 0;
 
 		animation.callback = (name, frameNumber, frameIndex) -> {
+			if (frameNumber == 3) {
+				body.active = false;
+			}
 			if (frameNumber == 5)  {
                 FlxG.camera.shake(0.025, 0.2);
 			}
 		}
 
-		animation.finishCallback = (name) -> {
-			if (name == anims.open) {
-				body.active = false;
-			}
-		}
+		// animation.finishCallback = (name) -> {
+		// 	if (name == anims.open) {
+		// 	}
+		// }
     }
 
 	public function open() {

@@ -87,7 +87,9 @@ class Scrap extends Unibody {
             pickPoint();
         }
 
-		body.velocity.set(velocity.x, velocity.y);
+        if (body != null && body.velocity != null && velocity != null){
+            body.velocity.set(velocity.x, velocity.y);
+        }
     }
 
     function pickPoint() {
