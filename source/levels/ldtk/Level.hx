@@ -22,6 +22,7 @@ class Level {
 	
 	public var bounds = FlxRect.get();
 	public var terrainGfx = new FlxSpriteGroup();
+	public var terrainTopGfx = new FlxSpriteGroup();
 	public var terrainDecorGfx = new FlxSpriteGroup();
 	public var rawCollisionInts = new Array<Int>();
 	public var rawTerrainTilesWide = 0;
@@ -30,6 +31,7 @@ class Level {
 	public var doors:Array<DoorTop> = [];
 
 	public var rawTerrainLayer:levels.ldtk.LDTKProject.Layer_Ground;
+	public var rawTerrainTopLayer:levels.ldtk.LDTKProject.Layer_Top;
 	public var rawWallsLayer:levels.ldtk.LDTKProject.Layer_Collision;
 
 	public var playerSpawnPoint:FlxPoint;
@@ -70,6 +72,9 @@ class Level {
 		for (d in level.l_Entities.all_Door) {
 			doors.push(new DoorTop(d.pixelX, d.pixelY));
 		}
+		
+		rawTerrainTopLayer = level.l_Top;
+		terrainTopGfx = rawTerrainTopLayer.render();
 
 		// TODO: handle all this crap
 		// level.l_Entities.all_Recepticle
