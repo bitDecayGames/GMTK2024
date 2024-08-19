@@ -60,7 +60,10 @@ class Tink extends Unibody {
 		if (distanceToPlayer < 30) {
 			if (!introDialogDone) {
 				introDialogDone = true;
-				var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
+				var dialogTest = new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.");
+				PlayState.me.openDialog(dialogTest);
+			} else {
+				var dialogTest = new CharacterDialog(TINK, "2nd dialog here.");
 				PlayState.me.openDialog(dialogTest);
 			}
 		}
