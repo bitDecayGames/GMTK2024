@@ -1,5 +1,6 @@
 package states;
 
+import ui.WeaponUnlockOverlay;
 import entities.GroundFire;
 import entities.PracticeTarget;
 import entities.Shutter;
@@ -121,6 +122,8 @@ class PlayState extends FlxTransitionableState {
         super.create();
         Lifecycle.startup.dispatch();
 
+		persistentUpdate = true;
+
         me = this;
 
 		FlxEcho.init({
@@ -163,22 +166,34 @@ class PlayState extends FlxTransitionableState {
 
         // Add uiGroup to the state
         add(uiGroup);
+
+		#if testgunget
+		openSubState(new WeaponUnlockOverlay(SHOTTY));
+		#end
 	}
 
 	public function openDialog(dialog:CharacterDialog){
 		dialogActive = true;
-		player.body.active = false;
-        entityRenderGroup.active = false;
-        projectileRenderGroup.active = false;
         uiGroup.add(dialog);
+		pauseGame();
 	}
 
 	public function closeDialog(dialog:CharacterDialog){
 		dialogActive = false;
+		uiGroup.remove(dialog);
+		resumeGame();
+	}
+
+	public function pauseGame() {
+		player.body.active = false;
+        entityRenderGroup.active = false;
+        projectileRenderGroup.active = false;
+	}
+
+	public function resumeGame() {
 		player.body.active = true;
         entityRenderGroup.active = true;
         projectileRenderGroup.active = true;
-		uiGroup.remove(dialog);
 	}
     
     function loadLevel(levelName:String) {

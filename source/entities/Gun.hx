@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Player.GunHas;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import loaders.Aseprite;
@@ -9,6 +10,8 @@ import flixel.FlxSprite;
 class Gun extends FlxSprite {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/pistol.json");
 
+    public var type:GunHas;
+
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
 
@@ -16,9 +19,28 @@ class Gun extends FlxSprite {
         super(0, 0);
         //origin.set(offsetX, offsetY);
         parent = follow;
+        // TODO: Do we need different offsets for each weapon? probobly...
         this.drawfset.copyFrom(drawfset);
         Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
         // animation.play(anims.)
+        origin.set(width/2, height/2);
+    }
+
+    public function setType(type:Player.GunHas) {
+        this.type = type;
+        switch(type) {
+            case HANDS:
+                // TODO: Load hands
+                Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+            case PISTOL:
+                Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+            case MAGNUM:
+                Aseprite.loadAllAnimations(this, AssetPaths.magnum__json);
+            case SHOTTY:
+                Aseprite.loadAllAnimations(this, AssetPaths.shotty__json);
+            case ROCKET:
+                Aseprite.loadAllAnimations(this, AssetPaths.gl__json);
+        }
         origin.set(width/2, height/2);
     }
 

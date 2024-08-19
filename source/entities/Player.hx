@@ -20,7 +20,11 @@ import haxe.Timer;
 using echo.FlxEcho;
 
 enum GunHas {
+	HANDS;
 	PISTOL;
+	MAGNUM;
+	SHOTTY;
+	ROCKET;
 }
 
 class Player extends Unibody {
@@ -49,7 +53,6 @@ class Player extends Unibody {
 	public var hitByFireCount = 0;
 
 	public var scrapCount = 0;
-	public var currentGun:GunHas = PISTOL;
 
 	var canShootPistol = true;
 	var pistolShotCooldown = 0.375;
@@ -83,6 +86,7 @@ class Player extends Unibody {
 		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
 
 		gun = new Gun(this, rightDrawfset);
+		gun.setType(HANDS);
 
 		// TODO: This is not how we want to leave this, but it's a good filler for now
 		//FlxG.state.add(gun);
@@ -91,6 +95,11 @@ class Player extends Unibody {
 		// FlxG.watch.add(this, "rollSpeedMultiplier", "Roll speed multiplier");
 		// FlxG.watch.add(this, "speed", "Walk speed");
 		// FlxG.watch.add(gun, "angle", "gun angle");
+	}
+
+	public function setGun(type:GunHas) {
+		gun.setType(type);
+		// TODO: upate bullet types? SFX?
 	}
 
 	override function makeBody():Body {
@@ -159,9 +168,13 @@ class Player extends Unibody {
 
 			
 			var position = body.get_position();
-			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
+			// TODO: could scale this by the length of the gun or something, but whatever
+			var tipPoint = FlxPoint.get(1, 0).rotateByDegrees(gun.angle).scale(10);
+			var positionAsFlxPoint = new FlxPoint(position.x + tipPoint.x, position.y + tipPoint.y);
+			tipPoint.put();
 			if (FlxG.mouse.pressed) {
-				switch(currentGun) {
+				switch(gun.type) {
+					case HANDS:
 					case PISTOL:
 						if (canShootPistol){
 							canShootPistol = false;
@@ -172,6 +185,12 @@ class Player extends Unibody {
 								canShootPistol = true;
 							});
 						}
+					case MAGNUM:
+						// TODO: Make this work
+					case SHOTTY:
+						// TODO: Make this work
+					case ROCKET:
+						// TODO: Make this work
 				}
 			}
 		}
