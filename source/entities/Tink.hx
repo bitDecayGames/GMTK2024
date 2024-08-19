@@ -36,12 +36,19 @@ class Tink extends Unibody {
 	var doorBottom:DoorBottom;
 	public var shutter:Shutter = null;
 
+	var skipAllDialog = false;
+	var fireDashTipDisplayedHitCount = 0;
+
 	var activationRadius = 30;
 
 	var introDialogDone = false;
 	var introDialog2Done = false;
 
 	public function new(x:Float, y:Float, spawnPoint:String, doorTop:DoorTop, doorBottom:DoorBottom, activationRadius:Int) {
+		#if skip_dialog
+		skipAllDialog = true;
+		#end
+
 		super(x, y);
 		ogXY.set(x, y);
 		this.doorTop = doorTop;
@@ -71,6 +78,16 @@ class Tink extends Unibody {
 		});
 	}
 
+	function triggerDialog(dialog:CharacterDialog, ?callback:() -> Void) {
+		if (!skipAllDialog){
+			PlayState.me.openDialog(dialog);
+		} else {
+			if (callback != null) {
+				callback();
+			}
+		}
+	}
+
 	override public function update(delta:Float) {
 		super.update(delta);
 		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
@@ -88,21 +105,35 @@ class Tink extends Unibody {
 
 					if (!introDialogDone) {
 						introDialogDone = true;
-						shutter.close();
-						var dialogTest = new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", () -> {
-							FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
+
+						var endDialogCallback = () -> {
+							shutter.close();
 							new FlxTimer().start(1, (t) -> {
 								doorTop.open();
 								doorBottom.open();
 							});
-						});
-						PlayState.me.openDialog(dialogTest);
+						};
+
+						triggerDialog(new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", endDialogCallback), endDialogCallback);
 					} 
+				case TINK_FIRE:
+					if (!introDialogDone) {
+						introDialogDone = true;
+						var endDialogCallback = () -> {
+							shutter.close();
+						};
+						triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+						return;
+					} else if (PlayState.me.player.hitByFireCount % 3 == 0) {
+						if (fireDashTipDisplayedHitCount != PlayState.me.player.hitByFireCount) {
+							fireDashTipDisplayedHitCount = PlayState.me.player.hitByFireCount;
+							triggerDialog(new CharacterDialog(TINK, "Dash through the fire with SPACEBAR!"));
+						}
+					}
 				case TINK_TARGETS:
 					if (!introDialogDone) {
 						introDialogDone = true;
-						var dialogTest = new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet.");
-						PlayState.me.openDialog(dialogTest);
+						triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));
 						return;
 					} else if (!introDialog2Done) {
 						var targetsDone = true;
@@ -115,20 +146,14 @@ class Tink extends Unibody {
 
 						if (targetsDone && !introDialog2Done) {
 							introDialog2Done = true;
-							shutter.close();
-							var dialogTest = new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", () -> {
-								FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
-							});
-							PlayState.me.openDialog(dialogTest);
+
+							var endDialogCallback = () -> {
+								shutter.close();
+							};
+
+							triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);
 						}
 					}
-				case TINK_FIRE:
-					if (!introDialogDone) {
-						introDialogDone = true;
-						var dialogTest = new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.");
-						PlayState.me.openDialog(dialogTest);
-						return;
-					} 
 			}
 		}
 	}
