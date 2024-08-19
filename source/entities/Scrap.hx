@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxTimer;
 import echo.Echo;
 import echo.Line;
 import flixel.tweens.FlxTween;
@@ -25,6 +26,9 @@ class Scrap extends Unibody {
 	var loopDropRadius = 30;
     public var collectible = false;
 
+    var delayedPickup = false;
+    var pointPicked = false;
+
     public function new(source:FlxPoint, distance:Int = 30, delayPickup:Bool = false) {
         super(source.x, source.y);
 
@@ -38,54 +42,14 @@ class Scrap extends Unibody {
             animation.play(animsNut.spin);
         }
 
-        if (loopDropRadius == 0) {
-            collectible = true;
-            source.putWeak();
-            return;
-        }
-		
-        // accounting for known half-width and half-height here
-        // assume we are placing loot based on center
-        var boundaryBuffer = 24;
-
-        var levelBounds = PlayState.me.level.bounds;
-
-        // Calculate final drop point
-        var theta = Math.random() * 2 * Math.PI;
-        var xdist = source.x + loopDropRadius * Math.cos(theta);
-        var ydist = source.y + loopDropRadius * Math.sin(theta);
-
-        var line = Line.get(source.x, source.y, xdist, ydist);
-        var intersect = Echo.linecast(line, PlayState.me.wallBodies, FlxEcho.instance.world);
-        if (intersect != null) {
-            xdist = intersect.closest.hit.x;
-            ydist = intersect.closest.hit.y;
-        }
-
-        
-        // var finalX = Math.min(Math.max(boundaryBuffer, source.x + loopDropRadius * Math.cos(theta)), levelBounds.width-boundaryBuffer);
-        // var finalY = Math.min(Math.max(boundaryBuffer*2, source.y + loopDropRadius * Math.sin(theta)), levelBounds.height-boundaryBuffer);
-        var randomPointAroundPlayer = new FlxPoint(xdist, ydist);
-
-        // Create the path for it to follow
-        path = new FlxPath();
-
+        delayedPickup = delayPickup;
         if (delayPickup) {
             collectible = false;
-            path.onComplete = (p) -> collectible = true;
-        } else {
-            collectible = true;
+            new FlxTimer().start(1, (t) -> {
+                // fail safe in case the thing can't finish its path
+                collectible = true;
+            });
         }
-
-        var initialPoint = new FlxPoint(source.x, source.y);
-        var midpoint = GetMidpoint(initialPoint, randomPointAroundPlayer);
-        var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
-        midpoint.y = topOfArc-10;
-        var points:Array<FlxPoint> = [getPosition(), midpoint, randomPointAroundPlayer];
-
-        // Start the movement and add it to the state
-        path.start(points, 100, FlxPathType.FORWARD);
-        source.putWeak();
     }
 
 	function GetMidpoint(point1:FlxPoint, point2:FlxPoint):FlxPoint {
@@ -105,17 +69,12 @@ class Scrap extends Unibody {
 		return this.add_body({
 			x: x,
 			y: y,
-			max_velocity_x: 1000,
-			max_velocity_length: 1000,
-			drag_x: 0,
-			mass: 100,
+            kinematic: true,
 			shapes: [
-				// Standard moving hitbox
 				{
 					type:RECT,
 					width: 16,
 					height: 16,
-					// offset_y: 8,
 				}
 			]
 		});
@@ -124,7 +83,47 @@ class Scrap extends Unibody {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        if (!pointPicked) {
+            pickPoint();
+        }
+
 		body.velocity.set(velocity.x, velocity.y);
+    }
+
+    function pickPoint() {
+        pointPicked = true;
+
+        var start = getMidpoint();
+
+        if (loopDropRadius == 0) {
+            collectible = true;
+            return;
+        }
+		
+        // Calculate final drop point
+        var theta = Math.random() * 2 * Math.PI;
+        var xdist = start.x + loopDropRadius * Math.cos(theta);
+        var ydist = start.y + loopDropRadius * Math.sin(theta);
+
+        var line = Line.get(start.x, start.y, xdist, ydist);
+        var intersect = Echo.linecast(line, PlayState.me.wallBodies, FlxEcho.instance.world);
+        if (intersect != null) {
+            xdist = intersect.closest.hit.x;
+            ydist = intersect.closest.hit.y;
+        }
+
+        var randomPointAroundPlayer = new FlxPoint(xdist, ydist);
+
+        // Create the path for it to follow
+        path = new FlxPath();
+
+        var midpoint = GetMidpoint(start, randomPointAroundPlayer);
+        var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
+        midpoint.y = topOfArc-10;
+        var points:Array<FlxPoint> = [start, midpoint, randomPointAroundPlayer];
+
+        // Start the movement and add it to the state
+        path.start(points, 100, FlxPathType.FORWARD);
     }
     
     override function draw() {

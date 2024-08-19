@@ -30,8 +30,8 @@ class GroundFire extends Unibody {
 
 	override function makeBody():Body {
 		return this.add_body({
-			x: x,
-			y: y,
+			x: x-8,
+			y: y-8,
             kinematic: true,
 			shapes: [
 				{
