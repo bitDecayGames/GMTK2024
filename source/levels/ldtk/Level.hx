@@ -5,7 +5,6 @@ import entities.GroundFire;
 import entities.Scrap;
 import entities.PracticeTarget;
 import entities.Tink;
-import js.html.Console;
 import entities.DoorBottom;
 import entities.DoorTop;
 import flixel.FlxBasic;
@@ -84,17 +83,25 @@ class Level {
 			doors.push(new DoorTop(d.iid, d.pixelX, d.pixelY+3, d.f_DoorName));
 			doorsBottom.push(new DoorBottom(d.iid, d.pixelX, d.pixelY+15, d.f_DoorName));
 		}
+
+		for (s in level.l_Entities.all_RecepticalSpawn) {
+			collectors.push(new ScrapCollector(s.pixelX, s.pixelY, s.f_ScrapToActivate, s.iid));
+		}
 		
 		if (level.l_Entities.all_TinkSpawn.length > 0) {
 			for (tinkSpawn in level.l_Entities.all_TinkSpawn) {
 				var top:DoorTop = null;
 				var bottom:DoorBottom = null;
+				var collector:ScrapCollector = null;
 				if (tinkSpawn.f_door != null) {
 					top = doors.filter((d) -> {return d.iid == tinkSpawn.f_door.entityIid;})[0];
 					bottom = doorsBottom.filter((d) -> {return d.iid == tinkSpawn.f_door.entityIid;})[0];
 				}
+				if (tinkSpawn.f_Collector != null) {
+					collector = collectors.filter((d) -> {return d.id == tinkSpawn.f_Collector.entityIid;})[0];
+				}
 				
-				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom, tinkSpawn.f_ActivationRadius));
+				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom, tinkSpawn.f_ActivationRadius, collector));
 			}
 		}
 
@@ -110,11 +117,6 @@ class Level {
 
 		for (s in level.l_Entities.all_ScrapSpawn) {
 			scrap.push(new Scrap(s.pixelX, s.pixelY, 0));
-		}
-
-
-		for (s in level.l_Entities.all_RecepticalSpawn) {
-			collectors.push(new ScrapCollector(s.pixelX, s.pixelY, s.f_ScrapToActivate));
 		}
 
 		rawTerrainTopLayer = level.l_Top;

@@ -1,5 +1,7 @@
 package entities;
 
+import ui.WeaponUnlockOverlay;
+import flixel.FlxG;
 import flixel.tweens.FlxTween;
 import flixel.text.FlxBitmapText;
 import flixel.path.FlxPath;
@@ -24,11 +26,16 @@ class ScrapCollector extends Unibody {
     var scrapToActivate = 0;
     var closed = true;
     var scrapToClose = 0;
+    public var id = "";
+    var givingPlayerGun = false;
 
-    public function new(x:Float, y:Float, scrapToActivate:Int) {
+    public var isDepositable = true;
+
+    public function new(x:Float, y:Float, scrapToActivate:Int, id:String) {
         super(x, y);
         Aseprite.loadAllAnimations(this, AssetPaths.recepticle__json);
         animation.frameIndex = 0;
+        this.id = id;
 
         animation.finishCallback = handleAnimFinish;
 
@@ -55,10 +62,63 @@ class ScrapCollector extends Unibody {
             animation.play(anims.close);
             FmodManager.PlaySoundOneShot(FmodSFX.CollectorOpen);
         }
+
+        if (scrapToActivate <= 0 && isDepositable) {
+            isDepositable = false;
+            new FlxTimer().start(1, (t) -> {
+                FmodManager.PlaySoundOneShot(FmodSFX.CollectorGrinding);
+                new FlxTimer().start(1.45, (t) -> {
+                    FlxG.camera.shake(0.01, 1.74);
+                    new FlxTimer().start(2, (t) -> {
+                        givingPlayerGun = true;
+                        animation.play(anims.open);
+                        FmodManager.PlaySoundOneShot(FmodSFX.CollectorOpen);
+                    });
+                    
+                });
+            });  
+        }
     }
 
     function handleAnimFinish(name:String) {
-        if (name == anims.open) {
+        if(name == anims.open && givingPlayerGun) {
+            new FlxTimer().start(0.5, (t) -> {
+                new FlxTimer().start(1, (t) -> {
+                    animation.play(anims.close);
+                    FmodManager.PlaySoundOneShot(FmodSFX.CollectorOpen);
+                });
+                FmodManager.PlaySoundOneShot(FmodSFX.GunSpawn);
+                var player = PlayState.me.player;
+                var myPosition = new FlxPoint(body.get_position().x, body.get_position().y);
+                var playerPosition = new FlxPoint(player.body.get_position().x, player.body.get_position().y);
+        
+                var gun = new GunHusk(myPosition);
+                PlayState.me.topGroup.add(gun);
+        
+                // Create the path for it to follow
+                gun.path = new FlxPath();
+                var midpoint = GetMidpoint(playerPosition, myPosition);
+                var topOfArc = body.y-32;
+                midpoint.y = topOfArc-10;
+                var points:Array<FlxPoint> = [myPosition, midpoint, playerPosition];
+        
+                gun.path.onComplete = (p) -> {
+                    FmodManager.PlaySoundOneShot(FmodSFX.GunGet);
+                    FmodManager.PauseSong();
+                    new FlxTimer().start(0.4, (t) -> {
+                        FmodManager.PlaySoundOneShot(FmodSFX.GunGetJingle);
+		                PlayState.me.openSubState(new WeaponUnlockOverlay(PISTOL));
+                    });   
+                    new FlxTimer().start(4, (t) -> {
+                        FmodManager.UnpauseSong();
+                    });   
+                    gun.kill();
+                }
+        
+                // Start the movement and add it to the state
+                gun.path.start(points, 100, FlxPathType.FORWARD);
+            });
+        } else if (name == anims.open) {
             opening = false;
             closed = false;
             var player = PlayState.me.player;
@@ -111,7 +171,7 @@ class ScrapCollector extends Unibody {
     override function handleEnter(other:Body, data:Array<CollisionData>) {
         super.handleEnter(other, data);
 
-        if (other.object is Player) {
+        if (isDepositable && other.object is Player) {
             if (!opening) {
                 opening = true;
                 var p:Player = cast other.object;
