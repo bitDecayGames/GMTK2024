@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.ScrapCollector;
 import entities.GroundFire;
 import entities.Scrap;
 import entities.PracticeTarget;
@@ -42,6 +43,7 @@ class Level {
 	public var hazards:Array<GroundFire> = [];
 
 	public var scrap:Array<Scrap> = [];
+	public var collectors:Array<ScrapCollector> = [];
 
 	public var rawTerrainLayer:levels.ldtk.LDTKProject.Layer_Ground;
 	public var rawTerrainTopLayer:levels.ldtk.LDTKProject.Layer_Top;
@@ -108,6 +110,11 @@ class Level {
 
 		for (s in level.l_Entities.all_ScrapSpawn) {
 			scrap.push(new Scrap(FlxPoint.get(s.pixelX, s.pixelY), 0));
+		}
+
+
+		for (s in level.l_Entities.all_RecepticalSpawn) {
+			collectors.push(new ScrapCollector(s.pixelX, s.pixelY));
 		}
 
 		rawTerrainTopLayer = level.l_Top;

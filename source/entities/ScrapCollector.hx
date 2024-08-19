@@ -11,6 +11,8 @@ using echo.FlxEcho;
 class ScrapCollector extends Unibody {
     public static var anims = AsepriteMacros.tagNames("assets/aseprite/recepticle.json");
 
+    var opening = false;
+
     public function new(x:Float, y:Float) {
         super(x, y);
         Aseprite.loadAllAnimations(this, AssetPaths.recepticle__json);
@@ -21,6 +23,7 @@ class ScrapCollector extends Unibody {
 
     function handleAnimFinish(name:String) {
         if (name == anims.open) {
+            opening = false;
             var scrapCount = PlayState.me.player.scrapCount;
             PlayState.me.player.scrapCount = 0;
             if (scrapCount > 0) {
@@ -28,6 +31,7 @@ class ScrapCollector extends Unibody {
                  // TODO: spawn particles for player scrap and have them fly to the receptical
                  // Once that's done, close this bidge
                  animation.play(anims.close);
+                 FmodManager.PlaySoundOneShot(FmodSFX.CollectorOpen);
             }
         }
     }
@@ -36,12 +40,15 @@ class ScrapCollector extends Unibody {
         super.handleEnter(other, data);
 
         if (other.object is Player) {
-            var p:Player = cast other.object;
-            if (p.scrapCount <= 0) {
-                return;
+            if (!opening) {
+                opening = true;
+                var p:Player = cast other.object;
+                if (p.scrapCount <= 0) {
+                    return;
+                }
+    
+                deposit();
             }
-
-            deposit();
         }
     }
 
@@ -50,6 +57,7 @@ class ScrapCollector extends Unibody {
         // TODO: close
         // TODO: track for Tink, somehow
         animation.play(anims.open);
+        FmodManager.PlaySoundOneShot(FmodSFX.CollectorOpen);
     }
 
 	override function makeBody():Body {

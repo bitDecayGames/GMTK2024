@@ -117,14 +117,21 @@ class Tink extends Unibody {
 						triggerDialog(new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", endDialogCallback), endDialogCallback);
 					} 
 				case TINK_FIRE:
-					if (!introDialogDone) {
+					if (!introDialogDone && PlayState.me.player.hitByFireCount > 0) {
+						PlayState.me.player.hitByFireCount = 0;
 						introDialogDone = true;
 						var endDialogCallback = () -> {
 							shutter.close();
 						};
-						triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+						
+						new FlxTimer().start(1, (t) -> {
+							triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+						});
 						return;
-					} else if (PlayState.me.player.hitByFireCount % 3 == 0) {
+					} else if (!introDialogDone && PlayState.me.player.body.x > 550) { // If you dash through the fire without hitting it, skip the tutorial dialog
+						introDialogDone = true;
+						shutter.close();
+					} else if (introDialogDone && PlayState.me.player.hitByFireCount % 3 == 0) {
 						if (fireDashTipDisplayedHitCount != PlayState.me.player.hitByFireCount) {
 							fireDashTipDisplayedHitCount = PlayState.me.player.hitByFireCount;
 							triggerDialog(new CharacterDialog(TINK, "Dash through the fire with SPACEBAR!"));
