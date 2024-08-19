@@ -224,6 +224,7 @@ class PlayState extends FlxTransitionableState {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;
 					aSpr.handleEnter(b, o);
+					aSpr.handleTerrainHit(b, o);
 				}
 			},
 			exit: (a, b) -> {

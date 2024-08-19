@@ -27,6 +27,7 @@ class EchoSprite extends FlxSprite {
 		super.kill();
 		if (body != null) {
 			body.active = false;
+			this.remove_object(true);
 		}
 	}
 
@@ -37,6 +38,10 @@ class EchoSprite extends FlxSprite {
 	}
 
 	public function handleEnter(other:Body, data:Array<CollisionData>) {
+
+	}
+
+	public function handleTerrainHit(other:Body, data:Array<CollisionData>) {
 
 	}
 

@@ -6,6 +6,8 @@ import states.PlayState;
 import bitdecay.behavior.tree.BTContext;
 import bitdecay.behavior.tree.BTree;
 import bitdecay.behavior.tree.decorator.Repeater;
+import bitdecay.behavior.tree.decorator.basic.AlwaysSucceed;
+import bitdecay.behavior.tree.decorator.basic.Invert;
 import bitdecay.behavior.tree.leaf.util.Success;
 import bitdecay.behavior.tree.BTContext;
 import bitdecay.behavior.tree.NodeStatus;
@@ -32,7 +34,8 @@ class Dumpster extends Unibody {
     var firstPhaseScrap = 10;
     public var hitByKillGun = false;
 
-    var lastCollisionWall:Bool;
+    public var lastCollisionWall:Bool;
+    public var lastCollisionPlayer:Bool;
 
     var btree:BTree;
 
@@ -76,26 +79,19 @@ class Dumpster extends Unibody {
                         return FAIL;
                     }), new Sequence([
                         new Wait(0.5, 1.5),
-                        new Selector(RANDOM([4]), [
-                            new LeftDoorAttack(this),
+                        new AlwaysSucceed(new Selector(RANDOM([4]), [
                             new Sequence([
-                                // RamAttack(this),
-                                new Precondition(new StatusAction((delta) -> {
-                                    if (lastCollisionWall) {
-                                        return SUCCESS;
-                                    }
-
-                                    return FAIL;
-                                }), new Selector(RANDOM([2, 2, 1]), [
-                                    // new LeftDoorAttack(this),
-                                    // new RightDoorAttack(this),
-                                    // new BarrageAttack(this)
-                                ]))
+                                new Invert(new RamAttack(this)),
+                                new Selector(RANDOM([2, 2]), [
+                                    new LeftDoorAttack(this),
+                                    new RightDoorAttack(this),
+                                    new BarrageAttack(this)
+                                ])
                             ]),
                             // new LeftDoorAttack(this),
                             // new RightDoorAttack(this),
                             // new BarrageAttack(this)
-                        ])
+                        ]))
                     ])),
                     new Precondition(new StatusAction((delta) -> {
                         return FAIL;
@@ -145,10 +141,69 @@ class Dumpster extends Unibody {
     override function handleEnter(other:Body, data:Array<CollisionData>) {
         super.handleEnter(other, data);
 
+        lastCollisionWall = false;
+
         if (other.object is Bullet) {
             handleHit(cast other.object);
         }
+
+
+        // TODO: Keep track of when player touches boss
+        if (other.object is Player) {
+            lastCollisionPlayer = true;
+        }
     }
+
+    override function handleTerrainHit(other:Body, data:Array<CollisionData>) {
+        lastCollisionWall = true;
+    }
+}
+
+class RamAttack implements Node {
+    var can:Dumpster;
+
+    var started = false;
+    var ramSpeed = 120;
+
+    public function new(can:Dumpster) {
+        this.can = can;
+    }
+
+    public function init(context:BTContext) {
+        started = false;
+        can.animation.finishCallback = (name) -> {
+        }
+    }
+
+    public function process(delta:Float):NodeStatus {
+        if (can.lastCollisionPlayer) {
+            // "attack" successfully hit the player
+            can.body.velocity.set(0, 0);
+            can.lastCollisionPlayer = false;
+            return SUCCESS;
+        }
+        if (can.lastCollisionWall) {
+            // "attack" failed to hit the player and hit something else
+            can.body.velocity.set(0, 0);
+            can.lastCollisionWall = false;
+            return FAIL;
+        }
+
+        if (!started) {
+            // TODO: SFX dumpster starts moving at player
+            var p = PlayState.me.player;
+            var target = FlxPoint.get(p.body.x, p.body.y);
+            var vel = FlxPoint.get().copyFrom(target).subtract(can.body.x, can.body.y).normalize().scale(ramSpeed);
+            can.body.velocity.set(vel.x, vel.y);
+            target.put();
+            vel.put();
+            started = true;
+        }
+
+        return RUNNING;
+    }
+
+    public function exit() {}
 }
 
 class LeftDoorAttack implements Node {
@@ -184,6 +239,74 @@ class LeftDoorAttack implements Node {
         if (!prepForAttack) {
             prepForAttack = true;
             can.animation.play(Dumpster.anims.leftDoorOpen);
+            return RUNNING;
+        }
+
+        if (readyForAttack && !attackSent) {
+            attackSent = true;
+
+            var e = FlxPoint.get(can.body.x, can.body.y);
+            var p = FlxPoint.get(PlayState.me.player.body.x, PlayState.me.player.body.y);
+            p.subtractPoint(e);
+            PlayState.me.AddEnemyBullet(new ClusterBomb(can.body.x, can.body.y, p.degrees, bombSpeed));
+            e.put();
+            p.put();
+
+            can.animation.play(Dumpster.anims.leftDoorClose);
+            return RUNNING;
+        }
+
+        if (finished) {
+            return SUCCESS;
+        }
+
+        return RUNNING;
+    }
+
+    public function exit() {}
+}
+
+// TODO: Implement 'boomerang' attack
+class RightDoorAttack extends LeftDoorAttack {
+    public function new(can:Dumpster) {
+        super(can);
+    }
+}
+
+class BarrageAttack implements Node {
+    var can:Dumpster;
+
+    var bombSpeed = 100;
+
+    var prepForAttack:Bool;
+    var readyForAttack:Bool;
+    var attackSent:Bool;
+    var finished:Bool;
+
+    public function new(can:Dumpster) {
+        this.can = can;
+    }
+
+    public function init(context:BTContext) {
+        prepForAttack = false;
+        readyForAttack = false;
+        attackSent = false;
+        finished = false;
+
+        can.animation.finishCallback = (name) -> {
+            if (name == Dumpster.anims.bothDoorsOpen) {
+                //can.animation.play(Dumpster.anims.)
+                readyForAttack = true;
+            } else if (name == Dumpster.anims.leftDoorClose) {
+                finished = true;
+            }
+        }
+    }
+
+    public function process(delta:Float):NodeStatus {
+        if (!prepForAttack) {
+            prepForAttack = true;
+            can.animation.play(Dumpster.anims.bothDoorsOpen);
             return RUNNING;
         }
 

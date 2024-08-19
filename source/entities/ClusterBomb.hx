@@ -1,15 +1,22 @@
 package entities;
 
+import loaders.AsepriteMacros;
+import loaders.Aseprite;
 import states.PlayState;
 import flixel.math.FlxPoint;
 
 class ClusterBomb extends Bullet {
+    public static var anims = AsepriteMacros.tagNames("assets/aseprite/spinningBottle.json");
+
     var triggerDist = 40.0;
     var blastDirections = 16;
     
     public function new(x:Float, y:Float, angle:Float, speed:Float) {
         // TODO: get real aim
         super(FlxPoint.weak(x, y), angle, speed);
+
+        Aseprite.loadAllAnimations(this, AssetPaths.spinningBottle__json);
+        animation.play(anims.spin);
     }
 
     var p1 = FlxPoint.get();
