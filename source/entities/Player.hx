@@ -304,9 +304,8 @@ class Player extends Unibody {
 			return;
 		}
 
-		// TODO: knockback 
 		for (i in 0...scrapCount) {
-			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
+			PlayState.me.AddScrap(new Scrap(FlxPoint.get(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
 		}
 		scrapCount = 0;
 	
