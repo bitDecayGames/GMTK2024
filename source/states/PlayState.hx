@@ -89,6 +89,14 @@ class PlayState extends FlxTransitionableState {
         entityRenderGroup.add(int);
     }
 
+	public function AddTopEntity(e:FlxSprite) {
+		topGroup.add(e);
+	}
+
+	public function RemoveTopEntity(e:FlxSprite) {
+		topGroup.remove(e);
+	}
+
     override public function create() {
         super.create();
         Lifecycle.startup.dispatch();
@@ -113,7 +121,7 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-        loadLevel("Level_1");
+        loadLevel("Level_0");
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
@@ -211,19 +219,18 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-        tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player);
-        entityRenderGroup.add(tink);
+		if (level.tinkSpawnPoint != null) {
+			tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player);
+			entityRenderGroup.add(tink);
+		}
 
-        // var testTrash = new TrashCan(100, 100);
-        // testTrash.add_to_group(enemyGroup);
-        // entityRenderGroup.add(testTrash);
         for (door in level.doors) {
             AddInteractable(door);
         }
 
-        // var testTrash = new Dumpster(100, 100);
-        // testTrash.add_to_group(enemyGroup);
-        // entityRenderGroup.add(testTrash);
+        var testTrash = new Dumpster(100, 100);
+        testTrash.add_to_group(enemyGroup);
+        entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);

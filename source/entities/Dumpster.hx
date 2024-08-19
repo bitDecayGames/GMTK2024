@@ -72,6 +72,7 @@ class Dumpster extends Unibody {
         btree = new BTree(
             new Repeater(FOREVER, 
                 new Selector(IN_ORDER, [
+                    new BarrageAttack(this),
                     new Precondition(new StatusAction((delta) -> {
                         if (scrapDropped < firstPhaseScrap) {
                             return SUCCESS;
@@ -276,12 +277,21 @@ class RightDoorAttack extends LeftDoorAttack {
 class BarrageAttack implements Node {
     var can:Dumpster;
 
-    var bombSpeed = 100;
+    var launchSpeed = 800;
+    var landSpeed = 1200;
+    var delay = 1;
 
     var prepForAttack:Bool;
     var readyForAttack:Bool;
     var attackSent:Bool;
+    var started:Bool;
     var finished:Bool;
+
+    var leftSpawn = FlxPoint.get();
+    var middleSpawn = FlxPoint.get();
+    var rightSpawn = FlxPoint.get();
+
+    var launchTracker:Map<Int, Bool>;
 
     public function new(can:Dumpster) {
         this.can = can;
@@ -291,38 +301,63 @@ class BarrageAttack implements Node {
         prepForAttack = false;
         readyForAttack = false;
         attackSent = false;
+        started = false;
         finished = false;
 
         can.animation.finishCallback = (name) -> {
             if (name == Dumpster.anims.bothDoorsOpen) {
-                //can.animation.play(Dumpster.anims.)
+                can.animation.play(Dumpster.anims.missileLoad);
+                prepForAttack = true;
+            } else if (name == Dumpster.anims.missileLoad) {
+                can.animation.play(Dumpster.anims.missileFire);
                 readyForAttack = true;
-            } else if (name == Dumpster.anims.leftDoorClose) {
+            } else if (name == Dumpster.anims.missileFire) {
+                can.animation.play(Dumpster.anims.bothDoorsClosed);
+                attackSent = true;
+            } else if (name == Dumpster.anims.bothDoorsClosed) {
                 finished = true;
             }
         }
+
+
+        launchTracker = new Map<Int, Bool>();
+
+        can.animation.callback = (name, frame, index) -> {
+            if (name == Dumpster.anims.missileFire) {
+				if (launchTracker.exists(frame)) {
+					return;
+				}
+
+				launchTracker.set(frame, true);
+                switch (frame) {
+                    case 0 | 6:
+                        // fire missile left
+                        trace('firing left');
+                        PlayState.me.AddTopEntity(new TankMissile(leftSpawn, launchSpeed, landSpeed, delay));
+                    case 2 | 8:
+                        // fire missile center
+                        trace('firing middle');
+                        PlayState.me.AddTopEntity(new TankMissile(middleSpawn, launchSpeed, landSpeed, delay));
+                    case 4 | 10:
+                        // fire missile right
+                        trace('firing right');
+                        PlayState.me.AddTopEntity(new TankMissile(rightSpawn, launchSpeed, landSpeed, delay));
+                    default:
+                }
+
+            }
+        };
     }
 
     public function process(delta:Float):NodeStatus {
-        if (!prepForAttack) {
-            prepForAttack = true;
+        if (!started) {
+            started = true;
             can.animation.play(Dumpster.anims.bothDoorsOpen);
-            return RUNNING;
         }
 
-        if (readyForAttack && !attackSent) {
-            attackSent = true;
-
-            var e = FlxPoint.get(can.body.x, can.body.y);
-            var p = FlxPoint.get(PlayState.me.player.body.x, PlayState.me.player.body.y);
-            p.subtractPoint(e);
-            PlayState.me.AddEnemyBullet(new ClusterBomb(can.body.x, can.body.y, p.degrees, bombSpeed));
-            e.put();
-            p.put();
-
-            can.animation.play(Dumpster.anims.leftDoorClose);
-            return RUNNING;
-        }
+        can.getGraphicMidpoint(leftSpawn).subtract(23, 0);
+        can.getGraphicMidpoint(middleSpawn).subtract(6, 0);
+        can.getGraphicMidpoint(rightSpawn).add(9, 0);
 
         if (finished) {
             return SUCCESS;
