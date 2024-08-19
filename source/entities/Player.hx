@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import js.html.Console;
 import echo.data.Data.CollisionData;
@@ -312,6 +313,9 @@ class Player extends Unibody {
 	
 		var knockDir = (body.get_position() - hurter.body.get_position()).normalize();
 		setKnockback(FlxPoint.weak(knockDir.x, knockDir.y), 50, .5);
+		FmodManager.PlaySoundOneShot(FmodSFX.PlayerGetHit);
+		FlxG.camera.shake(0.0125, 0.1);
+		FlxG.camera.flash(FlxColor.RED, 0.1);
 	}
 
 	function handleScrap(scrap:Scrap) {

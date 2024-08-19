@@ -20,7 +20,7 @@ class Shutter extends FlxSprite {
     }
 
     public function close() {
-		// TODO: SFX close shutter sound
+        FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
         animation.play(anims.close);
     }
 }
