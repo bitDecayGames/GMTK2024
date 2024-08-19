@@ -122,7 +122,7 @@ class Dumpster extends Unibody {
         if (hitsToNextScrap <= 0) {
             // drop scrap
             // TODO: SFX hit dropped scrap
-		    PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y)));
+		    PlayState.me.AddScrap(new Scrap(body.x, body.y));
             scrapDropped++;
             hitsToNextScrap = hitsToEachScrap;
         } else {

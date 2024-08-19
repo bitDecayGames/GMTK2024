@@ -1,6 +1,4 @@
 # Main build deps
-flixel 5.8.0
-flixel-addons 3.2.2
 openfl 9.3.3
 lime 8.1.2
 
@@ -8,7 +6,7 @@ lime 8.1.2
 newgrounds 2.0.0
 
 # arcade physics
-echo git https://github.com/MondayHopscotch/echo.git
+echo git https://github.com/MondayHopscotch/echo.git listener-shape-issue
 echo-flixel git https://github.com/AustinEast/echo-flixel.git
 
 # level editor
@@ -25,3 +23,7 @@ lucidtext git https://github.com/bitDecayGames/LucidText.git
 
 # misc deps
 haxefmod git https://github.com/Tanz0rz/haxe-fmod.git master
+
+# putting these here to ensure we are on these versions even if something earlier sets a different version
+flixel 5.8.0
+flixel-addons 3.2.2
