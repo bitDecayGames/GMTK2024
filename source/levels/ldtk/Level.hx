@@ -44,8 +44,10 @@ class Level {
 		var rawSpawnPoint = level.l_Entities.all_PlayerSpawn[0];
 		playerSpawnPoint = FlxPoint.get(rawSpawnPoint.pixelX, rawSpawnPoint.pixelY);
 
-		var tinkRawSpawnPoint = level.l_Entities.all_TinkSpawn[0];
-		tinkSpawnPoint = FlxPoint.get(tinkRawSpawnPoint.pixelX, tinkRawSpawnPoint.pixelY);
+		if (level.l_Entities.all_TinkSpawn.length > 0) {
+			var tinkRawSpawnPoint = level.l_Entities.all_TinkSpawn[0];
+			tinkSpawnPoint = FlxPoint.get(tinkRawSpawnPoint.pixelX, tinkRawSpawnPoint.pixelY);
+		}
 
 		bounds.width = level.pxWid;
 		bounds.height = level.pxHei;
