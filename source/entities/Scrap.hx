@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import echo.Echo;
 import echo.Line;
@@ -21,26 +22,18 @@ class Scrap extends Unibody {
 	public static var animsBolt = AsepriteMacros.tagNames("assets/aseprite/bolt.json");
 	public static var animsNut = AsepriteMacros.tagNames("assets/aseprite/nut.json");
 
-    var parent:FlxSprite;
-    var drawfset = FlxPoint.get();
 	var loopDropRadius = 30;
-    public var collectible = false;
+    public var collectible = true;
 
     var delayedPickup = false;
     var pointPicked = false;
 
-    public function new(source:FlxPoint, distance:Int = 30, delayPickup:Bool = false) {
-        super(source.x, source.y);
+    var forceFollow = new FlxObject();
+
+    public function new(x:Float, y:Float, distance:Int = 30, delayPickup:Bool = false) {
+        super(x, y);
 
         loopDropRadius = distance;
-
-        if(Math.random() < 0.5){
-            Aseprite.loadAllAnimations(this, AssetPaths.bolt__json);
-            animation.play(animsBolt.Bolt);
-        } else {
-            Aseprite.loadAllAnimations(this, AssetPaths.nut__json);
-            animation.play(animsNut.spin);
-        }
 
         delayedPickup = delayPickup;
         if (delayPickup) {
@@ -49,6 +42,18 @@ class Scrap extends Unibody {
                 // fail safe in case the thing can't finish its path
                 collectible = true;
             });
+        }
+    }
+
+    override function configSprite() {
+        super.configSprite();
+
+        if(Math.random() < 0.5){
+            Aseprite.loadAllAnimations(this, AssetPaths.bolt__json);
+            animation.play(animsBolt.Bolt);
+        } else {
+            Aseprite.loadAllAnimations(this, AssetPaths.nut__json);
+            animation.play(animsNut.spin);
         }
     }
 
@@ -69,14 +74,12 @@ class Scrap extends Unibody {
 		return this.add_body({
 			x: x,
 			y: y,
-            kinematic: true,
-			shapes: [
-				{
-					type:RECT,
-					width: 16,
-					height: 16,
-				}
-			]
+            //kinematic: true,
+			// shape: {
+            //     type:RECT,
+            //     width: 16,
+            //     height: 16,
+			// }
 		});
 	}
 
@@ -84,17 +87,16 @@ class Scrap extends Unibody {
         super.update(elapsed);
 
         if (!pointPicked) {
+            pointPicked = true; 
             pickPoint();
         }
 
-        if (body != null && body.velocity != null && velocity != null){
-            body.velocity.set(velocity.x, velocity.y);
+        if (forceFollow != null) {
+            body.set_position(forceFollow.x, forceFollow.y);
         }
     }
 
     function pickPoint() {
-        pointPicked = true;
-
         var start = getMidpoint();
 
         if (loopDropRadius == 0) {
@@ -108,7 +110,7 @@ class Scrap extends Unibody {
         var ydist = start.y + loopDropRadius * Math.sin(theta);
 
         var line = Line.get(start.x, start.y, xdist, ydist);
-        var intersect = Echo.linecast(line, PlayState.me.wallBodies, FlxEcho.instance.world);
+        var intersect = Echo.linecast(line, PlayState.me.wallBodies);
         if (intersect != null) {
             xdist = intersect.closest.hit.x;
             ydist = intersect.closest.hit.y;
@@ -121,11 +123,17 @@ class Scrap extends Unibody {
 
         var midpoint = GetMidpoint(start, randomPointAroundPlayer);
         var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
-        midpoint.y = topOfArc-10;
+        midpoint.y = topOfArc-20;
         var points:Array<FlxPoint> = [start, midpoint, randomPointAroundPlayer];
 
         // Start the movement and add it to the state
-        path.start(points, 100, FlxPathType.FORWARD);
+        //path.start(points, 100, FlxPathType.FORWARD);
+        FlxTween.quadPath(forceFollow, points, 100, false, {
+            onComplete: (t) -> {
+                forceFollow.destroy();
+                forceFollow = null;
+            }
+        });
     }
     
     override function draw() {

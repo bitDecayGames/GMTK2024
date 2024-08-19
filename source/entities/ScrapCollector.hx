@@ -151,7 +151,7 @@ class ScrapCollector extends Unibody {
                     var myPosition = new FlxPoint(body.get_position().x, body.get_position().y);
                     var playerPosition = new FlxPoint(player.body.get_position().x, player.body.get_position().y);
 
-                    var depositScrap = new Scrap(playerPosition, 0, true);
+                    var depositScrap = new Scrap(playerPosition.x, playerPosition.y, 0, true);
                     PlayState.me.topGroup.add(depositScrap);
 
                     FmodManager.PlaySoundOneShot(FmodSFX.ScrapSpawnDeposited2);

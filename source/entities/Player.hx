@@ -130,6 +130,15 @@ class Player extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+		#if logan
+		if (FlxG.keys.pressed.J) {
+			PlayState.me.AddBullet(new Bullet(PISTOL, FlxPoint.weak(body.x, body.y), 90, 1));
+		}
+		if (FlxG.keys.pressed.K) {
+			PlayState.me.AddScrap(new Scrap(body.x - 3, body.y, true));
+		}
+		#end
+
 		// FlxG.watch.addQuick('kb: ', inKnockback);
 		// FlxG.watch.addQuick('kbdur: ', knockbackDuration);
 		// FlxG.watch.addQuick('bVel', body.velocity);
@@ -340,7 +349,7 @@ class Player extends Unibody {
     }
 
 	function handleHit(bullet:Bullet) {
-		if (!dashing) {
+		if (dashing) {
 			// no hits while dashing
 			return; 
 		}
@@ -359,7 +368,7 @@ class Player extends Unibody {
 		hitByFireCount++;
 
 		for (i in 0...scrapCount) {
-			PlayState.me.AddScrap(new Scrap(FlxPoint.get(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
+			PlayState.me.AddScrap(new Scrap(body.x, body.y, 50 + FlxG.random.int(0, 30), true));
 		}
 		scrapCount = 0;
 	

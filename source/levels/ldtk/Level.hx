@@ -116,7 +116,7 @@ class Level {
 		}
 
 		for (s in level.l_Entities.all_ScrapSpawn) {
-			scrap.push(new Scrap(FlxPoint.get(s.pixelX, s.pixelY), 0));
+			scrap.push(new Scrap(s.pixelX, s.pixelY, 0));
 		}
 
 		rawTerrainTopLayer = level.l_Top;

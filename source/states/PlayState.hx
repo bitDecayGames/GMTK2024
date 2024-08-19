@@ -169,7 +169,13 @@ class PlayState extends FlxTransitionableState {
         add(uiGroup);
 
 		#if testgunget
-		openSubState(new WeaponUnlockOverlay(ROCKET));
+		openSubState(new WeaponUnlockOverlay(PISTOL));
+		#end
+
+		#if logan
+		var bossman = new TrashCan(100, 100);
+		entityRenderGroup.add(bossman);
+		bossman.add_to_group(enemyGroup);
 		#end
 	}
 
@@ -407,7 +413,7 @@ class PlayState extends FlxTransitionableState {
 			}
 		});
         FlxEcho.listen(enemyGroup, playerGroup, {
-			separate: true,
+			separate: false,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;
@@ -476,6 +482,10 @@ class PlayState extends FlxTransitionableState {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;
 					aSpr.handleEnter(b, o);
+				}                
+				if (b.object is EchoSprite) {
+					var bSpr:EchoSprite = cast b.object;
+					bSpr.handleEnter(a, o);
 				}                
 			},
             stay: (a, b, o) -> {
