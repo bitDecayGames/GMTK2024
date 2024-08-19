@@ -250,8 +250,6 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-		var fireTest = new GroundFire(level.playerSpawnPoint.x, level.playerSpawnPoint.y - 32);
-		AddHazard(fireTest);
 
 		// if (level.tinkSpawnPoint != null) {
 		// 	var shutter = new Shutter(level.tinkSpawnPoint.x - 24, level.tinkSpawnPoint.y - 8);
@@ -271,6 +269,10 @@ class PlayState extends FlxTransitionableState {
 		for (target in level.targets) {
 			AddInteractable(target);
 			practiceTargets.push(target);
+		}
+
+		for (fire in level.hazards) {
+			AddHazard(fire);
 		}
 
 		for (scrap in level.scrap) {

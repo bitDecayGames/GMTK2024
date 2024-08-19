@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.GroundFire;
 import entities.Scrap;
 import entities.PracticeTarget;
 import entities.Tink;
@@ -38,6 +39,7 @@ class Level {
 	public var doorsBottom:Array<DoorBottom> = [];
 
 	public var targets:Array<PracticeTarget> = [];
+	public var hazards:Array<GroundFire> = [];
 
 	public var scrap:Array<Scrap> = [];
 
@@ -90,13 +92,18 @@ class Level {
 					bottom = doorsBottom.filter((d) -> {return d.iid == tinkSpawn.f_door.entityIid;})[0];
 				}
 				
-				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom));
+				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom, tinkSpawn.f_ActivationRadius));
 			}
 		}
 
 		for (t in level.l_Entities.all_PracticeTarget) {
 			var target = new PracticeTarget(t.pixelX, t.pixelY);
 			targets.push(target);
+		}
+
+		for (t in level.l_Entities.all_Fire) {
+			var fire = new GroundFire(t.pixelX, t.pixelY);
+			hazards.push(fire);
 		}
 
 		for (s in level.l_Entities.all_ScrapSpawn) {
