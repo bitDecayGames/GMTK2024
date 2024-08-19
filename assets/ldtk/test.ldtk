@@ -11,7 +11,7 @@
 	"iid": "597a0d00-4ce0-11ef-8b7f-6b3358d89566",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 19,
+	"nextUid": 20,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -472,6 +472,41 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "PracticeTarget",
+			"uid": 19,
+			"tags": [],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#D000FA",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -2178,10 +2213,61 @@
 							"px": [560,304],
 							"fieldInstances": [
 								{ "__identifier": "door", "__type": "EntityRef", "__value": null, "__tile": null, "defUid": 17, "realEditorValues": [] },
-								{ "__identifier": "TinkSpawnName", "__type": "String", "__value": null, "__tile": null, "defUid": 18, "realEditorValues": [] }
+								{ "__identifier": "TinkSpawnName", "__type": "String", "__value": "Targets", "__tile": null, "defUid": 18, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Targets"]
+								}] }
 							],
 							"__worldX": -272,
 							"__worldY": 288
+						},
+						{
+							"__identifier": "PracticeTarget",
+							"__grid": [39,22],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#D000FA",
+							"iid": "fe59e130-4ce0-11ef-b179-85b47df6ed00",
+							"width": 16,
+							"height": 16,
+							"defUid": 19,
+							"px": [624,352],
+							"fieldInstances": [],
+							"__worldX": -208,
+							"__worldY": 336
+						},
+						{
+							"__identifier": "PracticeTarget",
+							"__grid": [39,24],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#D000FA",
+							"iid": "feb2d6a0-4ce0-11ef-b179-81f2bfb2a2d9",
+							"width": 16,
+							"height": 16,
+							"defUid": 19,
+							"px": [624,384],
+							"fieldInstances": [],
+							"__worldX": -208,
+							"__worldY": 368
+						},
+						{
+							"__identifier": "PracticeTarget",
+							"__grid": [39,26],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#D000FA",
+							"iid": "ff0e3d10-4ce0-11ef-b179-2787e3d8d54b",
+							"width": 16,
+							"height": 16,
+							"defUid": 19,
+							"px": [624,416],
+							"fieldInstances": [],
+							"__worldX": -208,
+							"__worldY": 400
 						}
 					]
 				},
