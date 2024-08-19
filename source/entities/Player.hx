@@ -165,7 +165,7 @@ class Player extends Unibody {
 			speed += 5;
 		}
 
-		if (!inKnockback && !dashing && SimpleController.pressed(Button.A, playerNum)) {
+		if (!inKnockback && !dashing && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {
 			FmodManager.PlaySoundOneShot(FmodSFX.PlayerDodge);
 			dashing = true;
 			Timer.delay(() -> {
