@@ -1,5 +1,6 @@
 package states;
 
+import entities.Shutter;
 import js.html.Console;
 import entities.DoorBottom;
 import entities.DoorTop;
@@ -43,6 +44,8 @@ class PlayState extends FlxTransitionableState {
     public var player:Player;
     public var tink:Tink;
 
+	public var dialogActive = false;
+
     var uiCamera:FlxCamera;
 
 	var reticle:FlxSprite;
@@ -52,6 +55,7 @@ class PlayState extends FlxTransitionableState {
 
     // groups for rendering
     var uiGroup:FlxGroup = new FlxGroup();
+    public var underGroup = new FlxGroup();
     public var terrainGroup = new FlxGroup();
     public var topTerrainGroup = new FlxGroup();
     public var entityRenderGroup = new FlxTypedGroup<FlxSprite>();
@@ -112,6 +116,7 @@ class PlayState extends FlxTransitionableState {
 			height: FlxG.height,
 		});
 
+		add(underGroup);
         add(terrainGroup);
         add(entityRenderGroup);
         add(projectileRenderGroup);
@@ -124,7 +129,11 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-        loadLevel("Level_0");
+		var levelName = "Level_1";
+		#if logan
+		levelName = "Level_0";
+		#end
+        loadLevel(levelName);
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
@@ -144,6 +153,7 @@ class PlayState extends FlxTransitionableState {
 	}
 
 	public function openDialog(dialog:CharacterDialog){
+		dialogActive = true;
 		player.body.active = false;
         entityRenderGroup.active = false;
         projectileRenderGroup.active = false;
@@ -151,6 +161,7 @@ class PlayState extends FlxTransitionableState {
 	}
 
 	public function closeDialog(dialog:CharacterDialog){
+		dialogActive = false;
 		player.body.active = true;
         entityRenderGroup.active = true;
         projectileRenderGroup.active = true;
@@ -223,9 +234,19 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-		if (level.tinkSpawnPoint != null) {
-			tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, player, TinkSpawnPoint.Intro, getDoorTopByName("Intro"), getDoorBottomByName("Intro"));
-			entityRenderGroup.add(tink);
+		// if (level.tinkSpawnPoint != null) {
+		// 	var shutter = new Shutter(level.tinkSpawnPoint.x - 24, level.tinkSpawnPoint.y - 8);
+		// 	entityRenderGroup.add(shutter);
+		// 	tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y, TinkSpawnPoint.Intro, getDoorTopByName("Intro"), getDoorBottomByName("Intro"));
+		// 	tink.shutter = shutter;
+		// 	underGroup.add(tink);
+		// }
+
+		for (tink in level.tinks) {
+			var shutter = new Shutter(tink.ogXY.x - 24, tink.ogXY.y - 8);
+			entityRenderGroup.add(shutter);
+			tink.shutter = shutter;
+			underGroup.add(tink);
 		}
 
         for (door in level.doors) {
@@ -235,9 +256,9 @@ class PlayState extends FlxTransitionableState {
             AddInteractable(door);
         }
 
-        var testTrash = new Dumpster(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
+        // var testTrash = new Dumpster(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);

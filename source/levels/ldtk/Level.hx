@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.Tink;
 import js.html.Console;
 import entities.DoorBottom;
 import entities.DoorTop;
@@ -30,6 +31,7 @@ class Level {
 	public var rawTerrainTilesWide = 0;
 	public var rawTerrainTilesTall = 0;
 
+	public var tinks:Array<Tink> = [];
 	public var doors:Array<DoorTop> = [];
 	public var doorsBottom:Array<DoorBottom> = [];
 
@@ -38,7 +40,6 @@ class Level {
 	public var rawWallsLayer:levels.ldtk.LDTKProject.Layer_Collision;
 
 	public var playerSpawnPoint:FlxPoint;
-	public var tinkSpawnPoint:FlxPoint;
 
 	public function new(nameOrIID:String) {
 		var level = project.all_worlds.Default.getLevel(nameOrIID);
@@ -46,11 +47,6 @@ class Level {
 
 		var rawSpawnPoint = level.l_Entities.all_PlayerSpawn[0];
 		playerSpawnPoint = FlxPoint.get(rawSpawnPoint.pixelX, rawSpawnPoint.pixelY);
-
-		if (level.l_Entities.all_TinkSpawn.length > 0) {
-			var tinkRawSpawnPoint = level.l_Entities.all_TinkSpawn[0];
-			tinkSpawnPoint = FlxPoint.get(tinkRawSpawnPoint.pixelX, tinkRawSpawnPoint.pixelY);
-		}
 
 		bounds.width = level.pxWid;
 		bounds.height = level.pxHei;
@@ -75,10 +71,23 @@ class Level {
 		}
 
 		for (d in level.l_Entities.all_Door) {
-			doors.push(new DoorTop(d.pixelX, d.pixelY+3, d.f_DoorName));
-			doorsBottom.push(new DoorBottom(d.pixelX, d.pixelY+15, d.f_DoorName));
+			doors.push(new DoorTop(d.iid, d.pixelX, d.pixelY+3, d.f_DoorName));
+			doorsBottom.push(new DoorBottom(d.iid, d.pixelX, d.pixelY+15, d.f_DoorName));
 		}
 		
+		if (level.l_Entities.all_TinkSpawn.length > 0) {
+			for (tinkSpawn in level.l_Entities.all_TinkSpawn) {
+				var top:DoorTop = null;
+				var bottom:DoorBottom = null;
+				if (tinkSpawn.f_door != null) {
+					top = doors.filter((d) -> {return d.iid == tinkSpawn.f_door.entityIid;})[0];
+					bottom = doorsBottom.filter((d) -> {return d.iid == tinkSpawn.f_door.entityIid;})[0];
+				}
+				
+				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom));
+			}
+		}
+
 		rawTerrainTopLayer = level.l_Top;
 		terrainTopGfx = rawTerrainTopLayer.render();
 
