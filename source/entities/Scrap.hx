@@ -1,5 +1,7 @@
 package entities;
 
+import echo.Echo;
+import echo.Line;
 import flixel.tweens.FlxTween;
 import states.PlayState;
 import flixel.math.FlxMath;
@@ -50,9 +52,20 @@ class Scrap extends Unibody {
 
         // Calculate final drop point
         var theta = Math.random() * 2 * Math.PI;
-        var finalX = Math.min(Math.max(boundaryBuffer, source.x + loopDropRadius * Math.cos(theta)), levelBounds.width-boundaryBuffer);
-        var finalY = Math.min(Math.max(boundaryBuffer*2, source.y + loopDropRadius * Math.sin(theta)), levelBounds.height-boundaryBuffer);
-        var randomPointAroundPlayer = new FlxPoint(finalX, finalY);
+        var xdist = source.x + loopDropRadius * Math.cos(theta);
+        var ydist = source.y + loopDropRadius * Math.sin(theta);
+
+        var line = Line.get(source.x, source.y, xdist, ydist);
+        var intersect = Echo.linecast(line, PlayState.me.wallBodies, FlxEcho.instance.world);
+        if (intersect != null) {
+            xdist = intersect.closest.hit.x;
+            ydist = intersect.closest.hit.y;
+        }
+
+        
+        // var finalX = Math.min(Math.max(boundaryBuffer, source.x + loopDropRadius * Math.cos(theta)), levelBounds.width-boundaryBuffer);
+        // var finalY = Math.min(Math.max(boundaryBuffer*2, source.y + loopDropRadius * Math.sin(theta)), levelBounds.height-boundaryBuffer);
+        var randomPointAroundPlayer = new FlxPoint(xdist, ydist);
 
         // Create the path for it to follow
         path = new FlxPath();

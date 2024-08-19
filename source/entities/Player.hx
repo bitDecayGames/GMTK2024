@@ -283,7 +283,11 @@ class Player extends Unibody {
 		// TODO: handle damage / scrap
 		bullet.kill();
 
-		// TODO: Drop scrap
+		takeDamage();
+	}
+
+	public function takeDamage() {
+		// TODO: knockback 
 		for (i in 0...scrapCount) {
 			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
 		}

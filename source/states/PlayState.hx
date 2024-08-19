@@ -1,5 +1,6 @@
 package states;
 
+import entities.GroundFire;
 import entities.PracticeTarget;
 import entities.Shutter;
 import js.html.Console;
@@ -69,6 +70,7 @@ class PlayState extends FlxTransitionableState {
     public var enemyGroup = new FlxGroup();
     public var scrapGroup = new FlxGroup();
     public var generalInteractables = new FlxGroup();
+    public var hazards = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     public var topGroup = new FlxGroup();
     
@@ -101,6 +103,11 @@ class PlayState extends FlxTransitionableState {
         int.add_to_group(generalInteractables);
         entityRenderGroup.add(int);
     }
+
+	public function AddHazard(h:EchoSprite) {
+		h.add_to_group(hazards);
+		entityRenderGroup.add(h);
+	}
 
 	public function AddTopEntity(e:FlxSprite) {
 		topGroup.add(e);
@@ -190,6 +197,9 @@ class PlayState extends FlxTransitionableState {
         generalInteractables.forEach((f) -> f.destroy());
 		generalInteractables.clear();
 
+        hazards.forEach((f) -> f.destroy());
+		hazards.clear();
+
         scrapGroup.forEach((f) -> f.destroy());
 		scrapGroup.clear();
 
@@ -239,6 +249,9 @@ class PlayState extends FlxTransitionableState {
         player = new Player(level.playerSpawnPoint.x, level.playerSpawnPoint.y);
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
+
+		var fireTest = new GroundFire(level.playerSpawnPoint.x, level.playerSpawnPoint.y - 32);
+		AddHazard(fireTest);
 
 		// if (level.tinkSpawnPoint != null) {
 		// 	var shutter = new Shutter(level.tinkSpawnPoint.x - 24, level.tinkSpawnPoint.y - 8);
@@ -450,6 +463,22 @@ class PlayState extends FlxTransitionableState {
 					aSpr.handleEnter(b, o);
 				}            
             },
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+        // Hazards are told of player touching
+        FlxEcho.listen(hazards, playerGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
 			exit: (a, b) -> {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;
