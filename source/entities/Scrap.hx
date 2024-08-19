@@ -28,7 +28,7 @@ class Scrap extends Unibody {
     var delayedPickup = false;
     var pointPicked = false;
 
-    var forceFollow:FlxObject = null;
+    public var forceFollow:FlxObject = null;
 
     public function new(x:Float, y:Float, distance:Int = 30, delayPickup:Bool = false) {
         super(x, y);
@@ -126,13 +126,18 @@ class Scrap extends Unibody {
         midpoint.y = topOfArc-20;
         var points:Array<FlxPoint> = [start, midpoint, randomPointAroundPlayer];
 
-        // Start the movement and add it to the state
-        //path.start(points, 100, FlxPathType.FORWARD);
+        doPath(points, null);
+    }
+
+    public function doPath(points:Array<FlxPoint>, doneFn:() -> Void) {
         forceFollow = new FlxObject();
         FlxTween.quadPath(forceFollow, points, 100, false, {
             onComplete: (t) -> {
                 forceFollow.destroy();
                 forceFollow = null;
+                if (doneFn != null) {
+                    doneFn();
+                }
             }
         });
     }
