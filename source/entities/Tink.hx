@@ -14,14 +14,21 @@ import loaders.Aseprite;
 import loaders.AsepriteMacros;
 import echo.Body;
 import haxe.Timer;
+import ui.CharacterDialog;
 
 using echo.FlxEcho;
 
 class Tink extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/tinkSketchpad.json");
 
-	public function nsew(x:Float, y:Float) {
+	var player:Player;
+	var distanceToPlayer:Float;
+
+	var introDialogDone = false;
+
+	public function new(x:Float, y:Float, player:Player) {
 		super(x, y);
+		this.player = player;
 		Aseprite.loadAllAnimations(this, AssetPaths.tinkSketchpad__json);
 		animation.play(anims.Idle);
 	}
@@ -48,6 +55,15 @@ class Tink extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
+
+		distanceToPlayer = player.getMidpoint().distanceTo(getMidpoint());
+		if (distanceToPlayer < 30) {
+			if (!introDialogDone) {
+				introDialogDone = true;
+				var dialogTest = new CharacterDialog(TINK, "Hello buddy. I'd be happy to help you out, but I'm going to need some scrap for my troubles.");
+				PlayState.me.openDialog(dialogTest);
+			}
+		}
 	}
 
 	override function updateCurrentAnimation(reference:FlxPoint) {

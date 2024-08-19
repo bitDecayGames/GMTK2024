@@ -1,5 +1,6 @@
 package ui;
 
+import states.PlayState;
 import input.SimpleController;
 import flixel.FlxG;
 import flixel.math.FlxRect;
@@ -29,7 +30,7 @@ class CharacterDialog extends FlxGroup {
 
 		options = new TypeOptions(AssetPaths.ninePatch__png, [16, 16, 16, 16], portraitMargins, 10);
 		options.checkPageConfirm = (delta) -> {
-			if (SimpleController.just_pressed(A)) {
+			if (SimpleController.just_pressed(A) || FlxG.mouse.justPressed) {
 				// we don't want their press to go to the next page to also start fast-forwarding the next page
 				skipOneUpdate = true;
 				return true;
@@ -64,6 +65,7 @@ class CharacterDialog extends FlxGroup {
 		add(textGroup);
 
 		textGroup.finishCallback = () -> {
+			PlayState.me.closeDialog(this);
 			kill();
 		}
 
@@ -93,12 +95,12 @@ class CharacterDialog extends FlxGroup {
 			return;
 		}
 
-		if (SimpleController.just_pressed(A) && !faster) {
+		if ((SimpleController.just_pressed(A) || FlxG.mouse.justPressed) && !faster) {
 			faster = true;
 			textGroup.options.modOps.speedMultiplier = 3;
 		}
 
-		if (!SimpleController.pressed(A) && faster) {
+		if ((!SimpleController.pressed(A) && !FlxG.mouse.pressed) && faster) {
 			faster = false;
 			textGroup.options.modOps.speedMultiplier = 1;
 		}
