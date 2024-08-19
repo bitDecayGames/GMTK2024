@@ -32,6 +32,13 @@ class Unibody extends EchoSprite {
 	var intentState = new AnimationState();
 	var animState = new AnimationState();
 
+	// Knockback
+    public var inKnockback:Bool = false;
+    var knockbackDirection:FlxPoint = FlxPoint.get();
+    var knockbackDuration:Float = 0;
+
+	public var invincibilityTimeLeft:Float = 0;
+
 	public var killable = true;
 
 	public function new(x:Float, y:Float) {
@@ -40,6 +47,16 @@ class Unibody extends EchoSprite {
 		// This aligns the body's bottom edge with whatever coordinate y was passed in for our creation
 		// body.y = body.y - (body.shapes[0].bottom - body.shapes[0].top)/2 - body.shapes[0].get_local_position().y;
 	}
+
+	public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
+        inKnockback = true;
+        knockbackDirection = _knockbackDirection.normalize().scale(_knockbackSpeed);
+        knockbackDuration = _knockbackDuration;
+
+		invulnerable(_knockbackDuration);
+        invincibilityTimeLeft = knockbackDuration;
+    }
+
 
 	public function invulnerable(duration:Float) {
 		killable = false;
@@ -55,7 +72,19 @@ class Unibody extends EchoSprite {
 		animState.reset();
 	}
 
-	function handleMovement() {
+	function handleMovement(delta:Float) {
+		if (invincibilityTimeLeft > 0) {
+			invincibilityTimeLeft -= delta;
+		}
+
+		if (inKnockback) {
+			knockbackDuration -= delta;
+			if (knockbackDuration <= 0) {
+				inKnockback = false;
+			}
+			body.velocity.set(knockbackDirection.x, knockbackDirection.y);
+			return;
+		}
 		if (intentState.has(RUNNING)) {
 			animState.add(RUNNING);
 			tmp.copyFrom(inputDir).scale(speed);

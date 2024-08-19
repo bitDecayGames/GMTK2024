@@ -15,7 +15,7 @@ class GroundFire extends Unibody {
         super(x, y);
 
         Aseprite.loadAllAnimations(this, AssetPaths.flame__json);
-        animation.play(anims.burn);
+        animation.play(anims.burn, -1);
     }
 
 	override function handleEnter(other:Body, data:Array<CollisionData>) {
@@ -23,7 +23,7 @@ class GroundFire extends Unibody {
 
 		if (other.object is Player) {
             var p:Player = cast other.object;
-            p.takeDamage();
+            p.takeDamage(this);
 		}
 	}
 

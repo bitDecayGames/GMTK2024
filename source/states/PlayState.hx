@@ -525,6 +525,10 @@ class PlayState extends FlxTransitionableState {
 		camera.focusOn(focus);
 
         entityRenderGroup.sort(ZSorting.getSort(BOTTOM));
+
+		if (!entityRenderGroup.active) {
+			player.forceUpdateCurrentAnimation();
+		}
     }
 
     override public function onFocusLost() {

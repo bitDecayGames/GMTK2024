@@ -112,6 +112,10 @@ class Player extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+		FlxG.watch.addQuick('kb: ', inKnockback);
+		FlxG.watch.addQuick('kbdur: ', knockbackDuration);
+		FlxG.watch.addQuick('bVel', body.velocity);
+
 		// debug tweaking 
 		if (FlxG.keys.anyJustPressed([FlxKey.PLUS])){
 			rollDurationMs += 100;
@@ -132,7 +136,7 @@ class Player extends Unibody {
 			speed += 5;
 		}
 
-		if (!dashing && SimpleController.pressed(Button.A, playerNum)) {
+		if (!inKnockback && !dashing && SimpleController.pressed(Button.A, playerNum)) {
 			FmodManager.PlaySoundOneShot(FmodSFX.PlayerDodge);
 			dashing = true;
 			Timer.delay(() -> {
@@ -148,7 +152,7 @@ class Player extends Unibody {
 			intentState.add(DODGING);
 		} else {
 			handleDirectionIntent();
-			handleMovement();
+			handleMovement(delta);
 
 			
 			var position = body.get_position();
@@ -188,6 +192,10 @@ class Player extends Unibody {
 		} else if (inputDir.x > 0 && lastInputDir.x < 0){
 			flippedInputDir = true;
 		}
+	}
+
+	public function forceUpdateCurrentAnimation() {
+		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 	}
 
 	override function updateCurrentAnimation(reference:FlxPoint) {
@@ -280,18 +288,30 @@ class Player extends Unibody {
     }
 
 	function handleHit(bullet:Bullet) {
+		if (!dashing) {
+			// no hits while dashing
+			return; 
+		}
+
 		// TODO: handle damage / scrap
 		bullet.kill();
 
-		takeDamage();
+		takeDamage(bullet);
 	}
 
-	public function takeDamage() {
+	public function takeDamage(hurter:EchoSprite) {
+		if (dashing || invincibilityTimeLeft > 0) {
+			return;
+		}
+
 		// TODO: knockback 
 		for (i in 0...scrapCount) {
 			PlayState.me.AddScrap(new Scrap(FlxPoint.weak(body.x, body.y), 50 + FlxG.random.int(0, 30), true));
 		}
 		scrapCount = 0;
+	
+		var knockDir = (body.get_position() - hurter.body.get_position()).normalize();
+		setKnockback(FlxPoint.weak(knockDir.x, knockDir.y), 50, .5);
 	}
 
 	function handleScrap(scrap:Scrap) {
