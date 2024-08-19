@@ -327,27 +327,6 @@ class PlayState extends FlxTransitionableState {
         configureListeners();
     }
 
-	function getDoorTopByName(name:String):DoorTop {
-
-		for (door in level.doors) {
-
-			// Console.log(door.name);
-			if (door.name == name) {
-				return door;
-			}
-		}
-		return null;
-	}
-
-	function getDoorBottomByName(name:String):DoorBottom {
-		for (door in level.doorsBottom) {
-			if (door.name == name) {
-				return door;
-			}
-		}
-		return null;
-	}
-
     function configureListeners() {
         FlxEcho.instance.world.listen(FlxEcho.get_group_bodies(enemyGroup), wallBodies, {
 			separate: true,
