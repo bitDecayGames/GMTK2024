@@ -8,7 +8,7 @@ class MissileExplosion extends Bullet {
     public static var anims = AsepriteMacros.tagNames("assets/aseprite/explosion.json");
 
     public function new(x:Float, y:Float) {
-        super(FlxPoint.weak(x, y), 0, 0);
+        super(HANDS, FlxPoint.weak(x, y), 0, 0);
         // TODO: SFX missile explosion
         Aseprite.loadAllAnimations(this, AssetPaths.explosion__json);
         animation.play(anims.explode);

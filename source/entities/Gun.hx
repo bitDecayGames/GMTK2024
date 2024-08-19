@@ -30,8 +30,7 @@ class Gun extends FlxSprite {
         this.type = type;
         switch(type) {
             case HANDS:
-                // TODO: Load hands
-                Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+                Aseprite.loadAllAnimations(this, AssetPaths.hand__json);
             case PISTOL:
                 Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
             case MAGNUM:

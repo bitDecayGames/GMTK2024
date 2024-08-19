@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Player.GunHas;
 import echo.data.Data.CollisionData;
 import echo.Body;
 import flixel.math.FlxPoint;
@@ -14,9 +15,11 @@ class Bullet extends Unibody {
     var parent:FlxSprite;
     var drawfset = FlxPoint.get();
 
+	var spangleDegs:Float;
+
 	var lifespan = 5.0;
 
-    public function new(source:FlxPoint, angle:Float, speed:Float) {
+    public function new(type:GunHas, source:FlxPoint, angle:Float, speed:Float) {
         super(source.x, source.y);
 
         var direction = new FlxPoint(1, 0);
@@ -25,12 +28,24 @@ class Bullet extends Unibody {
         this.speed = speed;
         direction.scale(speed);
 
+		body.rotation = angle;
         
         body.velocity.set(direction.x, direction.y);
 
         //origin.set(offsetX, offsetY);
         this.drawfset.copyFrom(drawfset);
-		loadGraphic(AssetPaths.magnumBullet__png);
+		switch(type) {
+            case HANDS:
+            case PISTOL:
+				loadGraphic(AssetPaths.pistolBullet__png);
+            case MAGNUM:
+				loadGraphic(AssetPaths.magnumBullet__png);
+            case SHOTTY:
+				loadGraphic(AssetPaths.shottyBullet__png);
+            case ROCKET:
+				loadGraphic(AssetPaths.glBullet__png);
+				// TODO: Rocket should explode for visual oomph
+        }
 		centerOrigin();
     }
 
@@ -48,17 +63,15 @@ class Bullet extends Unibody {
 		return this.add_body({
 			x: x,
 			y: y,
+			rotation: spangleDegs,
 			max_velocity_x: 1000,
 			max_velocity_length: 1000,
 			drag_x: 0,
 			mass: 100,
 			shapes: [
-				// Standard moving hitbox
 				{
-					type:RECT,
-					width: 16,
-					height: 16,
-					offset_y: 8,
+					type:CIRCLE,
+					radius: 8,
 				}
 			]
 		});

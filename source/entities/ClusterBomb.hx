@@ -13,7 +13,7 @@ class ClusterBomb extends Bullet {
     
     public function new(x:Float, y:Float, angle:Float, speed:Float) {
         // TODO: get real aim
-        super(FlxPoint.weak(x, y), angle, speed);
+        super(HANDS, FlxPoint.weak(x, y), angle, speed);
 
         Aseprite.loadAllAnimations(this, AssetPaths.spinningBottle__json);
         animation.play(anims.spin);

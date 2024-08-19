@@ -169,7 +169,7 @@ class PlayState extends FlxTransitionableState {
         add(uiGroup);
 
 		#if testgunget
-		openSubState(new WeaponUnlockOverlay(SHOTTY));
+		openSubState(new WeaponUnlockOverlay(ROCKET));
 		#end
 	}
 

@@ -34,6 +34,9 @@ class Player extends Unibody {
 
 	var gun:Gun;
 	var pistolBulletSpeed = 240;
+	var magnumBulletSpeed = 300;
+	var shottyBulletSpeed = 200;
+	var rocketBulletSpeed = 150;
 
 	var playerNum = 0;
 	var dashing = false;
@@ -54,9 +57,12 @@ class Player extends Unibody {
 
 	public var scrapCount = 0;
 
-	var canShootPistol = true;
 	var pistolShotCooldown = 0.375;
+	var magnumShotCooldown = 0.5;
+	var shottyShotCooldown = 0.75;
+	var rocketShotCooldown = 1.5;
 
+	var canShoot = true;
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -175,24 +181,46 @@ class Player extends Unibody {
 			var positionAsFlxPoint = new FlxPoint(position.x + tipPoint.x, position.y + tipPoint.y);
 			tipPoint.put();
 			if (FlxG.mouse.pressed) {
+				if (!canShoot) {
+					return;
+				}
 				switch(gun.type) {
 					case HANDS:
 					case PISTOL:
-						if (canShootPistol){
-							canShootPistol = false;
-							var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
-							PlayState.me.AddBullet(bullet);
-							FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
-							new FlxTimer().start(pistolShotCooldown, (t) -> {
-								canShootPistol = true;
-							});
-						}
+						canShoot = false;
+						var bullet = new Bullet(gun.type, positionAsFlxPoint, gun.angle, pistolBulletSpeed);
+						PlayState.me.AddBullet(bullet);
+						FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+						new FlxTimer().start(pistolShotCooldown, (t) -> {
+							canShoot = true;
+						});
 					case MAGNUM:
-						// TODO: Make this work
+						canShoot = false;
+						var bullet = new Bullet(gun.type, positionAsFlxPoint, gun.angle, magnumBulletSpeed);
+						PlayState.me.AddBullet(bullet);
+						// TODO: SFX FOR MAGNUM
+						FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+						new FlxTimer().start(pistolShotCooldown, (t) -> {
+							canShoot = true;
+						});
 					case SHOTTY:
-						// TODO: Make this work
+						canShoot = false;
+						var bullet = new Bullet(gun.type, positionAsFlxPoint, gun.angle, shottyBulletSpeed);
+						PlayState.me.AddBullet(bullet);
+						// TODO: SFX FOR SHOTTY
+						FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+						new FlxTimer().start(pistolShotCooldown, (t) -> {
+							canShoot = true;
+						});
 					case ROCKET:
-						// TODO: Make this work
+						canShoot = false;
+						var bullet = new Bullet(gun.type, positionAsFlxPoint, gun.angle, rocketBulletSpeed);
+						PlayState.me.AddBullet(bullet);
+						// TODO: SFX FOR ROCKET
+						FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+						new FlxTimer().start(pistolShotCooldown, (t) -> {
+							canShoot = true;
+						});
 				}
 			}
 		}
