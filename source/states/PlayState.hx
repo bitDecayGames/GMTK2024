@@ -260,6 +260,10 @@ class PlayState extends FlxTransitionableState {
 			practiceTargets.push(target);
 		}
 
+		for (scrap in level.scrap) {
+			AddScrap(scrap);
+		}
+
         for (door in level.doors) {
             AddInteractable(door);
         }
