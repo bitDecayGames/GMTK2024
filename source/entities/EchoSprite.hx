@@ -14,6 +14,7 @@ class EchoSprite extends FlxSprite {
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
 
+		pixelPerfectPosition = true;
 		configSprite();
 		body = makeBody();
 
