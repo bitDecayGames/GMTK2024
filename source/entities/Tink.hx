@@ -37,6 +37,7 @@ class Tink extends Unibody {
 	public var shutter:Shutter = null;
 
 	var skipAllDialog = false;
+	var fireDashTipDisplayedHitCount = 0;
 
 	var activationRadius = 30;
 
@@ -115,6 +116,20 @@ class Tink extends Unibody {
 
 						triggerDialog(new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.<page/>Anyways, see ya.", endDialogCallback), endDialogCallback);
 					} 
+				case TINK_FIRE:
+					if (!introDialogDone) {
+						introDialogDone = true;
+						var endDialogCallback = () -> {
+							shutter.close();
+						};
+						triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+						return;
+					} else if (PlayState.me.player.hitByFireCount % 3 == 0) {
+						if (fireDashTipDisplayedHitCount != PlayState.me.player.hitByFireCount) {
+							fireDashTipDisplayedHitCount = PlayState.me.player.hitByFireCount;
+							triggerDialog(new CharacterDialog(TINK, "Dash through the fire with SPACEBAR!"));
+						}
+					}
 				case TINK_TARGETS:
 					if (!introDialogDone) {
 						introDialogDone = true;
@@ -139,15 +154,6 @@ class Tink extends Unibody {
 							triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);
 						}
 					}
-				case TINK_FIRE:
-					if (!introDialogDone) {
-						introDialogDone = true;
-						var endDialogCallback = () -> {
-							shutter.close();
-						};
-						triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
-						return;
-					} 
 			}
 		}
 	}

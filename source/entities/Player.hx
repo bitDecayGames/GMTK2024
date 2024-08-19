@@ -46,6 +46,8 @@ class Player extends Unibody {
 	var lastInputDir = FlxPoint.get();
 	var flippedInputDir = false;
 
+	public var hitByFireCount = 0;
+
 	public var scrapCount = 0;
 	public var currentGun:GunHas = PISTOL;
 
