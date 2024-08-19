@@ -22,7 +22,9 @@ using echo.FlxEcho;
 class Tink extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/tinkSketchpad.json");
 
+	// These need to match the strings attached to the Tink spawns in LDTK
 	public static inline var TINK_INTRO = "Intro";
+	public static inline var TINK_TARGETS = "Targets";
 
 	public var ogXY = FlxPoint.get();
 
@@ -34,7 +36,7 @@ class Tink extends Unibody {
 	public var shutter:Shutter = null;
 
 	var introDialogDone = false;
-	var introDialogwDone = false;
+	var introDialog2Done = false;
 
 	public function new(x:Float, y:Float, spawnPoint:String, doorTop:DoorTop, doorBottom:DoorBottom) {
 		super(x, y);
@@ -83,8 +85,8 @@ class Tink extends Unibody {
 					introDialogDone = true;
 					var dialogTest = new CharacterDialog(TINK, "Hello buddy. I hear you are looking for some weapons. I can help with that, but you gotta bring me some scrap first.");
 					PlayState.me.openDialog(dialogTest);
-				} else if (!introDialogwDone) {
-					introDialogwDone = true;
+				} else if (!introDialog2Done) {
+					introDialog2Done = true;
 					shutter.close();
 					var dialogTest = new CharacterDialog(TINK, "2nd dialog here.", () -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.TinkShutter);
@@ -94,6 +96,28 @@ class Tink extends Unibody {
 						});
 					});
 					PlayState.me.openDialog(dialogTest);
+				}
+			} else if (spawnPoint == TINK_TARGETS) {
+				if (!introDialogDone) {
+					introDialogDone = true;
+					var dialogTest = new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet.");
+					PlayState.me.openDialog(dialogTest);
+					return;
+				} else if (!introDialog2Done) {
+					var targetsDone = true;
+					for (t in PlayState.me.practiceTargets) {
+						if (!t.beenShot) {
+							targetsDone = false;
+							break;
+						}
+					}
+
+					if (targetsDone && !introDialog2Done) {
+						introDialog2Done = true;
+						shutter.close();
+						var dialogTest = new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.");
+						PlayState.me.openDialog(dialogTest);
+					}
 				}
 			}
 		}

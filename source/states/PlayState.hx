@@ -1,5 +1,6 @@
 package states;
 
+import entities.PracticeTarget;
 import entities.Shutter;
 import js.html.Console;
 import entities.DoorBottom;
@@ -73,6 +74,11 @@ class PlayState extends FlxTransitionableState {
     
 	var tmp = FlxPoint.get();
 	var tmp2 = FlxPoint.get();
+
+
+	// XXX Start drilling boys
+	public var practiceTargets:Array<PracticeTarget> = [];
+	// END XXX
     
     public function AddBullet(bullet:Bullet) {
         bullet.add_to_group(bulletGroup);
@@ -249,6 +255,11 @@ class PlayState extends FlxTransitionableState {
 			underGroup.add(tink);
 		}
 
+		for (target in level.targets) {
+			AddInteractable(target);
+			practiceTargets.push(target);
+		}
+
         for (door in level.doors) {
             AddInteractable(door);
         }
@@ -389,6 +400,22 @@ class PlayState extends FlxTransitionableState {
 		});
         // Only enemies are told of bullets
         FlxEcho.listen(enemyGroup, bulletGroup, {
+			separate: false,
+			enter: (a, b, o) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleEnter(b, o);
+				}                
+			},
+			exit: (a, b) -> {
+				if (a.object is EchoSprite) {
+					var aSpr:EchoSprite = cast a.object;
+					aSpr.handleExit(b);
+				}
+			}
+		});
+		// Interactables may want to know when they are shot
+        FlxEcho.listen(generalInteractables, bulletGroup, {
 			separate: false,
 			enter: (a, b, o) -> {
 				if (a.object is EchoSprite) {
