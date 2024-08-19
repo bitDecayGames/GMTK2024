@@ -21,6 +21,9 @@ class FmodSFX {
     public static inline var PlayerGetHit:String = "event:/SFX/Player/PlayerGetHit";
     public static inline var PlayerStep:String = "event:/SFX/Player/PlayerStep";
     public static inline var TargetHit:String = "event:/SFX/Target/TargetHit";
+    public static inline var TargetHit2:String = "event:/SFX/Target/TargetHit2";
+    public static inline var TargetHit3:String = "event:/SFX/Target/TargetHit3";
+    public static inline var TargetHit4:String = "event:/SFX/Target/TargetHit4";
     public static inline var TinkShutter:String = "event:/SFX/Tink/TinkShutter";
     public static inline var TinkTalk:String = "event:/SFX/Tink/TinkTalk";
 }
