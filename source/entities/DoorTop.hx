@@ -23,7 +23,7 @@ class DoorTop extends Unibody {
 
 		animation.callback = (name, frameNumber, frameIndex) -> {
 			if (frameNumber == 5)  {
-                FlxG.camera.shake(0.05, 0.1);
+                FlxG.camera.shake(0.05, 0.2);
 			}
 		}
 

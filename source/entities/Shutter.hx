@@ -14,7 +14,7 @@ class Shutter extends FlxSprite {
 
 		animation.callback = (name, frameNumber, frameIndex) -> {
 			if (frameNumber == 4)  {
-                FlxG.camera.shake(0.05, 0.1);
+                FlxG.camera.shake(0.0125, 0.2);
 			}
 		}
     }
