@@ -139,7 +139,7 @@ class Tink extends Unibody {
 								};
 								
 								new FlxTimer().start(1, (t) -> {
-									triggerDialog(new CharacterDialog(TINK, "Hmmmm. An impassable wall of fire!<page/>Impassable for most, that is!<page/>Press SPACEBAR to dash through it!<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Go on, try it.", endDialogCallback), endDialogCallback);
+									triggerDialog(new CharacterDialog(TINK, "Well don't go walking into fire like that!<page/>Try dashing through the flames with SPACEBAR<page/>You are invincible during a dash, but you can't stop once you start, so choose your direction and position well.<page/>Taking damage will cause you to drop all your scrap. Don't leave any behind!", endDialogCallback), endDialogCallback);
 								});
 								return;
 							} else if (PlayState.me.player.body.x > 550) { // If you dash through the fire without hitting it, skip the tutorial dialog
@@ -177,8 +177,13 @@ class Tink extends Unibody {
 
 						if (targetsDone) {
 							dialogIndex++;
+
 							var endDialogCallback = () -> {
 								shutter.close();
+								new FlxTimer().start(1, (t) -> {
+									doorTop.open();
+									doorBottom.open();
+								});
 							};
 
 							triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);

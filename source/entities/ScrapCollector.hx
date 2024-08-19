@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.math.FlxVelocity;
 import ui.WeaponUnlockOverlay;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
@@ -28,6 +29,11 @@ class ScrapCollector extends Unibody {
     var scrapToClose = 0;
     public var id = "";
     var givingPlayerGun = false;
+
+    
+    var gun:GunHusk;
+    var gunBLine = false;
+    var gunCollected = false;
 
     public var isDepositable = true;
 
@@ -78,6 +84,29 @@ class ScrapCollector extends Unibody {
                 });
             });  
         }
+
+        if (gunBLine && gun != null && gun.active && !gunCollected) {
+            FlxG.watch.addQuick("gun location", gun.getPosition());
+            FlxG.watch.addQuick("player location", PlayState.me.player.getPosition());
+            FlxVelocity.moveTowardsObject(gun, PlayState.me.player, 200);
+            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 1) {
+                collectGun();
+            }
+        }
+    }
+
+    function collectGun() {
+        gunCollected = true;
+        FmodManager.PlaySoundOneShot(FmodSFX.GunGet);
+        FmodManager.PauseSong();
+        new FlxTimer().start(0.4, (t) -> {
+            FmodManager.PlaySoundOneShot(FmodSFX.GunGetJingle);
+            PlayState.me.openSubState(new WeaponUnlockOverlay(PISTOL));
+        });   
+        new FlxTimer().start(4, (t) -> {
+            FmodManager.UnpauseSong();
+        });   
+        gun.kill();
     }
 
     function handleAnimFinish(name:String) {
@@ -92,7 +121,7 @@ class ScrapCollector extends Unibody {
                 var myPosition = new FlxPoint(body.get_position().x, body.get_position().y);
                 var playerPosition = new FlxPoint(player.body.get_position().x, player.body.get_position().y);
         
-                var gun = new GunHusk(myPosition);
+                gun = new GunHusk(myPosition);
                 PlayState.me.topGroup.add(gun);
         
                 // Create the path for it to follow
@@ -100,19 +129,10 @@ class ScrapCollector extends Unibody {
                 var midpoint = GetMidpoint(playerPosition, myPosition);
                 var topOfArc = body.y-32;
                 midpoint.y = topOfArc-10;
-                var points:Array<FlxPoint> = [myPosition, midpoint, playerPosition];
+                var points:Array<FlxPoint> = [myPosition, midpoint];
         
                 gun.path.onComplete = (p) -> {
-                    FmodManager.PlaySoundOneShot(FmodSFX.GunGet);
-                    FmodManager.PauseSong();
-                    new FlxTimer().start(0.4, (t) -> {
-                        FmodManager.PlaySoundOneShot(FmodSFX.GunGetJingle);
-		                PlayState.me.openSubState(new WeaponUnlockOverlay(PISTOL));
-                    });   
-                    new FlxTimer().start(4, (t) -> {
-                        FmodManager.UnpauseSong();
-                    });   
-                    gun.kill();
+                    gunBLine = true;
                 }
         
                 // Start the movement and add it to the state
