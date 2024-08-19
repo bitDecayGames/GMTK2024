@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxTimer;
 import js.html.Console;
 import echo.data.Data.CollisionData;
 import states.PlayState;
@@ -17,13 +18,17 @@ import haxe.Timer;
 
 using echo.FlxEcho;
 
+enum GunHas {
+	PISTOL;
+}
+
 class Player extends Unibody {
 	public static var anims = AsepriteMacros.tagNames("assets/aseprite/playerSketchpad.json");
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/playerSketchpad.json");
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
 	var gun:Gun;
-	var pistolBulletSpeed = 120;
+	var pistolBulletSpeed = 240;
 
 	var playerNum = 0;
 	var dashing = false;
@@ -41,6 +46,11 @@ class Player extends Unibody {
 	var flippedInputDir = false;
 
 	public var scrapCount = 0;
+	public var currentGun:GunHas = PISTOL;
+
+	var canShootPistol = true;
+	var pistolShotCooldown = 0.375;
+
 
 	public function new(x:Float, y:Float) {
 		super(x, y);
@@ -143,10 +153,19 @@ class Player extends Unibody {
 			
 			var position = body.get_position();
 			var positionAsFlxPoint = new FlxPoint(position.x, position.y);
-			if (FlxG.mouse.justPressed) {
-				var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
-				PlayState.me.AddBullet(bullet);
-				FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+			if (FlxG.mouse.pressed) {
+				switch(currentGun) {
+					case PISTOL:
+						if (canShootPistol){
+							canShootPistol = false;
+							var bullet = new Bullet(positionAsFlxPoint, gun.angle, pistolBulletSpeed);
+							PlayState.me.AddBullet(bullet);
+							FmodManager.PlaySoundOneShot(FmodSFX.GunsPistol);
+							new FlxTimer().start(pistolShotCooldown, (t) -> {
+								canShootPistol = true;
+							});
+						}
+				}
 			}
 		}
 

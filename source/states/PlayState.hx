@@ -249,7 +249,7 @@ class PlayState extends FlxTransitionableState {
 		// }
 
 		for (tink in level.tinks) {
-			var shutter = new Shutter(tink.ogXY.x - 24, tink.ogXY.y - 8);
+			var shutter = new Shutter(tink.ogXY.x - 25, tink.ogXY.y - 8);
 			entityRenderGroup.add(shutter);
 			tink.shutter = shutter;
 			underGroup.add(tink);
