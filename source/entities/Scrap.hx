@@ -36,6 +36,11 @@ class Scrap extends Unibody {
             animation.play(animsNut.spin);
         }
 
+        if (loopDropRadius == 0) {
+            collectible = true;
+            source.putWeak();
+            return;
+        }
 		
         // accounting for known half-width and half-height here
         // assume we are placing loot based on center
@@ -64,9 +69,6 @@ class Scrap extends Unibody {
         var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
         midpoint.y = topOfArc-10;
         var points:Array<FlxPoint> = [getPosition(), midpoint, randomPointAroundPlayer];
-
-		// path = new FlxPath();
-        // var points:Array<FlxPoint> = [getPosition(), new FlxPoint(0,0)];
 
         // Start the movement and add it to the state
         path.start(points, 100, FlxPathType.FORWARD);

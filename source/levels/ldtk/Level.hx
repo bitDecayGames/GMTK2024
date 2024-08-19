@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.Scrap;
 import entities.PracticeTarget;
 import entities.Tink;
 import js.html.Console;
@@ -37,6 +38,8 @@ class Level {
 	public var doorsBottom:Array<DoorBottom> = [];
 
 	public var targets:Array<PracticeTarget> = [];
+
+	public var scrap:Array<Scrap> = [];
 
 	public var rawTerrainLayer:levels.ldtk.LDTKProject.Layer_Ground;
 	public var rawTerrainTopLayer:levels.ldtk.LDTKProject.Layer_Top;
@@ -94,6 +97,10 @@ class Level {
 		for (t in level.l_Entities.all_PracticeTarget) {
 			var target = new PracticeTarget(t.pixelX, t.pixelY);
 			targets.push(target);
+		}
+
+		for (s in level.l_Entities.all_ScrapSpawn) {
+			scrap.push(new Scrap(FlxPoint.get(s.pixelX, s.pixelY), 0));
 		}
 
 		rawTerrainTopLayer = level.l_Top;
