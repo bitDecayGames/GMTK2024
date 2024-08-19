@@ -315,7 +315,7 @@ class Player extends Unibody {
 		setKnockback(FlxPoint.weak(knockDir.x, knockDir.y), 50, .5);
 		FmodManager.PlaySoundOneShot(FmodSFX.PlayerGetHit);
 		FlxG.camera.shake(0.0125, 0.1);
-		FlxG.camera.flash(FlxColor.RED, 0.1);
+		// FlxG.camera.flash(FlxColor.RED, 0.1);
 	}
 
 	function handleScrap(scrap:Scrap) {
