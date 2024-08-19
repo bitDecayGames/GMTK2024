@@ -41,7 +41,7 @@ class PracticeTarget extends Unibody {
         if (other.object is Bullet) {
             other.object.kill();
             kill();
-            FmodManager.PlaySoundOneShot(FmodSFX.TargetHit4);
+            FmodManager.PlaySoundOneShot(FmodSFX.TargetHit2);
             // TODO: Play some animation? Explode? Something
             beenShot = true;
         }

@@ -71,6 +71,7 @@ class PlayState extends FlxTransitionableState {
     public var scrapGroup = new FlxGroup();
     public var generalInteractables = new FlxGroup();
     public var hazards = new FlxGroup();
+    public var collectors = new FlxGroup();
     public var wallBodies:Array<Body> = [];
     public var topGroup = new FlxGroup();
     
@@ -275,6 +276,10 @@ class PlayState extends FlxTransitionableState {
 			AddHazard(fire);
 		}
 
+		for (collector in level.collectors) {
+			AddInteractable(collector);
+		}
+
 		for (scrap in level.scrap) {
 			AddScrap(scrap);
 		}
@@ -290,8 +295,8 @@ class PlayState extends FlxTransitionableState {
         // testTrash.add_to_group(enemyGroup);
         // entityRenderGroup.add(testTrash);
 
-        var testRecepticle = new ScrapCollector(150, 150);
-        AddInteractable(testRecepticle);
+        // var testRecepticle = new ScrapCollector(150, 150);
+        // AddInteractable(testRecepticle);
 
 		// We want the reticle to likely live on the UI camera for ease of tracking the mouse?
 		// Or do we just want to project the mouse position into the game world cam?

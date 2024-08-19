@@ -2261,7 +2261,7 @@
 						},
 						{
 							"__identifier": "RecepticalSpawn",
-							"__grid": [49,20],
+							"__grid": [50,20],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 128, "y": 112, "w": 48, "h": 32 },
@@ -2270,9 +2270,9 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 9,
-							"px": [784,320],
+							"px": [800,320],
 							"fieldInstances": [],
-							"__worldX": 784,
+							"__worldX": 800,
 							"__worldY": -368
 						},
 						{
@@ -2464,6 +2464,22 @@
 							"fieldInstances": [],
 							"__worldX": 320,
 							"__worldY": -288
+						},
+						{
+							"__identifier": "RecepticalSpawn",
+							"__grid": [40,26],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 1, "x": 128, "y": 112, "w": 48, "h": 32 },
+							"__smartColor": "#BE4A2F",
+							"iid": "ece4f530-4ce0-11ef-b559-a9c88c55bd93",
+							"width": 16,
+							"height": 16,
+							"defUid": 9,
+							"px": [640,416],
+							"fieldInstances": [],
+							"__worldX": 640,
+							"__worldY": -272
 						}
 					]
 				},

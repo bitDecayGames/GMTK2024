@@ -12,6 +12,7 @@ class FmodSongs {
 
 class FmodSFX {
     public static inline var ScrapPickup:String = "event:/SFX/Collectables/ScrapPickup";
+    public static inline var CollectorOpen:String = "event:/SFX/Collector/CollectorOpen";
     public static inline var DoorOpen:String = "event:/SFX/Door/DoorOpen";
     public static inline var DoorOpen2:String = "event:/SFX/Door/DoorOpen2";
     public static inline var GunsPistol:String = "event:/SFX/Guns/GunsPistol";
