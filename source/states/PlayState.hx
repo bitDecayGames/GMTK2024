@@ -1,10 +1,7 @@
 package states;
 
-<<<<<<< HEAD
 import entities.Tink;
-=======
 import entities.Dumpster;
->>>>>>> b305a19152f00db6f325585a974a8d0982ef71e7
 import entities.ScrapCollector;
 import ui.CharacterDialog;
 import entities.Scrap;
@@ -207,22 +204,19 @@ class PlayState extends FlxTransitionableState {
         player.add_to_group(playerGroup);
         entityRenderGroup.add(player);
 
-<<<<<<< HEAD
         tink = new Tink(level.tinkSpawnPoint.x, level.tinkSpawnPoint.y);
         entityRenderGroup.add(tink);
 
         // var testTrash = new TrashCan(100, 100);
         // testTrash.add_to_group(enemyGroup);
         // entityRenderGroup.add(testTrash);
-=======
         for (door in level.doors) {
             AddInteractable(door);
         }
 
-        var testTrash = new Dumpster(100, 100);
-        testTrash.add_to_group(enemyGroup);
-        entityRenderGroup.add(testTrash);
->>>>>>> b305a19152f00db6f325585a974a8d0982ef71e7
+        // var testTrash = new Dumpster(100, 100);
+        // testTrash.add_to_group(enemyGroup);
+        // entityRenderGroup.add(testTrash);
 
         var testRecepticle = new ScrapCollector(150, 150);
         AddInteractable(testRecepticle);
