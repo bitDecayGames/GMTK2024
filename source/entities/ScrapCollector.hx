@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.text.FlxText.FlxTextAlign;
 import flixel.FlxObject;
 import flixel.math.FlxVelocity;
 import ui.WeaponUnlockOverlay;
@@ -46,8 +47,8 @@ class ScrapCollector extends Unibody {
 
         animation.finishCallback = handleAnimFinish;
 
-        displayText = FlxTextFactory.make('${scrapToActivate}', x-11, y-28, 16);
-        PlayState.me.add(displayText);
+        displayText = FlxTextFactory.make('${scrapToActivate}', x-10, y-28, 16, FlxTextAlign.RIGHT);
+        PlayState.me.AddTopEntity(displayText);
         this.scrapToActivate = scrapToActivate;
     }
 
@@ -130,14 +131,18 @@ class ScrapCollector extends Unibody {
                 var midpoint = GetMidpoint(playerPosition, myPosition);
                 var topOfArc = body.y-32;
                 midpoint.y = topOfArc-10;
-                var points:Array<FlxPoint> = [myPosition, midpoint];
-        
-                gun.path.onComplete = (p) -> {
-                    gunBLine = true;
-                }
+
+                var arcTop = GetMidpoint(myPosition, midpoint);
+                arcTop.y -= 32;
+                var points:Array<FlxPoint> = [myPosition, arcTop, midpoint];
         
                 // Start the movement and add it to the state
-                gun.path.start(points, 100, FlxPathType.FORWARD);
+                //gun.path.start(points, 100, FlxPathType.FORWARD);
+                FlxTween.quadPath(gun, points, 100, false, {
+                    onComplete: (p) -> {
+                        gunBLine = true;
+                    }
+                });
             });
         } else if (name == anims.open) {
             opening = false;

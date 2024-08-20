@@ -28,8 +28,6 @@ class Scrap extends Unibody {
     var delayedPickup = false;
     var pointPicked = false;
 
-    public var forceFollow:FlxObject = null;
-
     public function new(x:Float, y:Float, distance:Int = 30, delayPickup:Bool = false) {
         super(x, y);
 
@@ -129,18 +127,7 @@ class Scrap extends Unibody {
         doPath(points, null);
     }
 
-    public function doPath(points:Array<FlxPoint>, doneFn:() -> Void) {
-        forceFollow = new FlxObject();
-        FlxTween.quadPath(forceFollow, points, 100, false, {
-            onComplete: (t) -> {
-                forceFollow.destroy();
-                forceFollow = null;
-                if (doneFn != null) {
-                    doneFn();
-                }
-            }
-        });
-    }
+
     
     override function draw() {
         super.draw();

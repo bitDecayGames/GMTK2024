@@ -42,7 +42,6 @@ class TrashCan extends Unibody {
     public var hitByKillGun = false;
 
     var btree:BTree;
-    var forceFollow:FlxObject = null;
 
     public var startPoint = FlxPoint.get();
 
@@ -145,10 +144,6 @@ class TrashCan extends Unibody {
 
 	override public function update(delta:Float) {
 		super.update(delta);
-
-        if (forceFollow != null) {
-            body.set_position(forceFollow.x, forceFollow.y);
-        }
 
         if (btree.process(delta) == FAIL) {
             // Intersting. why it fail?

@@ -1,6 +1,9 @@
 package entities;
 
 
+import flixel.math.FlxPoint;
+import flixel.tweens.FlxTween;
+import flixel.FlxObject;
 import echo.Body;
 import flixel.FlxSprite;
 import echo.data.Data.CollisionData;
@@ -9,6 +12,9 @@ using echo.FlxEcho;
 
 class EchoSprite extends FlxSprite {
 	public var body:Body;
+
+
+    public var forceFollow:FlxObject = null;
 
 	@:access(echo.FlxEcho)
 	public function new(X:Float, Y:Float) {
@@ -31,6 +37,27 @@ class EchoSprite extends FlxSprite {
 			this.remove_object(true);
 		}
 	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+        if (forceFollow != null) {
+            body.set_position(forceFollow.x, forceFollow.y);
+        }
+	}
+
+    public function doPath(points:Array<FlxPoint>, doneFn:() -> Void) {
+        forceFollow = new FlxObject();
+        FlxTween.quadPath(forceFollow, points, 100, false, {
+            onComplete: (t) -> {
+                forceFollow.destroy();
+                forceFollow = null;
+                if (doneFn != null) {
+                    doneFn();
+                }
+            }
+        });
+    }
 
 	public function configSprite() {}
 
