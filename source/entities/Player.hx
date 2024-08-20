@@ -181,7 +181,7 @@ class Player extends Unibody {
 			speed += 5;
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.P])){
-			Flickerer.flickerWhite(this, 0.25, 2);
+			Flickerer.flickerWhite(this, 0.25, 2, colorTransform);
 		}
 
 		if (!inKnockback && !dashing && timeBeforeDash <= 0 && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {

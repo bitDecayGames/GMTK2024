@@ -1,5 +1,6 @@
 package entities;
 
+import openfl.geom.ColorTransform;
 import entities.Flicker.Flickerer;
 import flixel.effects.FlxFlicker;
 import flixel.util.FlxColor;
@@ -58,6 +59,9 @@ class TrashCan extends Unibody {
 
     public static var beenKilled = false;
 
+    var setToRed = false;
+    var restoreTransform:ColorTransform;
+
 	public function new(iid:String, x:Float, y:Float, playerTriggerPoint:FlxPoint) {
 		super(x, y);
         this.iid = iid;
@@ -76,10 +80,26 @@ class TrashCan extends Unibody {
         triggerPoint = playerTriggerPoint;
         initBTree();
 
+        saveColorTransform();
+
         #if logan
         hitsToEachScrap = 1;
         #end
 	}
+
+    function saveColorTransform() {
+        var ct = colorTransform;
+        restoreTransform = new ColorTransform(
+            ct.redMultiplier,
+            ct.greenMultiplier,
+            ct.blueMultiplier, 
+            ct.alphaMultiplier,
+            ct.redOffset,
+            ct.greenOffset,
+            ct.blueOffset,
+            ct.alphaOffset
+            );
+    }
 
     function initBTree() {
         btree = new BTree(
@@ -121,6 +141,10 @@ class TrashCan extends Unibody {
                         }
                         //XXX Not the right place to do this, but it may work
                         color = FlxColor.RED.getLightened(.5);
+                        if (!setToRed) {
+                            setToRed = true;
+                            saveColorTransform();
+                        }
                         return FAIL;
                     }), new Sequence([
                         new Wait(0.5, 1.5),
@@ -137,10 +161,10 @@ class TrashCan extends Unibody {
                         return FAIL;
                     }), new Sequence([
                         new Wait(.25, 1),
-                        new Selector(RANDOM([1, 1, 1]), [
+                        new Sequence([
                             new BigJump(this),
+                            new Wait(.1, .2),
                             new CircleBlast(this),
-                            new ChainFire(this)
                         ])
                     ])),
                     new Sequence([
@@ -176,7 +200,7 @@ class TrashCan extends Unibody {
     function handleHit(bullet:Bullet) {
         // TODO: Whatever damage/scrap mechanic we want
         FmodManager.PlaySoundOneShot(FmodSFX.TrashHit);
-        Flickerer.flickerWhite(this, 0.25, 3);
+        Flickerer.flickerWhite(this, 0.25, 3, restoreTransform);
         bullet.kill();
 
         if (bullet.type == SHOTTY) {
@@ -485,7 +509,7 @@ class CircleBlast implements Node {
     var blastDirections = 12;
     var angleOffset = 0;
     var angleChange = 5;
-    var baseCoolDown = 0.2;
+    var baseCoolDown = 0.4;
 
     var wavesRemaining = 3;
     var cd = 0.0;
