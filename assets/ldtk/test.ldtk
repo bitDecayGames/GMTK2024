@@ -4047,7 +4047,7 @@
 							"height": 16,
 							"defUid": 9,
 							"px": [800,720],
-							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 0, "__tile": null, "defUid": 24, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [10] }] }],
 							"__worldX": 800,
 							"__worldY": -272
 						},
