@@ -36,6 +36,7 @@ class ScrapCollector extends Unibody {
     var gun:GunHusk;
     var gunBLine = false;
     var gunCollected = false;
+    var depositAmount = 0;
 
     public var isDepositable = true;
 
@@ -148,10 +149,9 @@ class ScrapCollector extends Unibody {
             opening = false;
             closed = false;
             var player = PlayState.me.player;
-            var scrapCount = player.scrapCount;
-            scrapToClose = scrapCount;
+            scrapToClose = depositAmount;
 
-            for (i in 0...scrapCount) {
+            for (i in 0...depositAmount) {
 
                 new FlxTimer().start(i * animationDelaySecs, (t) -> {
                     var myPosition = new FlxPoint(body.get_position().x, body.get_position().y);
@@ -182,12 +182,7 @@ class ScrapCollector extends Unibody {
             // Divide that by how many scrap you hold
             // Start a loop with cascading delays 
             // Close door
-            PlayState.me.player.scrapCount = 0;
-            if (scrapCount > 0) {
-                QuickLog.notice('deposited ${scrapCount} scrap');
-                 // TODO: spawn particles for player scrap and have them fly to the receptical
-                 // Once that's done, close this bidge
-            }
+            depositAmount = 0;
         }
     }
 
@@ -201,6 +196,8 @@ class ScrapCollector extends Unibody {
                 if (p.scrapCount <= 0) {
                     return;
                 }
+                depositAmount = p.scrapCount;
+                p.scrapCount = 0;
     
                 deposit();
             }

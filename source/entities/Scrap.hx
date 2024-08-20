@@ -92,13 +92,19 @@ class Scrap extends Unibody {
         if (forceFollow != null) {
             body.set_position(forceFollow.x, forceFollow.y);
         }
+
+        
+        if (PlayState.me.player.getPosition().distanceTo(getPosition()) < 4 && collectible) {
+            PlayState.me.player.handleScrap(this);
+        }
+        
     }
 
     function pickPoint() {
         var start = getMidpoint();
 
         if (loopDropRadius == 0) {
-            collectible = true;
+            // collectible = true;
             return;
         }
 		

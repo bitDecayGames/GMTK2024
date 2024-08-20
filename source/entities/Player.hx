@@ -73,6 +73,10 @@ class Player extends Unibody {
 
 		speed = 95;
 
+		#if skip_dialog
+		dashCooldown = 0.01;
+		#end
+
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
 		Aseprite.loadAllAnimations(this, AssetPaths.playerSketchpad__json);
@@ -197,7 +201,7 @@ class Player extends Unibody {
 			var tipPoint = FlxPoint.get(1, 0).rotateByDegrees(gun.angle).scale(10);
 			var positionAsFlxPoint = new FlxPoint(position.x + tipPoint.x, position.y + tipPoint.y);
 			tipPoint.put();
-			if (FlxG.mouse.pressed) {
+			if (FlxG.mouse.justPressed) {
 				if (!canShoot) {
 					return;
 				}
@@ -393,7 +397,7 @@ class Player extends Unibody {
 		// FlxG.camera.flash(FlxColor.RED, 0.1);
 	}
 
-	function handleScrap(scrap:Scrap) {
+	public function handleScrap(scrap:Scrap) {
 		if (!scrap.collectible) {
 			return;
 		}

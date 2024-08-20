@@ -2664,6 +2664,7 @@
 						{ "px": [608,912], "src": [48,80], "f": 0, "t": 58, "d": [6023], "a": 1 },
 						{ "px": [944,912], "src": [48,80], "f": 0, "t": 58, "d": [6044], "a": 1 },
 						{ "px": [608,928], "src": [48,80], "f": 0, "t": 58, "d": [6128], "a": 1 },
+						{ "px": [800,928], "src": [0,0], "f": 0, "t": 0, "d": [6140], "a": 1 },
 						{ "px": [944,928], "src": [48,80], "f": 0, "t": 58, "d": [6149], "a": 1 },
 						{ "px": [608,944], "src": [48,80], "f": 0, "t": 58, "d": [6233], "a": 1 },
 						{ "px": [624,944], "src": [48,80], "f": 0, "t": 58, "d": [6234], "a": 1 },
@@ -4036,7 +4037,7 @@
 						},
 						{
 							"__identifier": "RecepticalSpawn",
-							"__grid": [50,37],
+							"__grid": [50,38],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 128, "y": 112, "w": 48, "h": 32 },
@@ -4045,10 +4046,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 9,
-							"px": [800,592],
-							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 0, "__tile": null, "defUid": 24, "realEditorValues": [] }],
+							"px": [800,608],
+							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [10] }] }],
 							"__worldX": 800,
-							"__worldY": -400
+							"__worldY": -384
 						},
 						{
 							"__identifier": "TinkSpawn",
