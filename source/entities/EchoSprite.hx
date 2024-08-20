@@ -13,6 +13,7 @@ using echo.FlxEcho;
 class EchoSprite extends FlxSprite {
 	public var body:Body;
 
+	public var iid:String;
 
     public var forceFollow:FlxObject = null;
 
@@ -79,5 +80,9 @@ class EchoSprite extends FlxSprite {
 
 	public function handleExit(other:Body) {
 		
+	}
+
+	public function markReady() {
+		// Override if you want something
 	}
 }

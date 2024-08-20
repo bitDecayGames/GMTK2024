@@ -111,6 +111,11 @@ class PlayState extends FlxTransitionableState {
 		entityRenderGroup.add(h);
 	}
 
+	public function AddEnemy(e:EchoSprite) {
+        e.add_to_group(enemyGroup);
+        entityRenderGroup.add(e);
+	}
+
 	public function AddTopEntity(e:FlxSprite) {
 		topGroup.add(e);
 	}
@@ -311,6 +316,10 @@ class PlayState extends FlxTransitionableState {
         for (door in level.doorsBottom) {
             AddInteractable(door);
         }
+
+		for (e in level.enemies) {
+			AddEnemy(e);
+		}
 
         // var testTrash = new Dumpster(100, 100);
         // testTrash.add_to_group(enemyGroup);

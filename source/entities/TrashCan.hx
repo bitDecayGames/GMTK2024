@@ -19,6 +19,7 @@ import bitdecay.behavior.tree.NodeStatus;
 import bitdecay.behavior.tree.leaf.util.Wait;
 import bitdecay.behavior.tree.composite.Sequence;
 import bitdecay.behavior.tree.leaf.util.StatusAction;
+import bitdecay.behavior.tree.leaf.util.Action;
 import bitdecay.behavior.tree.composite.Precondition;
 import bitdecay.behavior.tree.composite.Selector;
 import bitdecay.behavior.tree.BTree;
@@ -41,12 +42,19 @@ class TrashCan extends Unibody {
     var firstPhaseScrap = 10;
     public var hitByKillGun = false;
 
+    public var readyForSpawn = false;
+    public var spawnedIn = false;
+
+    public var triggerPoint:FlxPoint;
+    public var playerTriggered = false;
+
     var btree:BTree;
 
     public var startPoint = FlxPoint.get();
 
-	public function new(x:Float, y:Float) {
+	public function new(iid:String, x:Float, y:Float, playerTriggerPoint:FlxPoint) {
 		super(x, y);
+        this.iid = iid;
         startPoint.set(x, y);
 		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
 		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
@@ -59,6 +67,7 @@ class TrashCan extends Unibody {
 		// };
 		//this.loadGraphic(AssetPaths.filler16__png, true, 16, 16);
 
+        triggerPoint = playerTriggerPoint;
         initBTree();
 	}
 
@@ -66,6 +75,36 @@ class TrashCan extends Unibody {
         btree = new BTree(
             new Repeater(FOREVER, 
                 new Selector(IN_ORDER, [
+                    new StatusAction((d) -> {
+                        if (!readyForSpawn) {
+                            // block until we are ready to spawn
+                            return SUCCESS;
+                        }
+
+                        // This fail lets the next nodes try
+                        return FAIL;
+                    }),
+                    new StatusAction((d) -> {
+                        if (!playerTriggered) {
+                            // block until player triggers
+                            return SUCCESS;
+                        }
+
+                        // This fail lets the next nodes try
+                        return FAIL;
+                    }),
+                    new Precondition(new StatusAction((d) -> {
+                        if (playerTriggered && !spawnedIn) {
+                            return SUCCESS;
+                        }
+
+                        return FAIL;
+                    }), new Sequence([
+                        new BigJump(this),
+                        new Action(() -> {
+                            spawnedIn = true;
+                        })
+                    ])),
                     new Precondition(new StatusAction((delta) -> {
                         if (scrapDropped < firstPhaseScrap) {
                             return SUCCESS;
@@ -145,6 +184,12 @@ class TrashCan extends Unibody {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+        if (readyForSpawn && !playerTriggered) {
+            if (PlayState.me.player.x > triggerPoint.x && PlayState.me.player.y > triggerPoint.y) {
+                playerTriggered = true;
+            }
+        }
+
         if (btree.process(delta) == FAIL) {
             // Intersting. why it fail?
         }
@@ -165,6 +210,11 @@ class TrashCan extends Unibody {
 
     public function followObj(obj:FlxObject) {
         forceFollow = obj;
+    }
+
+    override public function markReady() {
+        // TODO: can spawn now
+        readyForSpawn = true;
     }
 }
 
