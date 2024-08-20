@@ -1,10 +1,11 @@
 package entities;
 
+import openfl.geom.ColorTransform;
 import flixel.util.FlxTimer;
 import flixel.FlxSprite;
 
 class Flickerer {
-    public static function flickerWhite(sprite:FlxSprite, totalBlinkTime:Float, numBlinks:Int) {
+    public static function flickerWhite(sprite:FlxSprite, totalBlinkTime:Float, numBlinks:Int, restore:ColorTransform) {
         // Store the original color transformation values
         var originalRedMultiplier = sprite.colorTransform.redMultiplier;
         var originalGreenMultiplier = sprite.colorTransform.greenMultiplier;
@@ -23,14 +24,14 @@ class Flickerer {
                 if (timer.loopsLeft % 2 == 0) {
                     // Restore original color transformation
                     sprite.setColorTransform(
-                        originalRedMultiplier,
-                        originalGreenMultiplier,
-                        originalBlueMultiplier,
-                        originalAlphaMultiplier,
-                        originalRedOffset,
-                        originalGreenOffset,
-                        originalBlueOffset,
-                        originalAlphaOffset
+                        restore.redMultiplier,
+                        restore.greenMultiplier,
+                        restore.blueMultiplier,
+                        restore.alphaMultiplier,
+                        restore.redOffset,
+                        restore.greenOffset,
+                        restore.blueOffset,
+                        restore.alphaOffset
                     );
                 } else {
                     // Apply white flicker effect
