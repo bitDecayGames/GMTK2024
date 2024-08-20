@@ -103,7 +103,7 @@ class Level {
 			var trigger = FlxPoint.get(tcSpawn.f_xTrigger.cx * 16, tcSpawn.f_xTrigger.cy * 16);
 			var trash = new TrashCan(tcSpawn.iid, tcSpawn.pixelX, tcSpawn.pixelY, trigger);
 			trash.shutDoorTop = doors.filter((d) -> {d.iid == tcSpawn.f_shutDoor.entityIid;})[0];
-			trash.openDoorTop = doors.filter((d) -> {d.iid == tcSpawn.f_openDoor.entityIid;})[0];
+			// trash.openDoorTop = doors.filter((d) -> {d.iid == tcSpawn.f_openDoor.entityIid;})[0];
 			enemies.push(trash);
 		}
 		

@@ -191,12 +191,14 @@ class PlayState extends FlxTransitionableState {
 		player.body.active = false;
         entityRenderGroup.active = false;
         projectileRenderGroup.active = false;
+		FlxEcho.instance.active = false;
 	}
 
 	public function resumeGame() {
 		player.body.active = true;
         entityRenderGroup.active = true;
         projectileRenderGroup.active = true;
+		FlxEcho.instance.active = true;
 	}
     
     function loadLevel(levelName:String) {
@@ -351,6 +353,10 @@ class PlayState extends FlxTransitionableState {
 				if (a.object is EchoSprite) {
 					var aSpr:EchoSprite = cast a.object;
 					aSpr.handleEnter(b, o);
+				}
+				if (a.object is Player) {
+					var p:Player = cast a.object;
+					p.touchWall();
 				}
 			},
 			exit: (a, b) -> {

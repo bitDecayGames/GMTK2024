@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.math.FlxMath;
 import entities.Player.GunHas;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.FlxObject;
@@ -51,7 +52,7 @@ class ScrapCollector extends Unibody {
 
         animation.finishCallback = handleAnimFinish;
 
-        displayText = FlxTextFactory.make('${scrapToActivate}', x-10, y-28, 16, FlxTextAlign.RIGHT);
+        displayText = FlxTextFactory.make('${scrapToActivate}', x-12, y-28, 16, FlxTextAlign.CENTER);
         PlayState.me.AddTopEntity(displayText);
         this.scrapToActivate = scrapToActivate;
     }
@@ -67,10 +68,7 @@ class ScrapCollector extends Unibody {
         super.update(elapsed);
 		body.velocity.set(velocity.x, velocity.y);
 
-        if (scrapToActivate < 0){
-            scrapToActivate = 0;
-        }
-
+        scrapToActivate = FlxMath.maxInt(scrapToActivate, 0);
         displayText.text = '${scrapToActivate}';
 
         if (!closed && scrapToClose <= 0){

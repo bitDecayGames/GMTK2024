@@ -56,6 +56,8 @@ class TrashCan extends Unibody {
     public var shutDoorTop:DoorTop;
     public var openDoorTop:DoorTop;
 
+    public static var beenKilled = false;
+
 	public function new(iid:String, x:Float, y:Float, playerTriggerPoint:FlxPoint) {
 		super(x, y);
         this.iid = iid;
@@ -180,6 +182,7 @@ class TrashCan extends Unibody {
         if (bullet.type == SHOTTY) {
             FmodManager.StopSongImmediately();
             FmodManager.PlaySoundOneShot(FmodSFX.TrashDie);
+            beenKilled = true;
             animation.play(anims.dead);
             active = false;
             body.active = false;
