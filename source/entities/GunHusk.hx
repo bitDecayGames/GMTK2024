@@ -10,10 +10,11 @@ import flixel.FlxSprite;
 class GunHusk extends FlxSprite {
     public var type:GunHas;
 
-    public function new(spawnPoint:FlxPoint) {
+    public function new(spawnPoint:FlxPoint, type:GunHas) {
         super(spawnPoint.x-8, spawnPoint.y);
         Aseprite.loadAllAnimations(this, AssetPaths.pistolNoHand__json);
         origin.set(width/2, height/2);
+        setType(type);
     }
 
     public function setType(type:Player.GunHas) {

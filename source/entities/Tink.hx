@@ -71,6 +71,13 @@ class Tink extends Unibody {
 				collector.isDepositable = false;
 			}
 		}
+		switch (spawnPoint) {
+			case TINK_TARGETS:
+				collector.reward = PISTOL;
+			case TINK_FIRST_BOSS:
+				collector.reward = SHOTTY;
+			// TODO: Rocket launcher for final tink
+		}
 	}
 
 	override function makeBody():Body {

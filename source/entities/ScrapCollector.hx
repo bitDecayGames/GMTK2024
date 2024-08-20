@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Player.GunHas;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.FlxObject;
 import flixel.math.FlxVelocity;
@@ -37,6 +38,8 @@ class ScrapCollector extends Unibody {
     var gunBLine = false;
     var gunCollected = false;
     var depositAmount = 0;
+
+    public var reward:GunHas = PISTOL;
 
     public var isDepositable = true;
 
@@ -92,7 +95,7 @@ class ScrapCollector extends Unibody {
             FlxG.watch.addQuick("gun location", gun.getPosition());
             FlxG.watch.addQuick("player location", PlayState.me.player.getPosition());
             FlxVelocity.moveTowardsObject(gun, PlayState.me.player, 200);
-            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 2) {
+            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 5) {
                 collectGun();
             }
         }
@@ -104,7 +107,7 @@ class ScrapCollector extends Unibody {
         FmodManager.PauseSong();
         new FlxTimer().start(0.4, (t) -> {
             FmodManager.PlaySoundOneShot(FmodSFX.GunGetJingle);
-            PlayState.me.openSubState(new WeaponUnlockOverlay(PISTOL));
+            PlayState.me.openSubState(new WeaponUnlockOverlay(reward));
         });   
         new FlxTimer().start(4, (t) -> {
             FmodManager.UnpauseSong();
@@ -124,7 +127,7 @@ class ScrapCollector extends Unibody {
                 var myPosition = new FlxPoint(body.get_position().x, body.get_position().y);
                 var playerPosition = new FlxPoint(player.body.get_position().x, player.body.get_position().y);
         
-                gun = new GunHusk(myPosition);
+                gun = new GunHusk(myPosition, reward);
                 PlayState.me.topGroup.add(gun);
         
                 // Create the path for it to follow
@@ -191,11 +194,11 @@ class ScrapCollector extends Unibody {
 
         if (isDepositable && other.object is Player) {
             if (!opening) {
-                opening = true;
                 var p:Player = cast other.object;
                 if (p.scrapCount <= 0) {
                     return;
                 }
+                opening = true;
                 depositAmount = p.scrapCount;
                 p.scrapCount = 0;
     
