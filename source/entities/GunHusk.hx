@@ -8,13 +8,11 @@ import loaders.AsepriteMacros;
 import flixel.FlxSprite;
 
 class GunHusk extends FlxSprite {
-	public static var anims = AsepriteMacros.tagNames("assets/aseprite/pistol.json");
-
     public var type:GunHas;
 
     public function new(spawnPoint:FlxPoint) {
         super(spawnPoint.x-8, spawnPoint.y);
-        Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+        Aseprite.loadAllAnimations(this, AssetPaths.pistolNoHand__json);
         origin.set(width/2, height/2);
     }
 
@@ -24,13 +22,13 @@ class GunHusk extends FlxSprite {
             case HANDS:
                 Aseprite.loadAllAnimations(this, AssetPaths.hand__json);
             case PISTOL:
-                Aseprite.loadAllAnimations(this, AssetPaths.pistol__json);
+                Aseprite.loadAllAnimations(this, AssetPaths.pistolNoHand__json);
             case MAGNUM:
-                Aseprite.loadAllAnimations(this, AssetPaths.magnum__json);
+                Aseprite.loadAllAnimations(this, AssetPaths.magnumNoHand__json);
             case SHOTTY:
-                Aseprite.loadAllAnimations(this, AssetPaths.shotty__json);
+                Aseprite.loadAllAnimations(this, AssetPaths.shottyNoHand__json);
             case ROCKET:
-                Aseprite.loadAllAnimations(this, AssetPaths.gl__json);
+                Aseprite.loadAllAnimations(this, AssetPaths.glNoHand__json);
         }
         origin.set(width/2, height/2);
     }

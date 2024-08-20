@@ -128,7 +128,7 @@ class Level {
 		}
 
 		for (t in level.l_Entities.all_Fire) {
-			var fire = new GroundFire(t.pixelX, t.pixelY);
+			var fire = new GroundFire(t.pixelX+8, t.pixelY);
 			hazards.push(fire);
 		}
 
