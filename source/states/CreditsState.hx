@@ -47,6 +47,7 @@ class CreditsState extends FlxTransitionableState {
 		camera.pixelPerfectRender = true;
 
 		// Credits
+		FmodManager.PlaySong(FmodSongs.WhereAmI);
 
 		_allCreditElements = new Array<FlxSprite>();
 
