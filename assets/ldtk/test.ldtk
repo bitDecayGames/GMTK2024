@@ -3301,7 +3301,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "PlayerSpawn",
-							"__grid": [69,21],
+							"__grid": [10,21],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 16, "y": 0, "w": 16, "h": 16 },
@@ -3310,9 +3310,9 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [1104,336],
+							"px": [160,336],
 							"fieldInstances": [],
-							"__worldX": 1104,
+							"__worldX": 160,
 							"__worldY": -656
 						},
 						{
@@ -3383,7 +3383,7 @@
 							"height": 16,
 							"defUid": 9,
 							"px": [816,320],
-							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 0, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }],
+							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 2, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }],
 							"__worldX": 816,
 							"__worldY": -672
 						},
@@ -3604,7 +3604,7 @@
 						},
 						{
 							"__identifier": "Door",
-							"__grid": [57,31],
+							"__grid": [62,22],
 							"__pivot": [0,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 96, "y": 96, "w": 16, "h": 48 },
@@ -3613,7 +3613,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 14,
-							"px": [912,512],
+							"px": [992,368],
 							"fieldInstances": [
 								{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
 									"id": "V_String",
@@ -3621,8 +3621,8 @@
 								}] },
 								{ "__identifier": "startOpen", "__type": "Bool", "__value": false, "__tile": null, "defUid": 32, "realEditorValues": [] }
 							],
-							"__worldX": 912,
-							"__worldY": -480
+							"__worldX": 992,
+							"__worldY": -624
 						},
 						{
 							"__identifier": "RecepticalSpawn",
