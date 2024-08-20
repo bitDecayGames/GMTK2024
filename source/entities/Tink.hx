@@ -171,7 +171,7 @@ class Tink extends Unibody {
 					switch(dialogIndex) {
 						case 0:
 							dialogIndex++;
-							triggerDialog(new CharacterDialog(TINK, "Ah, some targets! Time to start testing your sk...<page/>Wait, you still need a gun... Bring me 2 scrap and I will give you something easy to handle. Place the collected scrap into the scrap grider to my left.. uhh.. your left."));
+							triggerDialog(new CharacterDialog(TINK, "Ah, some targets! Time to start testing your sk...<page/>Wait, you still need a gun... Bring me 2 scrap and I will give you something easy to handle. Place the collected scrap into the scrap grinder to my left.. uhh.. your left."));
 							collector.isDepositable = true;
 							// triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));"
 							return;

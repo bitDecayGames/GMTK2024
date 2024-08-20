@@ -95,7 +95,8 @@ class ScrapCollector extends Unibody {
             FlxG.watch.addQuick("gun location", gun.getPosition());
             FlxG.watch.addQuick("player location", PlayState.me.player.getPosition());
             FlxVelocity.moveTowardsObject(gun, PlayState.me.player, 200);
-            if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 5) {
+            if (FlxG.overlap(PlayState.me.player, gun)) {
+            // if (PlayState.me.player.getPosition().distanceTo(gun.getPosition()) < 5) {
                 collectGun();
             }
         }

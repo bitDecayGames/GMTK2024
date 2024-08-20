@@ -334,6 +334,7 @@ class PlayState extends FlxTransitionableState {
         topGroup.add(reticle);
 
         configureListeners();
+		FlxG.worldBounds.set(level.raw.pxWid, level.raw.pxHei);
     }
 
     function configureListeners() {
