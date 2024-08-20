@@ -31,7 +31,8 @@ class SplashScreenState extends FlxState {
 		loadSplashImages([
 			new SplashImage(AssetPaths.bitdecaygamesinverted__png),
 			new SplashImage(AssetPaths.gmtk__png),
-			new SplashImage(AssetPaths.title__png)
+			new SplashImage(AssetPaths.title__png),
+			new SplashImage(AssetPaths.controls__png)
 		]);
 
 		timer = splashDuration;
