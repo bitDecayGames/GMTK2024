@@ -180,6 +180,7 @@ class TrashCan extends Unibody {
         bullet.kill();
 
         if (bullet.type == SHOTTY) {
+            color = FlxColor.WHITE;
             FmodManager.StopSongImmediately();
             FmodManager.PlaySoundOneShot(FmodSFX.TrashDie);
             beenKilled = true;
