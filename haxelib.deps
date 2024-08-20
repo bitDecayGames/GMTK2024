@@ -21,9 +21,10 @@ flixelutils git https://github.com/bitDecayGames/flixel-utils.git
 bitdecaybtree git https://github.com/bitDecayGames/BehaviorTree.git
 lucidtext git https://github.com/bitDecayGames/LucidText.git
 
-# misc deps
-haxefmod git https://github.com/Tanz0rz/haxe-fmod.git master
-
 # putting these here to ensure we are on these versions even if something earlier sets a different version
 flixel 5.8.0
 flixel-addons 3.2.3
+
+# misc deps
+haxefmod git https://github.com/Tanz0rz/haxe-fmod.git master
+
