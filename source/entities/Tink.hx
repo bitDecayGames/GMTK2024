@@ -26,6 +26,7 @@ class Tink extends Unibody {
 	public static inline var TINK_INTRO = "Intro";
 	public static inline var TINK_FIRE = "Fire";
 	public static inline var TINK_TARGETS = "Targets";
+	public static inline var TINK_FIRST_BOSS = "First Boss";
 
 	public var ogXY = FlxPoint.get();
 
@@ -38,6 +39,8 @@ class Tink extends Unibody {
 	var doorBottom:DoorBottom;
 	public var shutter:Shutter = null;
 	public var collector:ScrapCollector = null;
+
+	public var readyTriggers:Array<EchoSprite> = [];
 
 	var skipAllDialog = false;
 	var fireDashTipDisplayedHitCount = 0;
@@ -158,37 +161,49 @@ class Tink extends Unibody {
 					
 				case TINK_TARGETS:
 					
-				switch(dialogIndex) {
-					case 0:
-						dialogIndex++;
-						triggerDialog(new CharacterDialog(TINK, "Ah, some targets! Time to start testing your sk...<page/>Wait, you still need a gun... Bring me 2 scrap and I will give you something easy to handle. Place the collected scrap into the scrap grider to my left.. uhh.. your left."));
-						collector.isDepositable = true;
-						// triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));"
-						return;
-						
-					case 1:
-						var targetsDone = true;
-						for (t in PlayState.me.practiceTargets) {
-							if (!t.beenShot) {
-								targetsDone = false;
-								break;
-							}
-						}
-
-						if (targetsDone) {
+					switch(dialogIndex) {
+						case 0:
 							dialogIndex++;
+							triggerDialog(new CharacterDialog(TINK, "Ah, some targets! Time to start testing your sk...<page/>Wait, you still need a gun... Bring me 2 scrap and I will give you something easy to handle. Place the collected scrap into the scrap grider to my left.. uhh.. your left."));
+							collector.isDepositable = true;
+							// triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));"
+							return;
+							
+						case 1:
+							var targetsDone = true;
+							for (t in PlayState.me.practiceTargets) {
+								if (!t.beenShot) {
+									targetsDone = false;
+									break;
+								}
+							}
 
-							var endDialogCallback = () -> {
-								shutter.close();
-								new FlxTimer().start(1, (t) -> {
-									doorTop.open();
-									doorBottom.open();
-								});
-							};
+							if (targetsDone) {
+								dialogIndex++;
 
-							triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);
-						}
-				}
+								var endDialogCallback = () -> {
+									shutter.close();
+									new FlxTimer().start(1, (t) -> {
+										doorTop.open();
+										doorBottom.open();
+									});
+								};
+
+								triggerDialog(new CharacterDialog(TINK, "All of em? Nice! Anyways, see ya.", endDialogCallback), endDialogCallback);
+							}
+					}
+				case TINK_FIRST_BOSS:
+					// TODO: talk 
+					switch (dialogIndex) {
+						case 0:
+							dialogIndex++;
+							var cb = () -> {
+								for (rt in readyTriggers) {
+									rt.markReady();
+								}
+							}
+							triggerDialog(new CharacterDialog(TINK, "Spooky Bosco near. Anways, see ya.", cb), cb);
+					}
 			}
 		}
 	}

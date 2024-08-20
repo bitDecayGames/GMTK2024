@@ -1,5 +1,7 @@
 package levels.ldtk;
 
+import entities.TrashCan;
+import entities.Unibody;
 import entities.ScrapCollector;
 import entities.GroundFire;
 import entities.Scrap;
@@ -48,6 +50,8 @@ class Level {
 	public var rawTerrainTopLayer:levels.ldtk.LDTKProject.Layer_Top;
 	public var rawWallsLayer:levels.ldtk.LDTKProject.Layer_Collision;
 
+	public var enemies:Array<Unibody> = [];
+
 	public var playerSpawnPoint:FlxPoint;
 
 	public function new(nameOrIID:String) {
@@ -87,6 +91,11 @@ class Level {
 		for (s in level.l_Entities.all_RecepticalSpawn) {
 			collectors.push(new ScrapCollector(s.pixelX, s.pixelY, s.f_ScrapToActivate, s.iid));
 		}
+
+		for (tcSpawn in level.l_Entities.all_TrashCanSpawn) {
+			var trigger = FlxPoint.get(tcSpawn.f_xTrigger.cx * 16, tcSpawn.f_xTrigger.cy * 16);
+			enemies.push(new TrashCan(tcSpawn.iid, tcSpawn.pixelX, tcSpawn.pixelY, trigger));
+		}
 		
 		if (level.l_Entities.all_TinkSpawn.length > 0) {
 			for (tinkSpawn in level.l_Entities.all_TinkSpawn) {
@@ -101,7 +110,15 @@ class Level {
 					collector = collectors.filter((d) -> {return d.id == tinkSpawn.f_Collector.entityIid;})[0];
 				}
 				
-				tinks.push(new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom, tinkSpawn.f_ActivationRadius, collector));
+				var tink = new Tink(tinkSpawn.pixelX, tinkSpawn.pixelY, tinkSpawn.f_TinkSpawnName, top, bottom, tinkSpawn.f_ActivationRadius, collector);
+				if (tinkSpawn.f_Boss != null) {
+					var bossMatches:Array<Unibody> = enemies.filter((e) -> e.iid == tinkSpawn.f_Boss.entityIid);
+					for (b in bossMatches) {
+						tink.readyTriggers.push(b);
+					}
+				}
+				
+				tinks.push(tink);
 			}
 		}
 
