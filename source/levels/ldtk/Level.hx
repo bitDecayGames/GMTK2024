@@ -84,8 +84,11 @@ class Level {
 		}
 
 		for (d in level.l_Entities.all_Door) {
-			doors.push(new DoorTop(d.iid, d.pixelX, d.pixelY+3, d.f_DoorName));
-			doorsBottom.push(new DoorBottom(d.iid, d.pixelX, d.pixelY+15, d.f_DoorName));
+			var doorTop = new DoorTop(d.iid, d.pixelX, d.pixelY+3, d.f_DoorName);
+			var bottom = new DoorBottom(d.iid, d.pixelX, d.pixelY+15, d.f_DoorName);
+			doorTop.bottom = bottom;
+			doors.push(doorTop);
+			doorsBottom.push(bottom);
 		}
 
 		for (s in level.l_Entities.all_RecepticalSpawn) {
@@ -94,7 +97,10 @@ class Level {
 
 		for (tcSpawn in level.l_Entities.all_TrashCanSpawn) {
 			var trigger = FlxPoint.get(tcSpawn.f_xTrigger.cx * 16, tcSpawn.f_xTrigger.cy * 16);
-			enemies.push(new TrashCan(tcSpawn.iid, tcSpawn.pixelX, tcSpawn.pixelY, trigger));
+			var trash = new TrashCan(tcSpawn.iid, tcSpawn.pixelX, tcSpawn.pixelY, trigger);
+			trash.shutDoorTop = doors.filter((d) -> {d.iid == tcSpawn.f_shutDoor.entityIid;})[0];
+			trash.openDoorTop = doors.filter((d) -> {d.iid == tcSpawn.f_openDoor.entityIid;})[0];
+			enemies.push(trash);
 		}
 		
 		if (level.l_Entities.all_TinkSpawn.length > 0) {

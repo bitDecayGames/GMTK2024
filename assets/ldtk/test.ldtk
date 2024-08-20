@@ -11,7 +11,7 @@
 	"iid": "597a0d00-4ce0-11ef-8b7f-6b3358d89566",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 30,
+	"nextUid": 33,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -656,6 +656,43 @@
 					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "startOpen",
+					"doc": null,
+					"__type": "Bool",
+					"uid": 32,
+					"type": "F_Bool",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": true,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -797,6 +834,80 @@
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "shutDoor",
+					"doc": null,
+					"__type": "EntityRef",
+					"uid": 30,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": true,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySpecificEntity",
+					"allowedRefsEntityUid": 14,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "openDoor",
+					"doc": null,
+					"__type": "EntityRef",
+					"uid": 31,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": true,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySpecificEntity",
+					"allowedRefsEntityUid": 14,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -3250,10 +3361,13 @@
 							"height": 16,
 							"defUid": 14,
 							"px": [256,256],
-							"fieldInstances": [{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Intro"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Intro"]
+								}] },
+								{ "__identifier": "startOpen", "__type": "Bool", "__value": false, "__tile": null, "defUid": 32, "realEditorValues": [] }
+							],
 							"__worldX": 256,
 							"__worldY": -736
 						},
@@ -3500,10 +3614,13 @@
 							"height": 16,
 							"defUid": 14,
 							"px": [992,368],
-							"fieldInstances": [{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Intro"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Intro"]
+								}] },
+								{ "__identifier": "startOpen", "__type": "Bool", "__value": false, "__tile": null, "defUid": 32, "realEditorValues": [] }
+							],
 							"__worldX": 992,
 							"__worldY": -624
 						},
@@ -3519,7 +3636,7 @@
 							"height": 16,
 							"defUid": 9,
 							"px": [1120,304],
-							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [10] }] }],
+							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 12, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [12] }] }],
 							"__worldX": 1120,
 							"__worldY": -688
 						},
@@ -3580,10 +3697,30 @@
 							"height": 32,
 							"defUid": 27,
 							"px": [1168,16],
-							"fieldInstances": [{ "__identifier": "xTrigger", "__type": "Point", "__value": { "cx": 74, "cy": 28 }, "__tile": null, "defUid": 28, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["74,28"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "xTrigger", "__type": "Point", "__value": { "cx": 74, "cy": 28 }, "__tile": null, "defUid": 28, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["74,28"]
+								}] },
+								{ "__identifier": "shutDoor", "__type": "EntityRef", "__value": {
+									"entityIid": "af6d7f50-4ce0-11ef-b559-3bcbe975808c",
+									"layerIid": "5eed0480-4ce0-11ef-91af-e136fbcb7a56",
+									"levelIid": "5eecb660-4ce0-11ef-91af-0b71fb3046f1",
+									"worldIid": "597ad050-4ce0-11ef-8b7f-a3f823fb17fb"
+								}, "__tile": null, "defUid": 30, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["af6d7f50-4ce0-11ef-b559-3bcbe975808c"]
+								}] },
+								{ "__identifier": "openDoor", "__type": "EntityRef", "__value": {
+									"entityIid": "093ac1a0-4ce0-11ef-9282-5b584816a016",
+									"layerIid": "5eed0480-4ce0-11ef-91af-e136fbcb7a56",
+									"levelIid": "5eecb660-4ce0-11ef-91af-0b71fb3046f1",
+									"worldIid": "597ad050-4ce0-11ef-8b7f-a3f823fb17fb"
+								}, "__tile": null, "defUid": 31, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["093ac1a0-4ce0-11ef-9282-5b584816a016"]
+								}] }
+							],
 							"__worldX": 1168,
 							"__worldY": -976
 						},
@@ -3599,7 +3736,10 @@
 							"height": 16,
 							"defUid": 14,
 							"px": [1392,448],
-							"fieldInstances": [{ "__identifier": "DoorName", "__type": "String", "__value": "name_me", "__tile": null, "defUid": 16, "realEditorValues": [] }],
+							"fieldInstances": [
+								{ "__identifier": "DoorName", "__type": "String", "__value": "name_me", "__tile": null, "defUid": 16, "realEditorValues": [] },
+								{ "__identifier": "startOpen", "__type": "Bool", "__value": false, "__tile": null, "defUid": 32, "realEditorValues": [] }
+							],
 							"__worldX": 1392,
 							"__worldY": -544
 						},
@@ -3615,7 +3755,16 @@
 							"height": 16,
 							"defUid": 14,
 							"px": [976,736],
-							"fieldInstances": [{ "__identifier": "DoorName", "__type": "String", "__value": "name_me", "__tile": null, "defUid": 16, "realEditorValues": [] }],
+							"fieldInstances": [
+								{ "__identifier": "DoorName", "__type": "String", "__value": "final_door", "__tile": null, "defUid": 16, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["final_door"]
+								}] },
+								{ "__identifier": "startOpen", "__type": "Bool", "__value": true, "__tile": null, "defUid": 32, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] }
+							],
 							"__worldX": 976,
 							"__worldY": -256
 						},
@@ -4037,7 +4186,7 @@
 						},
 						{
 							"__identifier": "RecepticalSpawn",
-							"__grid": [50,45],
+							"__grid": [50,46],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 128, "y": 112, "w": 48, "h": 32 },
@@ -4046,10 +4195,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 9,
-							"px": [800,720],
+							"px": [800,736],
 							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [10] }] }],
 							"__worldX": 800,
-							"__worldY": -272
+							"__worldY": -256
 						},
 						{
 							"__identifier": "TinkSpawn",

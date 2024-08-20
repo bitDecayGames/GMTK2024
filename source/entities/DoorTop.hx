@@ -13,6 +13,8 @@ class DoorTop extends Unibody {
 
 	public var name:String;
 
+	public var bottom:DoorBottom = null;
+
     public function new(iid:String, x:Float, y:Float, name:String) {
         super(x, y);
 		this.iid = iid;
@@ -23,6 +25,9 @@ class DoorTop extends Unibody {
 		animation.callback = (name, frameNumber, frameIndex) -> {
 			if (frameNumber == 3) {
 				body.active = false;
+			}
+			if (frameIndex == 1) {
+				body.active = true;
 			}
 			if (frameNumber == 5)  {
                 FlxG.camera.shake(0.025, 0.2);
@@ -36,7 +41,18 @@ class DoorTop extends Unibody {
     }
 
 	public function open() {
+		if (bottom != null) {
+			bottom.open();
+		}
 		animation.play(anims.open);
+		FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
+	}
+	
+	public function close() {
+		if (bottom != null) {
+			bottom.close();
+		}
+		animation.play(anims.close);
 		FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
 	}
     

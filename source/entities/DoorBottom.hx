@@ -22,6 +22,9 @@ class DoorBottom extends Unibody {
 			if (frameNumber == 3) {
 				body.active = false;
 			}
+			if (frameIndex == 1) {
+				body.active = true;
+			}
 		}
 
 		animation.finishCallback = (name) -> {
@@ -33,6 +36,10 @@ class DoorBottom extends Unibody {
 
 	public function open() {
 		animation.play(anims.open);
+	}
+
+	public function close() {
+		animation.play(anims.close);
 	}
     
 	override function makeBody():Body {

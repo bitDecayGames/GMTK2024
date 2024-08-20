@@ -51,6 +51,8 @@ class TrashCan extends Unibody {
     var btree:BTree;
 
     public var startPoint = FlxPoint.get();
+    public var shutDoorTop:DoorTop;
+    public var openDoorTop:DoorTop;
 
 	public function new(iid:String, x:Float, y:Float, playerTriggerPoint:FlxPoint) {
 		super(x, y);
@@ -179,6 +181,9 @@ class TrashCan extends Unibody {
             // TODO: Door unlock?
             FlxG.camera.flash(() -> {
                 // Flash finished?
+                if (openDoorTop != null) {
+                    openDoorTop.open();
+                }
             });
             return;
         }
@@ -202,6 +207,9 @@ class TrashCan extends Unibody {
         if (readyForSpawn && !playerTriggered) {
             if (PlayState.me.player.x > triggerPoint.x && PlayState.me.player.y > triggerPoint.y) {
                 playerTriggered = true;
+                if (shutDoorTop != null) {
+                    shutDoorTop.close();
+                }
             }
         }
 
