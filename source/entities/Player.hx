@@ -386,8 +386,8 @@ class Player extends Unibody {
 		// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
 		dashing = false;
 		timeBeforeDash = dashCooldown;
-		dashCooldownBar = new ShrinkingBar(x, y, 16, 2, dashCooldown);
-		PlayState.me.topGroup.add(dashCooldownBar);
+		// dashCooldownBar = new ShrinkingBar(x, y, 16, 2, dashCooldown);
+		// PlayState.me.topGroup.add(dashCooldownBar);
 
 	}
 
