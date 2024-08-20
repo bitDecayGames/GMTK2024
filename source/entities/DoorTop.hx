@@ -15,6 +15,8 @@ class DoorTop extends Unibody {
 
 	public var bottom:DoorBottom = null;
 
+	public var lastForced = false;
+
     public function new(iid:String, x:Float, y:Float, name:String) {
         super(x, y);
 		this.iid = iid;
@@ -30,7 +32,9 @@ class DoorTop extends Unibody {
 				body.active = true;
 			}
 			if (frameNumber == 5)  {
-                FlxG.camera.shake(0.025, 0.2);
+				if (!lastForced) {
+                	FlxG.camera.shake(0.025, 0.2);
+				}
 			}
 		}
 
@@ -40,12 +44,16 @@ class DoorTop extends Unibody {
 		// }
     }
 
-	public function open() {
+	public function open(force:Bool = false) {
+		lastForced = force;
 		if (bottom != null) {
-			bottom.open();
+			bottom.open(force);
 		}
 		animation.play(anims.open);
-		FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
+
+		if (!force) {
+			FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
+		}
 	}
 	
 	public function close() {
