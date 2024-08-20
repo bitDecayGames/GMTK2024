@@ -152,9 +152,6 @@ class PlayState extends FlxTransitionableState {
 
         // TODO: Confirm ordering here is proper
 		var levelName = "Level_1";
-		#if logan
-		levelName = "Level_0";
-		#end
         loadLevel(levelName);
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
 		
@@ -175,12 +172,6 @@ class PlayState extends FlxTransitionableState {
 
 		#if testgunget
 		openSubState(new WeaponUnlockOverlay(PISTOL));
-		#end
-
-		#if logan
-		var bossman = new TrashCan(100, 100);
-		entityRenderGroup.add(bossman);
-		bossman.add_to_group(enemyGroup);
 		#end
 	}
 

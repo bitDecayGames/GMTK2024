@@ -20,9 +20,12 @@ class Bullet extends Unibody {
 
 	var lifespan = 5.0;
 
+	public var type:GunHas;
+
     public function new(type:GunHas, source:FlxPoint, angle:Float, speed:Float) {
         super(source.x, source.y);
 
+		this.type = type;
         var direction = new FlxPoint(1, 0);
 
         direction.rotateByDegrees(angle);

@@ -53,6 +53,8 @@ class TrashCan extends Unibody {
     var btree:BTree;
 
     public var startPoint = FlxPoint.get();
+    public var shutDoorTop:DoorTop;
+    public var openDoorTop:DoorTop;
 
 	public function new(iid:String, x:Float, y:Float, playerTriggerPoint:FlxPoint) {
 		super(x, y);
@@ -71,6 +73,10 @@ class TrashCan extends Unibody {
 
         triggerPoint = playerTriggerPoint;
         initBTree();
+
+        #if logan
+        hitsToEachScrap = 1;
+        #end
 	}
 
     function initBTree() {
@@ -171,6 +177,20 @@ class TrashCan extends Unibody {
         Flickerer.flickerWhite(this, 0.25, 3);
         bullet.kill();
 
+        if (bullet.type == SHOTTY) {
+            animation.play(anims.dead);
+            active = false;
+            body.active = false;
+            // TODO: Door unlock?
+            FlxG.camera.flash(() -> {
+                // Flash finished?
+                if (openDoorTop != null) {
+                    openDoorTop.open();
+                }
+            });
+            return;
+        }
+
         hitsToNextScrap--;
         if (hitsToNextScrap <= 0) {
             // drop scrap
@@ -192,6 +212,9 @@ class TrashCan extends Unibody {
                 
                 FmodManager.PlaySong(FmodSongs.ForScrap);
                 playerTriggered = true;
+                if (shutDoorTop != null) {
+                    shutDoorTop.close();
+                }
             }
         }
 
