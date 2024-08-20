@@ -1,5 +1,6 @@
 package entities;
 
+import states.PlayState;
 import entities.Player.GunHas;
 import echo.data.Data.CollisionData;
 import echo.Body;

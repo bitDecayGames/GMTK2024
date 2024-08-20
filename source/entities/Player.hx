@@ -1,5 +1,6 @@
 package entities;
 
+import entities.ShrinkingBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import js.html.Console;
@@ -40,6 +41,9 @@ class Player extends Unibody {
 
 	var playerNum = 0;
 	var dashing = false;
+	var dashCooldown:Float = 1;
+	var timeBeforeDash:Float = 0;
+	var dashCooldownBar:ShrinkingBar;
 
 	var rollDurationMs = 400;
 	var rollSpeedMultiplier = 2.1;
@@ -165,12 +169,16 @@ class Player extends Unibody {
 			speed += 5;
 		}
 
-		if (!inKnockback && !dashing && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {
+		if (!inKnockback && !dashing && timeBeforeDash <= 0 && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {
 			FmodManager.PlaySoundOneShot(FmodSFX.PlayerDodge);
 			dashing = true;
 			Timer.delay(() -> {
 				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
 				dashing = false;
+				timeBeforeDash = dashCooldown;
+				dashCooldownBar = new ShrinkingBar(x, y, 16, 2, dashCooldown);
+				PlayState.me.topGroup.add(dashCooldownBar);
+
 			}, rollDurationMs);
 			
 			tmp.copyFrom(inputDir).scale(speed).scale(rollSpeedMultiplier);
@@ -233,6 +241,12 @@ class Player extends Unibody {
 				}
 			}
 		}
+
+		timeBeforeDash -= delta;
+		if (dashCooldownBar != null && dashCooldownBar.active){
+			dashCooldownBar.setPosition(x, y-5);
+		}
+		
 
 		updateCurrentAnimation(FlxG.mouse.getWorldPosition(tmp));
 	}
