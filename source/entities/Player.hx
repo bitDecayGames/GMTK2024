@@ -1,5 +1,7 @@
 package entities;
 
+import entities.Flicker.Flickerer;
+import flixel.effects.FlxFlicker;
 import entities.ShrinkingBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -171,6 +173,9 @@ class Player extends Unibody {
 		}
 		if (FlxG.keys.anyJustPressed([FlxKey.QUOTE])){
 			speed += 5;
+		}
+		if (FlxG.keys.anyJustPressed([FlxKey.P])){
+			Flickerer.flickerWhite(this, 0.25, 2);
 		}
 
 		if (!inKnockback && !dashing && timeBeforeDash <= 0 && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {

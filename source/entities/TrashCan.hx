@@ -1,5 +1,7 @@
 package entities;
 
+import entities.Flicker.Flickerer;
+import flixel.effects.FlxFlicker;
 import flixel.util.FlxColor;
 import echo.Line;
 import echo.math.Vector2;
@@ -165,7 +167,8 @@ class TrashCan extends Unibody {
 
     function handleHit(bullet:Bullet) {
         // TODO: Whatever damage/scrap mechanic we want
-        // TODO: SFX trash can hit by bullet
+        FmodManager.PlaySoundOneShot(FmodSFX.TrashHit);
+        Flickerer.flickerWhite(this, 0.25, 3);
         bullet.kill();
 
         hitsToNextScrap--;
@@ -186,6 +189,8 @@ class TrashCan extends Unibody {
 
         if (readyForSpawn && !playerTriggered) {
             if (PlayState.me.player.x > triggerPoint.x && PlayState.me.player.y > triggerPoint.y) {
+                
+                FmodManager.PlaySong(FmodSongs.ForScrap);
                 playerTriggered = true;
             }
         }

@@ -6,6 +6,7 @@
 package;
 
 class FmodSongs {
+    public static inline var ForScrap:String = "event:/Music/ForScrap";
     public static inline var LetsGo:String = "event:/Music/LetsGo";
     public static inline var WhereAmI:String = "event:/Music/WhereAmI";
 }
@@ -34,4 +35,5 @@ class FmodSFX {
     public static inline var TargetHit4:String = "event:/SFX/Target/TargetHit4";
     public static inline var TinkShutter:String = "event:/SFX/Tink/TinkShutter";
     public static inline var TinkTalk:String = "event:/SFX/Tink/TinkTalk";
+    public static inline var TrashHit:String = "event:/SFX/Trash/TrashHit";
 }
