@@ -14,6 +14,8 @@ import flixel.FlxSubState;
 class WeaponUnlockOverlay extends FlxSubState {
     public static var anims = AsepriteMacros.tagNames("assets/aseprite/weaponSplashScreens.json");
 
+    public static var playerHasPistol = false;
+
     public function new(type:GunHas) {
         super();
 
@@ -70,6 +72,9 @@ class WeaponUnlockOverlay extends FlxSubState {
         })).then(FlxTween.tween(bgSprite, {"alpha": 0}, 0.25, {
             onComplete: (t) -> {
                 PlayState.me.resumeGame();
+                if (type == PISTOL) {
+                    playerHasPistol = true;
+                }
                 close();
             }
         }));

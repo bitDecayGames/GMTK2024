@@ -35,7 +35,7 @@ class Player extends Unibody {
 	public static var layers = AsepriteMacros.layerNames("assets/aseprite/playerSketchpad.json");
 	//public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/playerSketchpad.json", "Layer 1");
 
-	var gun:Gun;
+	public var gun:Gun;
 	var pistolBulletSpeed = 240;
 	var magnumBulletSpeed = 300;
 	var shottyBulletSpeed = 200;

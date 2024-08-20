@@ -1,5 +1,6 @@
 package entities;
 
+import ui.WeaponUnlockOverlay;
 import states.CreditsState;
 import states.SplashScreenState;
 import states.SplashScreenState.SplashImage;
@@ -125,7 +126,7 @@ class Tink extends Unibody {
 
 		distanceToPlayer = PlayState.me.player.getMidpoint().distanceTo(getMidpoint());
 		var checkDistance = activationRadius;
-		if (spawnPoint == TINK_TARGETS && dialogIndex == 1) {
+		if (spawnPoint == TINK_TARGETS && dialogIndex >= 1) {
 			// we want him to trigger as soon as you break the last target
 			checkDistance = 1000;
 		}
@@ -185,8 +186,13 @@ class Tink extends Unibody {
 							collector.isDepositable = true;
 							// triggerDialog(new CharacterDialog(TINK, "Blast those crappy pink squares. They're actually targest, but I don't have assets yet."));"
 							return;
-							
+						
 						case 1:
+							if (WeaponUnlockOverlay.playerHasPistol){
+								dialogIndex++;
+								triggerDialog(new CharacterDialog(TINK, "There you go! Use left click to aim and shoot!"));
+							}
+						case 2:
 							var targetsDone = true;
 							for (t in PlayState.me.practiceTargets) {
 								if (!t.beenShot) {
@@ -219,7 +225,7 @@ class Tink extends Unibody {
 									rt.markReady();
 								}
 							}
-							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful.", cb), cb);
+							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. A pistol may not be enough to defeat him!", cb), cb);
 						case 1:
 							if (TrashCan.beenKilled) {
 								dialogIndex++;
@@ -235,7 +241,7 @@ class Tink extends Unibody {
 									});
 								};
 								triggerDialog(new CharacterDialog(TINK, "They said it couldn't be done. Bosco has been lurking this area as long as I can remember.<page/>" +
-								"I suppse my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
+								"I suppose my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
 							}
 					}
 			}
