@@ -44,6 +44,7 @@ class Player extends Unibody {
 	var dashCooldown:Float = 1;
 	var timeBeforeDash:Float = 0;
 	var dashCooldownBar:ShrinkingBar;
+	var dashTimer:FlxTimer = null;
 
 	var rollDurationMs = 400;
 	var rollSpeedMultiplier = 2.1;
@@ -111,6 +112,12 @@ class Player extends Unibody {
 		// FlxG.watch.add(gun, "angle", "gun angle");
 	}
 
+	public function forceIdle() {
+		touchWall();
+		animation.play(anims.Idle_up);
+		animation.update(0.01);
+	}
+
 	public function setGun(type:GunHas) {
 		gun.setType(type);
 		// TODO: upate bullet types? SFX?
@@ -176,14 +183,9 @@ class Player extends Unibody {
 		if (!inKnockback && !dashing && timeBeforeDash <= 0 && SimpleController.just_pressed(Button.A, playerNum) && (inputDir.x != 0 || inputDir.y != 0)) {
 			FmodManager.PlaySoundOneShot(FmodSFX.PlayerDodge);
 			dashing = true;
-			Timer.delay(() -> {
-				// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
-				dashing = false;
-				timeBeforeDash = dashCooldown;
-				dashCooldownBar = new ShrinkingBar(x, y, 16, 2, dashCooldown);
-				PlayState.me.topGroup.add(dashCooldownBar);
-
-			}, rollDurationMs);
+			dashTimer = new FlxTimer().start(rollDurationMs / 1000, (t) -> {
+				endDash();
+			});
 			
 			tmp.copyFrom(inputDir).scale(speed).scale(rollSpeedMultiplier);
 			body.velocity.set(tmp.x, tmp.y);
@@ -365,6 +367,25 @@ class Player extends Unibody {
             handleScrap(cast other.object);
         }
     }
+
+	public function touchWall() {
+		if (dashing) {
+			if (dashTimer != null) {
+				dashTimer.cancel();
+				dashTimer = null;
+			}
+			endDash();
+		}
+	}
+
+	function endDash() {
+		// FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
+		dashing = false;
+		timeBeforeDash = dashCooldown;
+		dashCooldownBar = new ShrinkingBar(x, y, 16, 2, dashCooldown);
+		PlayState.me.topGroup.add(dashCooldownBar);
+
+	}
 
 	function handleHit(bullet:Bullet) {
 		if (dashing) {

@@ -1,5 +1,9 @@
 package entities;
 
+import states.CreditsState;
+import states.SplashScreenState;
+import states.SplashScreenState.SplashImage;
+import lime.tools.SplashScreen;
 import flixel.util.FlxTimer;
 import js.html.Console;
 import echo.data.Data.CollisionData;
@@ -101,6 +105,7 @@ class Tink extends Unibody {
 
 	function triggerDialog(dialog:CharacterDialog, ?callback:() -> Void) {
 		if (!skipAllDialog){
+			PlayState.me.player.forceIdle();
 			PlayState.me.openDialog(dialog);
 		} else {
 			if (callback != null) {
@@ -209,7 +214,24 @@ class Tink extends Unibody {
 									rt.markReady();
 								}
 							}
-							triggerDialog(new CharacterDialog(TINK, "Spooky Bosco near. Anways, see ya.", cb), cb);
+							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful.", cb), cb);
+						case 1:
+							if (TrashCan.beenKilled) {
+								dialogIndex++;
+
+								var endCb = () -> {
+									shutter.close();
+									PlayState.me.pauseGame();
+									FlxG.camera.fade(() -> {
+										var creditsCb = () -> {
+											FlxG.switchState(new CreditsState());
+										};
+										triggerDialog(new CharacterDialog(TINK_GATE, "Honestly, there's a lot more help we could use from you. Check back when you've got time and maybe we'll have some more favors to ask.<page/>Anyways, see ya.", creditsCb), creditsCb);
+									});
+								};
+								triggerDialog(new CharacterDialog(TINK, "They said it couldn't be done. Bosco has been lurking this area as long as I can remember.<page/>" +
+								"I suppse my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
+							}
 					}
 			}
 		}

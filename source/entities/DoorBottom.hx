@@ -39,6 +39,7 @@ class DoorBottom extends Unibody {
 	}
 
 	public function close() {
+		body.active = true;
 		animation.play(anims.close);
 	}
     

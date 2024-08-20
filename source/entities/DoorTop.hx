@@ -59,6 +59,7 @@ class DoorTop extends Unibody {
 	public function close() {
 		if (bottom != null) {
 			bottom.close();
+			trace('top: ${this.name}, bottom: ${bottom.name}');
 		}
 		animation.play(anims.close);
 		FmodManager.PlaySoundOneShot(FmodSFX.DoorOpen2);
