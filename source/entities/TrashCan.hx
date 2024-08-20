@@ -161,10 +161,10 @@ class TrashCan extends Unibody {
                         return FAIL;
                     }), new Sequence([
                         new Wait(.25, 1),
-                        new Selector(RANDOM([1, 1, 1]), [
+                        new Sequence([
                             new BigJump(this),
+                            new Wait(.1, .2),
                             new CircleBlast(this),
-                            new ChainFire(this)
                         ])
                     ])),
                     new Sequence([
