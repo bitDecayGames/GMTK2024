@@ -89,6 +89,10 @@ class Level {
 			doorTop.bottom = bottom;
 			doors.push(doorTop);
 			doorsBottom.push(bottom);
+
+			if (d.f_startOpen) {
+				doorTop.open(true);
+			}
 		}
 
 		for (s in level.l_Entities.all_RecepticalSpawn) {
