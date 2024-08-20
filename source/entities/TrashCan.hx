@@ -225,6 +225,7 @@ class TrashCan extends Unibody {
         if (hitsToNextScrap <= 0) {
             // drop scrap
             // TODO: SFX hit dropped scrap
+            FmodManager.PlaySoundOneShot(FmodSFX.TrashHitBig);
 		    PlayState.me.AddScrap(new Scrap(body.x, body.y));
             scrapDropped++;
             hitsToNextScrap = hitsToEachScrap;
@@ -363,7 +364,7 @@ class HopAround implements Node {
                 // ease: FlxEase.sineOut,
                 onComplete: (t) -> {
                     // TODO: SFX small jump landed
-                    FmodManager.PlaySoundOneShot(FmodSFX.TrashJump2);
+                    FmodManager.PlaySoundOneShot(FmodSFX.TrashLand);
                     FlxG.camera.shake(0.01, 0.1);
                     can.followObj(null);
                     can.animation.play(TrashCan.anims.land);
