@@ -69,6 +69,10 @@ class TrashCan extends Unibody {
 
         triggerPoint = playerTriggerPoint;
         initBTree();
+
+        #if logan
+        hitsToEachScrap = 1;
+        #end
 	}
 
     function initBTree() {
@@ -167,6 +171,17 @@ class TrashCan extends Unibody {
         // TODO: Whatever damage/scrap mechanic we want
         // TODO: SFX trash can hit by bullet
         bullet.kill();
+
+        if (bullet.type == SHOTTY) {
+            animation.play(anims.dead);
+            active = false;
+            body.active = false;
+            // TODO: Door unlock?
+            FlxG.camera.flash(() -> {
+                // Flash finished?
+            });
+            return;
+        }
 
         hitsToNextScrap--;
         if (hitsToNextScrap <= 0) {
