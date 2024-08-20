@@ -226,6 +226,7 @@ class TrashCan extends Unibody {
             // drop scrap
             // TODO: SFX hit dropped scrap
             FmodManager.PlaySoundOneShot(FmodSFX.TrashHitBig);
+            FlxG.camera.shake(0.01, 0.1);
 		    PlayState.me.AddScrap(new Scrap(body.x, body.y));
             scrapDropped++;
             hitsToNextScrap = hitsToEachScrap;

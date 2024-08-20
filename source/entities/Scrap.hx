@@ -94,7 +94,7 @@ class Scrap extends Unibody {
         }
 
         
-        if (PlayState.me.player.getPosition().distanceTo(getPosition()) < 8 && collectible) {
+        if (PlayState.me.player.getPosition().distanceTo(getPosition()) < 12 && collectible) {
             PlayState.me.player.handleScrap(this);
         }
         
