@@ -538,7 +538,7 @@ class PlayState extends FlxTransitionableState {
         var focus = FlxPoint.get();
         focus.copyFrom(tmp).subtractPoint(tmp2).scale(0.2);
         focus.addPoint(tmp2);
-		focus.floor();
+		//focus.floor();
 		camera.focusOn(focus);
 
         entityRenderGroup.sort(ZSorting.getSort(BOTTOM));
