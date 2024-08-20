@@ -219,7 +219,7 @@ class Tink extends Unibody {
 									rt.markReady();
 								}
 							}
-							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful.", cb), cb);
+							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. A pistol may not be enough to defeat him!", cb), cb);
 						case 1:
 							if (TrashCan.beenKilled) {
 								dialogIndex++;
@@ -235,7 +235,7 @@ class Tink extends Unibody {
 									});
 								};
 								triggerDialog(new CharacterDialog(TINK, "They said it couldn't be done. Bosco has been lurking this area as long as I can remember.<page/>" +
-								"I suppse my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
+								"I suppose my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
 							}
 					}
 			}
