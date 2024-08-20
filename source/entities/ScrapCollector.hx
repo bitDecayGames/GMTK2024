@@ -67,6 +67,10 @@ class ScrapCollector extends Unibody {
         super.update(elapsed);
 		body.velocity.set(velocity.x, velocity.y);
 
+        if (scrapToActivate < 0){
+            scrapToActivate = 0;
+        }
+
         displayText.text = '${scrapToActivate}';
 
         if (!closed && scrapToClose <= 0){

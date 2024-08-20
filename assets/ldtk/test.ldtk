@@ -2874,7 +2874,8 @@
 						{ "px": [896,1184], "src": [32,80], "f": 0, "t": 57, "d": [7826], "a": 1 },
 						{ "px": [912,1184], "src": [32,80], "f": 0, "t": 57, "d": [7827], "a": 1 },
 						{ "px": [928,1184], "src": [32,80], "f": 0, "t": 57, "d": [7828], "a": 1 },
-						{ "px": [944,1184], "src": [32,80], "f": 0, "t": 57, "d": [7829], "a": 1 }
+						{ "px": [944,1184], "src": [32,80], "f": 0, "t": 57, "d": [7829], "a": 1 },
+						{ "px": [976,1216], "src": [0,0], "f": 0, "t": 0, "d": [8041], "a": 1 }
 					],
 					"entityInstances": []
 				},
@@ -3402,7 +3403,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "PlayerSpawn",
-							"__grid": [10,21],
+							"__grid": [69,21],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 16, "y": 0, "w": 16, "h": 16 },
@@ -3411,9 +3412,9 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [160,336],
+							"px": [1104,336],
 							"fieldInstances": [],
-							"__worldX": 160,
+							"__worldX": 1104,
 							"__worldY": -656
 						},
 						{
@@ -3484,7 +3485,7 @@
 							"height": 16,
 							"defUid": 9,
 							"px": [816,320],
-							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 2, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }],
+							"fieldInstances": [{ "__identifier": "ScrapToActivate", "__type": "Int", "__value": 0, "__tile": null, "defUid": 24, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }],
 							"__worldX": 816,
 							"__worldY": -672
 						},
@@ -3705,7 +3706,7 @@
 						},
 						{
 							"__identifier": "Door",
-							"__grid": [62,22],
+							"__grid": [57,31],
 							"__pivot": [0,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 1, "x": 96, "y": 96, "w": 16, "h": 48 },
@@ -3714,7 +3715,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 14,
-							"px": [992,368],
+							"px": [912,512],
 							"fieldInstances": [
 								{ "__identifier": "DoorName", "__type": "String", "__value": "Intro", "__tile": null, "defUid": 16, "realEditorValues": [{
 									"id": "V_String",
@@ -3722,8 +3723,8 @@
 								}] },
 								{ "__identifier": "startOpen", "__type": "Bool", "__value": false, "__tile": null, "defUid": 32, "realEditorValues": [] }
 							],
-							"__worldX": 992,
-							"__worldY": -624
+							"__worldX": 912,
+							"__worldY": -480
 						},
 						{
 							"__identifier": "RecepticalSpawn",

@@ -178,6 +178,8 @@ class TrashCan extends Unibody {
         bullet.kill();
 
         if (bullet.type == SHOTTY) {
+            FmodManager.StopSongImmediately();
+            FmodManager.PlaySoundOneShot(FmodSFX.TrashDie);
             animation.play(anims.dead);
             active = false;
             body.active = false;
@@ -328,10 +330,12 @@ class HopAround implements Node {
             can.animation.play(TrashCan.anims.float);
             can.followObj(hackObj);
             // TODO: SFX small jump started
+            FmodManager.PlaySoundOneShot(FmodSFX.TrashJumpLift1);
             FlxTween.quadPath(hackObj, [start, midpoint, dest], .5, {
                 // ease: FlxEase.sineOut,
                 onComplete: (t) -> {
                     // TODO: SFX small jump landed
+                    FmodManager.PlaySoundOneShot(FmodSFX.TrashJump2);
                     FlxG.camera.shake(0.01, 0.1);
                     can.followObj(null);
                     can.animation.play(TrashCan.anims.land);
@@ -370,6 +374,9 @@ class BigJump implements Node {
     var stateLand = "land";
     var stateShoot = "shoot";
     var stateDone = "done";
+    
+
+    var fallNoiseId = "fallNoiseId";
 
     var cd:Float = 0;
 
@@ -383,6 +390,7 @@ class BigJump implements Node {
         can.animation.finishCallback = (name) -> {
             if (name == TrashCan.anims.windup && state == stateWindup) {
                 // TODO: SFX trash can leaves the ground
+                FmodManager.PlaySoundOneShot(FmodSFX.TrashJumpLift1);
                 can.animation.play(TrashCan.anims.launch);
                 can.body.get_position(targetPoint);
                 var line = Line.get(can.body.x, can.body.y, can.body.x, can.body.y - 1000);
@@ -422,6 +430,7 @@ class BigJump implements Node {
 		} else if (state == stateTarget) {
 			if (cd <= 0) {
                 // TODO: SFX Trash can starts falling
+                FmodManager.PlaySoundAndAssignId(FmodSFX.TrashBeginFall, fallNoiseId);
 				PlayState.me.player.body.get_position(targetPoint);
 				can.animation.play(TrashCan.anims.float);
                 can.body.set_position(targetPoint.x, can.body.y);
@@ -433,7 +442,12 @@ class BigJump implements Node {
 			} else {
                 // TODO: Screen shake
                 // TODO: SFX: trash can lands big jump
-                FlxG.camera.shake();
+                FmodManager.PlaySoundOneShot(FmodSFX.TrashJump1);
+                FmodManager.PlaySoundOneShot(FmodSFX.TrashAttackRing);
+                if (FmodManager.IsSoundPlaying(fallNoiseId)) {
+                    FmodManager.StopSoundImmediately(fallNoiseId);
+                }
+                FlxG.camera.shake(0.02, 0.25);
                 can.body.velocity.set(0, 0);
 				can.body.set_position(targetPoint.x, targetPoint.y);
 				can.animation.play(TrashCan.anims.land);
@@ -443,6 +457,7 @@ class BigJump implements Node {
 				var increment = 360 / blastDirections;
 				var startPos = FlxPoint.get(can.body.x, can.body.y);
 				// TODO: SFX shoot ring of cans
+                FmodManager.PlaySoundOneShot(FmodSFX.TrashAttackRing);
 				for (i in 0...12) {
 					PlayState.me.AddEnemyBullet(new SpinningCan(startPos, i * increment, 100));
 				}
@@ -514,7 +529,8 @@ class CircleBlast implements Node {
 
 		var increment = 360 / blastDirections;
 		var startPos = FlxPoint.get(can.body.x, can.body.y);
-		// TODO: SFX shoot ring of cans
+        // TODO: SFX shoot ring of cans
+		FmodManager.PlaySoundOneShot(FmodSFX.TrashAttackRing);
 		for (i in 0...12) {
 			PlayState.me.AddEnemyBullet(new SpinningCan(startPos, angleOffset + i * increment, 100));
 		}

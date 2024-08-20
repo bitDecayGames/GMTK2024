@@ -35,5 +35,12 @@ class FmodSFX {
     public static inline var TargetHit4:String = "event:/SFX/Target/TargetHit4";
     public static inline var TinkShutter:String = "event:/SFX/Tink/TinkShutter";
     public static inline var TinkTalk:String = "event:/SFX/Tink/TinkTalk";
+    public static inline var TrashAttackFlare:String = "event:/SFX/Trash/TrashAttackFlare";
+    public static inline var TrashAttackRing:String = "event:/SFX/Trash/TrashAttackRing";
+    public static inline var TrashBeginFall:String = "event:/SFX/Trash/TrashBeginFall";
+    public static inline var TrashDie:String = "event:/SFX/Trash/TrashDie";
     public static inline var TrashHit:String = "event:/SFX/Trash/TrashHit";
+    public static inline var TrashJump1:String = "event:/SFX/Trash/TrashJump1";
+    public static inline var TrashJump2:String = "event:/SFX/Trash/TrashJump2";
+    public static inline var TrashJumpLift1:String = "event:/SFX/Trash/TrashJumpLift1";
 }
