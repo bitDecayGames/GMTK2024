@@ -225,7 +225,7 @@ class Tink extends Unibody {
 									rt.markReady();
 								}
 							}
-							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. A pistol may not be enough to defeat him!", cb), cb);
+							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. A pistol may not be enough to defeat him! Bring more scrap for a bigger gun. Now where to find more scrap....", cb), cb);
 						case 1:
 							if (TrashCan.beenKilled) {
 								dialogIndex++;
