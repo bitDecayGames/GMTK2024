@@ -166,10 +166,7 @@ class TrashCan extends Unibody {
                             new Wait(.1, .2),
                             new CircleBlast(this),
                         ])
-                    ])),
-                    new Sequence([
-                        new Explode(this)
-                    ])
+                    ]))
                 ]
             ))
         );
