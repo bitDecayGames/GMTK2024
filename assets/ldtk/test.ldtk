@@ -3698,9 +3698,9 @@
 							"defUid": 27,
 							"px": [1168,16],
 							"fieldInstances": [
-								{ "__identifier": "xTrigger", "__type": "Point", "__value": { "cx": 74, "cy": 28 }, "__tile": null, "defUid": 28, "realEditorValues": [{
+								{ "__identifier": "xTrigger", "__type": "Point", "__value": { "cx": 72, "cy": 26 }, "__tile": null, "defUid": 28, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["74,28"]
+									"params": ["72,26"]
 								}] },
 								{ "__identifier": "shutDoor", "__type": "EntityRef", "__value": {
 									"entityIid": "af6d7f50-4ce0-11ef-b559-3bcbe975808c",

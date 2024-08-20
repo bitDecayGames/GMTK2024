@@ -44,6 +44,8 @@ class ScrapCollector extends Unibody {
 
     public var isDepositable = true;
 
+    public var oneMoreBoolean = true;
+
     public function new(x:Float, y:Float, scrapToActivate:Int, id:String) {
         super(x-8, y);
         Aseprite.loadAllAnimations(this, AssetPaths.recepticle__json);
@@ -189,13 +191,15 @@ class ScrapCollector extends Unibody {
             // Start a loop with cascading delays 
             // Close door
             depositAmount = 0;
+        } else if (name == anims.close) {
+            oneMoreBoolean = true;
         }
     }
 
     override function handleEnter(other:Body, data:Array<CollisionData>) {
         super.handleEnter(other, data);
 
-        if (isDepositable && other.object is Player) {
+        if (isDepositable && other.object is Player && oneMoreBoolean) {
             if (!opening) {
                 var p:Player = cast other.object;
                 if (p.scrapCount <= 0) {
@@ -206,6 +210,7 @@ class ScrapCollector extends Unibody {
                 p.scrapCount = 0;
     
                 deposit();
+                oneMoreBoolean = false;
             }
         }
     }
