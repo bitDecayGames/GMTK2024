@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.util.FlxTimer;
 import loaders.Aseprite;
 import loaders.AsepriteMacros;
 import echo.data.Data.CollisionData;
@@ -31,10 +32,17 @@ class PracticeTarget extends Unibody {
 				}
 			]
         });
+
+        animation.finishCallback = (name) -> {
+            if (name == anims.drop) {
+                beenShot = true;
+            }
+        }
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+
     }
 
     override function handleEnter(other:Body, data:Array<CollisionData>) {
@@ -45,7 +53,9 @@ class PracticeTarget extends Unibody {
             body.active = false;
             FmodManager.PlaySoundOneShot(FmodSFX.TargetHit2);
             animation.play(anims.drop);
-            beenShot = true;
+            new FlxTimer().start(0.2, (t) -> {
+                beenShot = true;
+            });
         }
     }
 }

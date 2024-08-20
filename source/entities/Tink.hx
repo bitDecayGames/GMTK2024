@@ -124,7 +124,12 @@ class Tink extends Unibody {
 		}
 
 		distanceToPlayer = PlayState.me.player.getMidpoint().distanceTo(getMidpoint());
-		if (distanceToPlayer < activationRadius) {
+		var checkDistance = activationRadius;
+		if (spawnPoint == TINK_TARGETS && dialogIndex == 1) {
+			// we want him to trigger as soon as you break the last target
+			checkDistance = 1000;
+		}
+		if (distanceToPlayer < checkDistance) {
 
 			switch (spawnPoint) {
 				case TINK_INTRO:
