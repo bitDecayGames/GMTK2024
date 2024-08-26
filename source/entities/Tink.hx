@@ -32,6 +32,7 @@ class Tink extends Unibody {
 	public static inline var TINK_FIRE = "Fire";
 	public static inline var TINK_TARGETS = "Targets";
 	public static inline var TINK_FIRST_BOSS = "First Boss";
+	public static inline var TINK_ADDS = "Adds";
 
 	public var ogXY = FlxPoint.get();
 
@@ -216,7 +217,6 @@ class Tink extends Unibody {
 							}
 					}
 				case TINK_FIRST_BOSS:
-					// TODO: talk 
 					switch (dialogIndex) {
 						case 0:
 							dialogIndex++;
@@ -243,6 +243,17 @@ class Tink extends Unibody {
 								triggerDialog(new CharacterDialog(TINK, "They said it couldn't be done. Bosco has been lurking this area as long as I can remember.<page/>" +
 								"I suppose my shotgun helped, but thank you. There's more like him around here, but that's work for another day.", endCb), endCb);
 							}
+					}
+				case TINK_ADDS:
+					switch (dialogIndex) {
+						case 0:
+							dialogIndex++;
+							var cb = () -> {
+								for (rt in readyTriggers) {
+									rt.markReady();
+								}
+							}
+							triggerDialog(new CharacterDialog(TINK, "Ok, you've got a gun, but you will be shooting a lot more than just targets!", cb), cb);
 					}
 			}
 		}

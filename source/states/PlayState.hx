@@ -1,5 +1,6 @@
 package states;
 
+import entities.SimpleEnemy;
 import ui.WeaponUnlockOverlay;
 import entities.GroundFire;
 import entities.PracticeTarget;
@@ -82,6 +83,7 @@ class PlayState extends FlxTransitionableState {
 
 	// XXX Start drilling boys
 	public var practiceTargets:Array<PracticeTarget> = [];
+	public var simpleEnemies:Array<SimpleEnemy> = [];
 	// END XXX
     
     public function AddBullet(bullet:Bullet) {
@@ -151,9 +153,11 @@ class PlayState extends FlxTransitionableState {
         // add(bulletGroup);
 
         // TODO: Confirm ordering here is proper
-		var levelName = "Level_1";
+		var levelName = "Level_2";
         loadLevel(levelName);
 		FmodManager.PlaySong(FmodSongs.WhereAmI);
+
+		GlobalState.SetGameStateByLevelName(levelName);
 		
 		// add(Achievements.ACHIEVEMENT_NAME_HERE.toToast(true, true));
 
@@ -289,6 +293,11 @@ class PlayState extends FlxTransitionableState {
 		for (target in level.targets) {
 			AddInteractable(target);
 			practiceTargets.push(target);
+		}
+
+		for (simpleEnemy in level.simpleEnemies) {
+			AddInteractable(simpleEnemy);
+			simpleEnemies.push(simpleEnemy);
 		}
 
 		for (fire in level.hazards) {

@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.SimpleEnemy;
 import entities.TrashCan;
 import entities.Unibody;
 import entities.ScrapCollector;
@@ -41,6 +42,7 @@ class Level {
 	public var doorsBottom:Array<DoorBottom> = [];
 
 	public var targets:Array<PracticeTarget> = [];
+	public var simpleEnemies:Array<SimpleEnemy> = [];
 	public var hazards:Array<GroundFire> = [];
 
 	public var scrap:Array<Scrap> = [];
@@ -135,6 +137,11 @@ class Level {
 		for (t in level.l_Entities.all_PracticeTarget) {
 			var target = new PracticeTarget(t.pixelX, t.pixelY);
 			targets.push(target);
+		}
+
+		for (t in level.l_Entities.all_SimpleEnemy) {
+			var simpleEnemy = new SimpleEnemy(t.pixelX, t.pixelY);
+			simpleEnemies.push(simpleEnemy);
 		}
 
 		for (t in level.l_Entities.all_Fire) {
