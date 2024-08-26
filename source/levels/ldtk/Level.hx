@@ -162,4 +162,16 @@ class Level {
 		// level.l_Entities.all_TinkShop
 
 	}
+
+	public function getTinkBySpawnPoint(spawnPointName:String):Tink {
+		
+		for (tink in tinks) {
+			if (tink.spawnPoint == spawnPointName) {
+				return tink;
+			}
+		}
+
+		return null;
+
+	}
 }

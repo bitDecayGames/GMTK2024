@@ -38,9 +38,9 @@ class Tink extends Unibody {
 
 	var distanceToPlayer:Float;
 
-	var dialogIndex = 0;
+	public var dialogIndex = 0;
 
-	var spawnPoint:String;
+	public var spawnPoint:String;
 	var doorTop:DoorTop;
 	var doorBottom:DoorBottom;
 	public var shutter:Shutter = null;
@@ -254,6 +254,11 @@ class Tink extends Unibody {
 								}
 							}
 							triggerDialog(new CharacterDialog(TINK, "Ok, you've got a gun, but you will be shooting a lot more than just targets!", cb), cb);
+						case 1:
+							var cb = () -> {
+							}
+							triggerDialog(new CharacterDialog(TINK, "This is my second dialog!", cb), cb);
+
 					}
 			}
 		}
