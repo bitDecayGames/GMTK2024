@@ -225,7 +225,8 @@ class Tink extends Unibody {
 									rt.markReady();
 								}
 							}
-							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. A pistol may not be enough to defeat him! Bring more scrap for a bigger gun. Now where to find more scrap....", cb), cb);
+							triggerDialog(new CharacterDialog(TINK, "Bosco is somewhere near. I'd recognize his vile odor anywhere. Be careful. " + 
+							"A pistol may not be enough to defeat him! Bring more scrap for a bigger gun. Now where to find more scrap....", cb), cb);
 						case 1:
 							if (TrashCan.beenKilled) {
 								dialogIndex++;
@@ -237,7 +238,8 @@ class Tink extends Unibody {
 										var creditsCb = () -> {
 											FlxG.switchState(new CreditsState());
 										};
-										triggerDialog(new CharacterDialog(TINK_GATE, "Honestly, there's a lot more help we could use from you. Check back when you've got time and maybe we'll have some more favors to ask.<page/>Anyways, see ya.", creditsCb), creditsCb);
+										triggerDialog(new CharacterDialog(TINK_GATE, "Honestly, there's a lot more help we could use from you. " + 
+										"Check back when you've got time and maybe we'll have some more favors to ask.<page/>Anyways, see ya.", creditsCb), creditsCb);
 									});
 								};
 								triggerDialog(new CharacterDialog(TINK, "They said it couldn't be done. Bosco has been lurking this area as long as I can remember.<page/>" +
@@ -256,8 +258,10 @@ class Tink extends Unibody {
 							triggerDialog(new CharacterDialog(TINK, "Ok, you've got a gun, but you will be shooting a lot more than just targets!", cb), cb);
 						case 1:
 							var cb = () -> {
+								shutter.close();
 							}
 							triggerDialog(new CharacterDialog(TINK, "This is my second dialog!", cb), cb);
+							dialogIndex++;
 
 					}
 			}

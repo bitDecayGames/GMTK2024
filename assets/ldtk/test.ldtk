@@ -7339,7 +7339,7 @@
 						},
 						{
 							"__identifier": "SimpleEnemy",
-							"__grid": [24,25],
+							"__grid": [25,31],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -7348,14 +7348,14 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 34,
-							"px": [384,400],
+							"px": [400,496],
 							"fieldInstances": [],
-							"__worldX": 3760,
-							"__worldY": -624
+							"__worldX": 3776,
+							"__worldY": -528
 						},
 						{
 							"__identifier": "SimpleEnemy",
-							"__grid": [33,25],
+							"__grid": [34,31],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -7364,10 +7364,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 34,
-							"px": [528,400],
+							"px": [544,496],
 							"fieldInstances": [],
-							"__worldX": 3904,
-							"__worldY": -624
+							"__worldX": 3920,
+							"__worldY": -528
 						}
 					]
 				},
