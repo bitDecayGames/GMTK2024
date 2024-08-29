@@ -290,6 +290,10 @@ class PlayState extends FlxTransitionableState {
 			underGroup.add(tink);
 		}
 
+		for (scrappy in level.scrappies) {
+			topGroup.add(scrappy);
+		}
+
 		for (target in level.targets) {
 			AddInteractable(target);
 			practiceTargets.push(target);

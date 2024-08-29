@@ -1,5 +1,6 @@
 package levels.ldtk;
 
+import entities.Scrappy;
 import entities.SimpleEnemy;
 import entities.TrashCan;
 import entities.Unibody;
@@ -37,6 +38,7 @@ class Level {
 	public var rawTerrainTilesWide = 0;
 	public var rawTerrainTilesTall = 0;
 
+	public var scrappies:Array<Scrappy> = [];
 	public var tinks:Array<Tink> = [];
 	public var doors:Array<DoorTop> = [];
 	public var doorsBottom:Array<DoorBottom> = [];
@@ -131,6 +133,13 @@ class Level {
 				}
 				
 				tinks.push(tink);
+			}
+		}
+
+		if (level.l_Entities.all_ScrappySpawn.length > 0){
+			for (scrappySpawn in level.l_Entities.all_ScrappySpawn) {
+				var scrappy = new Scrappy(scrappySpawn.pixelX, scrappySpawn.pixelY, scrappySpawn.f_SpawnName, scrappySpawn.f_ActivationRadius);
+				scrappies.push(scrappy);
 			}
 		}
 
